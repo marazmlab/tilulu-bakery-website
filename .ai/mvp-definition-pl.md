@@ -33,9 +33,11 @@
 
 ### Backend
 
-1. Zapis zamówienia do Supabase (tabela orders)
-2. Wysłanie emaila do właściciela z detalami i wysłanie powiadomienia SMS
-3. Automatyczna odpowiedź dla klienta: "Dziękujemy za zamówienie, prosimy czekać na kontakt"
+1. Zapis zamówienia do Supabase (tabela orders) z RLS policies
+2. Server-side validation (Zod) i rate limiting (5 zapytań/IP/godzinę)
+3. Wysłanie emaila do właściciela z detalami
+4. Automatyczna odpowiedź dla klienta: "Dziękujemy za zamówienie, prosimy czekać na kontakt"
+5. Upload security (walidacja typu MIME, maksymalny rozmiar pliku)
 
 ### Dostęp właściciela
 
@@ -51,6 +53,7 @@
 
 - Panel admin z custom UI (właściciel używa Supabase Dashboard)
 - System płatności online (zamówienie + płatność przy odbiorze)
+- Powiadomienia SMS (przeniesione do Fazy 2)
 - Konta użytkowników / historia zamówień dla klientów
 - Kalendarz dostępności / rezerwacja terminów
 - Wersje językowe (angielski i inne)
@@ -78,17 +81,17 @@
 ### Techniczne
 
 1. ✅ Strona działa na urządzeniach mobilnych i desktopowych (responsive)
-2. ✅ Formularz waliduje dane przed wysłaniem
-3. ✅ Właściciel dostaje powiadomienie SMS o emailu
+2. ✅ Formularz waliduje dane po stronie serwera (Zod) i klienta
+3. ✅ Bezpieczeństwo: RLS policies, rate limiting, upload validation
 4. ✅ Strona ładuje się <3s (Lighthouse score >80)
 5. ✅ Zero błędów w konsoli przeglądarki
 
 ### Biznesowe (właściciel)
 
 1. ✅ Otrzymuje email z każdym nowym zamówieniem w <2 min
-2. ✅ Otrzymuje SMS z powiadomieniem o mailu
-3. ✅ Może przeglądać wszystkie zamówienia w Supabase Dashboard
-4. ✅ Email zawiera wszystkie niezbędne dane do kontaktu z klientem
+2. ✅ Może przeglądać wszystkie zamówienia w Supabase Dashboard
+3. ✅ Email zawiera wszystkie niezbędne dane do kontaktu z klientem
+4. ✅ Bezpieczne przechowywanie danych klientów (RLS w Supabase)
 
 ### Użytkowe (klient)
 
@@ -106,46 +109,52 @@
 ## UPROSZCZONY ZAKRES PROJEKTU
 
 ```
-MVP = ok 5 stron + 1 formularz + email + SMS + baza
+MVP = ok 5 stron + 1 formularz + email + baza + bezpieczeństwo
 Czas realizacji: ~20-30 godzin pracy
 Złożoność: Niska (idealna na start)
 ```
 
 ### Stack technologiczny
 
-- **Frontend:** Astro + React + Tailwind CSS
+- **Frontend:** Astro + React (tylko formularz i galeria) + Tailwind CSS + shadcn/ui
 - **Backend:** Astro API endpoints
-- **Baza danych:** Supabase (PostgreSQL)
+- **Baza danych:** Supabase (PostgreSQL) z RLS policies
 - **Storage:** Supabase Storage (zdjęcia inspiracji)
 - **Email:** Resend
-- **SMS:** SMSAPI.pl
-- **Hosting:** Cloudflare Pages lub Vercel
+- **SMS:** SMSAPI.pl (przeniesione do Fazy 2)
+- **Security:** Server-side validation (Zod), rate limiting, upload validation
+- **Hosting:** Vercel (lepszy dla API endpoints)
 - **Domena:** tilulu.pl/.com/.eu (do zakupu)
+- **Design:** Wireframe + Figma template LUB design-as-you-code
 
 ### Kluczowe decyzje
 
 1. **Lead time:** Minimum 48 godzin (blokada dat: dzisiaj + jutro)
 2. **Brak limitu zamówień:** Właściciel ma elastyczny czas pracy
 3. **Storage zdjęć:** Supabase Storage (5 MB max)
-4. **Powiadomienia:** Email + SMS dla pewności dostarczenia
-5. **Branding:** Placeholdery (logo, kolory) - do aktualizacji w przyszłości
+4. **Powiadomienia:** Tylko email w MVP (SMS w Fazy 2)
+5. **Branding:** Placeholdery z Unsplash API, potem prawdziwe zdjęcia
 6. **Język:** Tylko polski (struktura i18n-ready na przyszłość)
+7. **React usage:** Tylko dla interaktywnych komponentów (formularz, galeria)
+8. **Security-first:** RLS, server-side validation, rate limiting od MVP
 
 ---
 
 ## Roadmap rozwoju (poza MVP)
 
-### Faza 2: Panel Admin
-- Custom UI dla właściciela
+### Faza 2: SMS + Koszyk + Kreator
+- Powiadomienia SMS (SMSAPI.pl)
+- Wieloproduktowy koszyk z localStorage
+- 5-krokowy kreator tortów (interaktywny wizard)
+- Upload wielu zdjęć (do 3)
+- Mini-widget koszyka w nawigacji
+- Zaawansowany error handling
+
+### Faza 3: Custom Panel Admin
+- Custom UI dla właściciela (zastępuje Supabase Dashboard)
 - Zarządzanie statusami zamówień
 - Automatyczne emaile do klientów po zmianach statusu
 - Podstawowe statystyki
-
-### Faza 3: UX Improvements
-- Produkty w bazie danych (zamiast hardcoded)
-- Kalendarz z blokadą zajętych terminów
-- Ulepszona galeria (lightbox)
-- FAQ
 
 ### Faza 4: Konta klientów
 - Rejestracja/logowanie
@@ -162,6 +171,7 @@ Złożoność: Niska (idealna na start)
 
 ## Data utworzenia
 
-**Wersja:** 1.0  
-**Data:** 2025-03-30  
-**Bazuje na:** Sesji planistycznej PRD
+**Wersja:** 1.1  
+**Data:** 2026-04-25  
+**Ostatnia aktualizacja:** Usunięcie SMS z MVP (przeniesione do Fazy 2), dodanie bezpieczeństwa, shadcn/ui, Vercel hosting
+**Bazuje na:** Sesji planistycznej PRD + analiza stacku technologicznego

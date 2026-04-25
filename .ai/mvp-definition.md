@@ -33,9 +33,11 @@
 
 ### Backend
 
-1. Save order to Supabase (orders table)
-2. Send email to owner with details and send SMS notification
-3. Automatic response to customer: "Thank you for your order, please wait for contact"
+1. Save order to Supabase (orders table) with RLS policies
+2. Server-side validation (Zod) and rate limiting (5 inquiries/IP/hour)
+3. Send email to owner with details
+4. Automatic response to customer: "Thank you for your order, please wait for contact"
+5. Upload security (MIME type validation, maximum file size)
 
 ### Owner Access
 
@@ -51,6 +53,7 @@
 
 - Custom admin panel UI (owner uses Supabase Dashboard)
 - Online payment system (order + payment on pickup)
+- SMS notifications (moved to Phase 2)
 - User accounts / order history for customers
 - Availability calendar / appointment booking
 - Language versions (English and others)
@@ -78,17 +81,17 @@
 ### Technical
 
 1. ✅ Website works on mobile and desktop devices (responsive)
-2. ✅ Form validates data before submission
-3. ✅ Owner receives SMS notification about email
+2. ✅ Form validates data server-side (Zod) and client-side
+3. ✅ Security: RLS policies, rate limiting, upload validation
 4. ✅ Page loads in <3s (Lighthouse score >80)
 5. ✅ Zero browser console errors
 
 ### Business (Owner)
 
 1. ✅ Receives email with each new order in <2 min
-2. ✅ Receives SMS notification about email
-3. ✅ Can browse all orders in Supabase Dashboard
-4. ✅ Email contains all necessary data to contact customer
+2. ✅ Can browse all orders in Supabase Dashboard
+3. ✅ Email contains all necessary data to contact customer
+4. ✅ Secure storage of customer data (Supabase RLS)
 
 ### User Experience (Customer)
 
@@ -106,46 +109,52 @@
 ## SIMPLIFIED PROJECT SCOPE
 
 ```
-MVP = 5 pages + 1 form + email + SMS + database
+MVP = 5 pages + 1 form + email + database + security
 Implementation time: ~20-30 hours of work
 Complexity: Low (ideal for start)
 ```
 
 ### Technology Stack
 
-- **Frontend:** Astro + React + Tailwind CSS + shadcn/ui
+- **Frontend:** Astro + React (form and gallery only) + Tailwind CSS + shadcn/ui
 - **Backend:** Astro API endpoints
-- **Database:** Supabase (PostgreSQL)
+- **Database:** Supabase (PostgreSQL) with RLS policies
 - **Storage:** Supabase Storage (inspiration photos)
-- **Email:** Resend or SendGrid
-- **SMS:** SMSAPI.pl or Twilio
-- **Hosting:** Cloudflare Pages or Vercel
+- **Email:** Resend
+- **SMS:** SMSAPI.pl (moved to Phase 2)
+- **Security:** Server-side validation (Zod), rate limiting, upload validation
+- **Hosting:** Vercel (better support for API endpoints)
 - **Domain:** tilulu.pl/.com/.eu (to purchase)
+- **Design:** Wireframe + Figma template OR design-as-you-code
 
 ### Key Decisions
 
 1. **Lead time:** Minimum 48 hours (date blocking: today + tomorrow)
 2. **No order limit:** Owner has flexible working hours
 3. **Photo storage:** Supabase Storage (5 MB max)
-4. **Notifications:** Email + SMS for delivery assurance
-5. **Branding:** Placeholders (logo, colors) - to be updated in future
+4. **Notifications:** Email only in MVP (SMS in Phase 2)
+5. **Branding:** Unsplash placeholders first, real photos later
 6. **Language:** Polish only (i18n-ready structure for future)
+7. **React usage:** For interactive components only (form, gallery)
+8. **Security-first:** RLS, server-side validation, rate limiting from MVP
 
 ---
 
 ## Development Roadmap (Beyond MVP)
 
-### Phase 2: Admin Panel
+### Phase 2: SMS + Cart + Builder
+- SMS notifications (SMSAPI.pl)
+- Multi-product cart with localStorage
+- 5-step cake builder (interactive wizard)
+- Multiple photo uploads (up to 3)
+- Mini cart widget in navigation
+- Advanced error handling
+
+### Phase 3: Custom Admin Panel
 - Custom UI for owner
 - Order status management
 - Automatic emails to customers after status changes
 - Basic statistics
-
-### Phase 3: UX Improvements
-- Products in database (instead of hardcoded)
-- Calendar with blocked dates
-- Enhanced gallery (lightbox)
-- FAQ
 
 ### Phase 4: Customer Accounts
 - Registration/login
@@ -164,6 +173,7 @@ Complexity: Low (ideal for start)
 
 ## Creation Date
 
-**Version:** 1.0  
-**Date:** 2025-03-30  
-**Based on:** PRD Planning Session
+**Version:** 1.1  
+**Date:** 2026-04-25  
+**Last update:** SMS removed from MVP (moved to Phase 2), security scope added, shadcn/ui and Vercel clarified  
+**Based on:** PRD Planning Session + technology stack analysis

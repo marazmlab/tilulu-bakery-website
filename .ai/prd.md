@@ -4,7 +4,7 @@
 
 Tilulu Bakery is a website for a home bakery located in Szczecin, Poland. The product serves a dual role: an online business card showcasing the bakery's offerings and a central point for accepting quote requests from customers.
 
-The website replaces scattered communication channels (Instagram DM, WhatsApp, phone) with a unified interface where customers can browse products with photos and prices, then submit quote requests through a simple form. The owner receives email and SMS notifications for each new inquiry, and all data is stored in a Supabase database.
+The website replaces scattered communication channels (Instagram DM, WhatsApp, phone) with a unified interface where customers can browse products with photos and prices, then submit quote requests through a simple form. The owner receives email notifications for each new inquiry (SMS in later phases), and all data is stored in a Supabase database.
 
 Future development phases include adding an interactive multi-product cart and a 5-step cake builder, enabling more advanced order composition.
 
@@ -20,21 +20,33 @@ The product targets two user groups: bakery customers (primarily women aged 30-6
 - Photos and content hardcoded in code with placeholders initially
 
 ### Development Roadmap
-- **Phase 1 (MVP)**: 5 public pages + simple form + email/SMS + Supabase Dashboard
-- **Phase 2**: Multi-product cart + 5-step cake builder + advanced error handling
+- **Phase 1 (MVP)**: 5 public pages + simple form + email + Supabase Dashboard
+- **Phase 2**: SMS + multi-product cart + 5-step cake builder + advanced error handling
 - **Phase 3**: Custom admin panel + status management + automated emails
 - **Phase 4**: Customer accounts + order history + status tracking
 
 ### Tech Stack
-- Frontend: Astro + React + Tailwind CSS + shadcn/ui
+- Frontend: Astro + React (form and gallery only) + Tailwind CSS + shadcn/ui
 - Backend: Astro API endpoints
 - Database: Supabase (PostgreSQL)
 - Storage: Supabase Storage (inspiration photos)
 - Email: Resend (React Email)
-- SMS: SMSAPI.pl
-- Hosting: Cloudflare Pages or Vercel
+- SMS: SMSAPI.pl (moved to Phase 2)
+- Hosting: Vercel (better support for API endpoints)
+- Security: RLS policies, server-side validation (Zod), rate limiting
 - State management (Phase 2+): Zustand or Context API + localStorage
 - Analytics: Google Analytics 4 + Microsoft Clarity
+
+### Design Strategy
+- UI components: shadcn/ui (faster development + accessibility)
+- Design approach: wireframe + Figma template customization OR design-as-you-code
+- Placeholders: Unsplash API for MVP, then real photos in Supabase Storage
+
+### Architecture Decisions
+- **React usage:** only for interactive components (order form, gallery filters)
+- **Astro pages:** static pages (Home, About, Contact) without React for better performance
+- **API strategy:** Astro API endpoints instead of direct Supabase calls (better security)
+- **Hosting:** Vercel preferred over Cloudflare Pages for API endpoint support
 
 ## 2. User Problem
 
@@ -191,14 +203,21 @@ Form validation:
 - Complete order details: product category, order details (textarea content), customer contact details, pickup date, notes, inspiration photo link
 - All data needed for customer contact
 
-#### 3.3.4 Owner SMS
-- SMSAPI.pl (~0.10 PLN/SMS)
-- Short format: "New order: [Name], [Category], [Pickup Date]. Check email."
-- Sent simultaneously with email
+#### 3.3.4 Rate Limiting and Security
 
-#### 3.3.5 Rate Limiting
-- Maximum 5 inquiries per IP address per day
-- No CAPTCHA (negative UX impact)
+**Must-have in MVP:**
+- **Server-side validation:** Zod schema validation for all form fields
+- **Rate limiting:** Maximum 5 inquiries per IP/hour (in-memory for MVP)
+- **Upload security:** MIME type and file size validation (max 5MB, JPG/PNG/WEBP only)
+- **Supabase RLS:** Row Level Security policies (anon can INSERT only, no SELECT/UPDATE/DELETE)
+- **Environment variables:** All API keys (Supabase, Resend) in `.env` (not in code)
+- **HTTPS enforcement:** Provided automatically by Vercel
+
+**Nice-to-have (post-MVP):**
+- **CAPTCHA:** Cloudflare Turnstile if spam appears
+- **Content Security Policy:** Security headers against XSS
+- **Input sanitization:** DOMPurify for rich HTML email content
+- **Antivirus scanning:** Cloudflare Images or ClamAV for uploads
 
 ### 3.4 Error Handling (MVP - basic)
 
@@ -346,22 +365,26 @@ Extended form displayed after clicking "Proceed to Form" from cart:
 - 5 public pages (Homepage, Products, About Us, Orders, Contact, Terms) + Privacy Policy
 - Simple order form with category selection and textarea for details description
 - 1 inspiration photo upload (optional, max 5 MB)
-- Order storage to Supabase
+- Order storage to Supabase with RLS policies
 - HTML email to customer (confirmation + summary)
 - Detailed email to owner
-- SMS to owner (SMSAPI.pl)
 - Order browsing through Supabase Dashboard
 - Manual order status change in Supabase Dashboard
 - Basic SEO (meta tags, Open Graph, schema.org, sitemap, robots.txt)
 - Google Analytics 4 + Microsoft Clarity
 - Cookie banner (GDPR)
-- Responsive design (mobile + desktop)
-- Rate limiting (5 inquiries/IP/day)
+- Responsive design (mobile + desktop) with shadcn/ui components
+- Security: server-side validation, rate limiting (5 inquiries/IP/hour), upload validation
 - Basic error handling (validation, retry, duplicate prevention, loading states)
-- Hardcoded photos and content with placeholders
+- Hardcoded photos and content with placeholders (Unsplash API)
 - i18n-ready structure (JSON files) without language switching implementation
 
 ### Planned for Phase 2
+
+- **SMS notifications:**
+  - SMSAPI.pl integration (~0.10 PLN/SMS)
+  - Short format: "New order: [Name], [Category], [Pickup Date]. Check email."
+  - Sent simultaneously with owner email
 
 - **Multi-product cart:**
   - Persistence in localStorage
@@ -563,7 +586,6 @@ Acceptance Criteria:
 - Inspiration photo is uploaded to Supabase Storage (if added)
 - Confirmation email is sent to customer
 - Detailed email is sent to owner
-- SMS is sent to owner
 - After successful submission, customer sees message confirming inquiry acceptance
 - In case of server error, message with retry request is displayed
 - Re-clicking button during processing doesn't cause duplicate
@@ -591,14 +613,6 @@ Acceptance Criteria:
 - Email contains selected pickup date
 - Email contains additional notes (if provided)
 - Email contains inspiration photo link (if added)
-
-**[MVP] US-021**
-Title: Receiving SMS About New Order
-Description: As the owner, I want to receive SMS about new order, so I can react quickly even when not checking email.
-Acceptance Criteria:
-- SMS is sent to owner's number simultaneously with email
-- SMS has format: "New order: [Name], [Category], [Pickup Date]. Check email."
-- SMS is sent through SMSAPI.pl
 
 **[MVP] US-022**
 Title: Browsing Orders in Supabase Dashboard
@@ -766,6 +780,17 @@ Acceptance Criteria:
 
 ## PHASE 2: User Stories for Cart and Builder
 
+### SMS Notifications (PHASE 2)
+
+**[PHASE 2] US-021**
+Title: Receiving SMS About New Order
+Description: As the owner, I want to receive SMS about a new order, so I can react quickly even when not checking email.
+Acceptance Criteria:
+- SMS is sent to owner number simultaneously with email
+- SMS format: "New order: [Name], [Category], [Pickup Date]. Check email."
+- SMS is sent through SMSAPI.pl
+- Cost is approximately 0.10 PLN per SMS
+
 ### Cart (PHASE 2)
 
 **[PHASE 2] US-003**
@@ -909,8 +934,8 @@ Acceptance Criteria:
 - Zero browser console errors on all pages
 - 100% form validation works correctly (frontend + backend)
 - Email to customer sent within 2 minutes of inquiry submission
-- SMS to owner sent within 2 minutes of inquiry submission
-- Website uptime 99.9% (Cloudflare Pages / Vercel hosting)
+- Email to owner sent within 2 minutes of inquiry submission
+- Website uptime 99.9% (Vercel hosting)
 
 #### Business Metrics
 

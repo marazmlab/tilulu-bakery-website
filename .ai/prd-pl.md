@@ -4,7 +4,7 @@
 
 Tilulu Bakery to strona internetowa dla domowej piekarni zlokalizowanej w Szczecinie. Produkt pełni podwójną rolę: wizytówki online prezentującej ofertę cukierni oraz centralnego punktu przyjmowania zapytań ofertowych od klientów.
 
-Strona zastępuje rozproszone kanały komunikacji (Instagram DM, WhatsApp, telefon) jednym spójnym interfejsem, przez który klienci mogą przeglądać ofertę ze zdjęciami i cenami, a następnie wysyłać zapytania ofertowe przez prosty formularz. Właścicielka otrzymuje powiadomienia email i SMS o każdym nowym zapytaniu, a wszystkie dane są przechowywane w bazie Supabase.
+Strona zastępuje rozproszone kanały komunikacji (Instagram DM, WhatsApp, telefon) jednym spójnym interfejsem, przez który klienci mogą przeglądać ofertę ze zdjęciami i cenami, a następnie wysyłać zapytania ofertowe przez prosty formularz. Właścicielka otrzymuje powiadomienia email o każdym nowym zapytaniu (SMS w kolejnych fazach rozwoju), a wszystkie dane są przechowywane w bazie Supabase.
 
 W przyszłych fazach rozwoju planowane jest dodanie interaktywnego koszyka wieloproduktowego oraz 5-krokowego kreatora tortów, które umożliwią bardziej zaawansowaną kompozycję zamówień.
 
@@ -20,21 +20,33 @@ Produkt jest przeznaczony dla dwóch grup użytkowników: klientów cukierni (g�
 - Zdjęcia i treści hardcoded w kodzie z placeholderami na start
 
 ### Roadmap rozwoju
-- **Faza 1 (MVP)**: 5 stron publicznych + prosty formularz + email/SMS + Supabase Dashboard
-- **Faza 2**: Wieloproduktowy koszyk + 5-krokowy kreator tortów + zaawansowany error handling
+- **Faza 1 (MVP)**: 5 stron publicznych + prosty formularz + email + Supabase Dashboard
+- **Faza 2**: SMS + wieloproduktowy koszyk + 5-krokowy kreator tortów + zaawansowany error handling
 - **Faza 3**: Custom panel admin + zarządzanie statusami + automatyczne emaile
 - **Faza 4**: Konta klientów + historia zamówień + tracking statusu
 
 ### Stack technologiczny
-- Frontend: Astro + React + Tailwind CSS + shadcn/ui
+- Frontend: Astro + React (tylko formularz i galeria) + Tailwind CSS + shadcn/ui
 - Backend: Astro API endpoints
 - Baza danych: Supabase (PostgreSQL)
 - Storage: Supabase Storage (zdjęcia inspiracji)
 - Email: Resend (React Email)
-- SMS: SMSAPI.pl
-- Hosting: Cloudflare Pages lub Vercel
+- SMS: SMSAPI.pl (przeniesione do Fazy 2)
+- Hosting: Vercel (lepszy dla API endpoints)
+- Security: RLS policies, server-side validation (Zod), rate limiting
 - State management (Faza 2+): Zustand lub Context API + localStorage
 - Analityka: Google Analytics 4 + Microsoft Clarity
+
+### Design strategy
+- UI Components: shadcn/ui (oszczędność czasu development + accessibility)
+- Design approach: Wireframe + Figma template customization LUB design-as-you-code
+- Placeholders: Unsplash API do MVP, potem prawdziwe zdjęcia w Supabase Storage
+
+### Architecture decisions
+- **React usage:** Tylko dla interaktywnych komponentów (formularz zamówienia, galeria z filtrami)
+- **Astro pages:** Statyczne strony (Home, O nas, Kontakt) bez Reacta dla lepszej performance
+- **API strategy:** Astro API endpoints zamiast direct Supabase calls (lepsze bezpieczeństwo)
+- **Hosting:** Vercel preferowany nad Cloudflare Pages (lepsze API endpoints support)
 
 ## 2. Problem użytkownika
 
@@ -191,14 +203,21 @@ Walidacja formularza:
 - Pełne szczegóły zamówienia: kategoria produktu, szczegóły zamówienia (treść textarea), dane kontaktowe klienta, data odbioru, uwagi, link do zdjęcia inspiracji
 - Wszystkie dane potrzebne do kontaktu z klientem
 
-#### 3.3.4 SMS do właścicielki
-- SMSAPI.pl (~0.10 zł/SMS)
-- Krótki format: "Nowe zamówienie: [Imię], [Kategoria], [Data odbioru]. Sprawdź email."
-- Wysyłka równocześnie z emailem
+#### 3.3.4 Rate limiting i bezpieczeństwo
 
-#### 3.3.5 Rate limiting
-- Maksymalnie 5 zapytań z jednego adresu IP dziennie
-- Bez CAPTCHA (negatywny wpływ na UX)
+**Must-have w MVP:**
+- **Server-side validation:** Zod schema validation dla wszystkich pól formularza
+- **Rate limiting:** Maksymalnie 5 zapytań z jednego IP/godzinę (in-memory dla MVP)
+- **Upload security:** Walidacja typu MIME i rozmiaru plików (max 5MB, tylko JPG/PNG/WEBP)
+- **Supabase RLS:** Row Level Security policies (anon może tylko INSERT, nie SELECT/UPDATE/DELETE)
+- **Environment variables:** Wszystkie API keys (Supabase, Resend) w .env (nie w kodzie)
+- **HTTPS enforcement:** Automatyczne przez Vercel
+
+**Nice-to-have (post-MVP):**
+- **CAPTCHA:** Cloudflare Turnstile jeśli pojawi się spam
+- **Content Security Policy:** Headers przeciw XSS
+- **Input sanitization:** DOMPurify dla rich HTML emaili
+- **Antivirus scanning:** Cloudflare Images lub ClamAV dla uploadów
 
 ### 3.4 Obsługa błędów (MVP - podstawowa)
 
@@ -346,22 +365,26 @@ Rozszerzony formularz wyświetlany po kliknięciu "Przejdź do formularza" z kos
 - 5 stron publicznych (Strona główna, Oferta, O nas, Zamówienia, Kontakt, Regulamin) + Polityka prywatności
 - Prosty formularz zamówienia z wyborem kategorii i textarea do opisu szczegółów
 - Upload 1 zdjęcia inspiracji (opcjonalne, max 5 MB)
-- Zapis zamówień do Supabase
+- Zapis zamówień do Supabase z RLS policies
 - Email HTML do klienta (potwierdzenie + podsumowanie)
 - Email ze szczegółami do właścicielki
-- SMS do właścicielki (SMSAPI.pl)
 - Przeglądanie zamówień przez Supabase Dashboard
 - Ręczna zmiana statusu zamówienia w Supabase Dashboard
 - Podstawowe SEO (meta tagi, Open Graph, schema.org, sitemap, robots.txt)
 - Google Analytics 4 + Microsoft Clarity
 - Cookie banner (RODO)
-- Responsywny design (mobile + desktop)
-- Rate limiting (5 zapytań/IP/dzień)
+- Responsywny design (mobile + desktop) z shadcn/ui components
+- Security: server-side validation, rate limiting (5 zapytań/IP/godzinę), upload validation
 - Podstawowy error handling (walidacja, retry, duplicate prevention, loading states)
-- Hardcoded zdjęcia i treści z placeholderami
+- Hardcoded zdjęcia i treści z placeholderami (Unsplash API)
 - Struktura i18n-ready (pliki JSON) bez implementacji przełączania języków
 
 ### Planowane w Fazie 2
+
+- **SMS notifications:**
+  - SMSAPI.pl integration (~0.10 zł/SMS)
+  - Krótki format: "Nowe zamówienie: [Imię], [Kategoria], [Data odbioru]. Sprawdź email."
+  - Wysyłka równocześnie z emailem do właścicielki
 
 - **Wieloproduktowy koszyk:**
   - Persystencja w localStorage
@@ -563,7 +586,6 @@ Kryteria akceptacji:
 - Zdjęcie inspiracji jest uploadowane do Supabase Storage (jeśli dodane)
 - Email potwierdzający jest wysyłany do klienta
 - Email ze szczegółami jest wysyłany do właścicielki
-- SMS jest wysyłany do właścicielki
 - Po pomyślnym wysłaniu klient widzi komunikat potwierdzający przyjęcie zapytania
 - W przypadku błędu serwera wyświetlany jest komunikat z prośbą o ponowienie próby
 - Ponowne kliknięcie przycisku w trakcie przetwarzania nie powoduje duplikatu
@@ -592,13 +614,6 @@ Kryteria akceptacji:
 - Email zawiera uwagi dodatkowe (jeśli podane)
 - Email zawiera link do zdjęcia inspiracji (jeśli dodane)
 
-**[MVP] US-021**
-Tytuł: Otrzymanie SMS o nowym zamówieniu
-Opis: Jako właścicielka chcę otrzymać SMS o nowym zamówieniu, żeby szybko zareagować nawet gdy nie sprawdzam emaila.
-Kryteria akceptacji:
-- SMS jest wysyłany na numer właścicielki równocześnie z emailem
-- SMS ma format: "Nowe zamówienie: [Imię], [Kategoria], [Data odbioru]. Sprawdź email."
-- SMS jest wysyłany przez SMSAPI.pl
 
 **[MVP] US-022**
 Tytuł: Przeglądanie zamówień w Supabase Dashboard
@@ -766,6 +781,17 @@ Kryteria akceptacji:
 
 ## FAZA 2: User Stories dla koszyka i kreatora
 
+### SMS Notifications (FAZA 2)
+
+**[FAZA 2] US-021**
+Tytuł: Otrzymanie SMS o nowym zamówieniu
+Opis: Jako właścicielka chcę otrzymać SMS o nowym zamówieniu, żeby szybko zareagować nawet gdy nie sprawdzam emaila.
+Kryteria akceptacji:
+- SMS jest wysyłany na numer właścicielki równocześnie z emailem
+- SMS ma format: "Nowe zamówienie: [Imię], [Kategoria], [Data odbioru]. Sprawdź email."
+- SMS jest wysyłany przez SMSAPI.pl
+- Koszt ~0.10 zł/SMS
+
 ### Koszyk (FAZA 2)
 
 **[FAZA 2] US-003**
@@ -909,8 +935,8 @@ Kryteria akceptacji:
 - Zero błędów w konsoli przeglądarki na wszystkich stronach
 - 100% walidacji formularza działa poprawnie (frontend + backend)
 - Email do klienta wysyłany w ciągu 2 minut od złożenia zapytania
-- SMS do właścicielki wysyłany w ciągu 2 minut od złożenia zapytania
-- Uptime strony 99.9% (hosting Cloudflare Pages / Vercel)
+- Email do właścicielki wysyłany w ciągu 2 minut od złożenia zapytania
+- Uptime strony 99.9% (hosting Vercel)
 
 #### Metryki biznesowe
 
