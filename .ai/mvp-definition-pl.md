@@ -113,12 +113,12 @@ Złożoność: Niska (idealna na start)
 
 ### Stack technologiczny
 
-- **Frontend:** Astro + React + Tailwind CSS + shadcn/ui
+- **Frontend:** Astro + React + Tailwind CSS
 - **Backend:** Astro API endpoints
 - **Baza danych:** Supabase (PostgreSQL)
 - **Storage:** Supabase Storage (zdjęcia inspiracji)
-- **Email:** Resend lub SendGrid
-- **SMS:** SMSAPI.pl lub Twilio
+- **Email:** Resend
+- **SMS:** SMSAPI.pl
 - **Hosting:** Cloudflare Pages lub Vercel
 - **Domena:** tilulu.pl/.com/.eu (do zakupu)
 
