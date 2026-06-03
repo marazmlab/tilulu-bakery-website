@@ -141,6 +141,7 @@ Complexity: Low (ideal for start)
 ## Development Roadmap (Beyond MVP)
 
 ### Phase 2: SMS + Cart + Builder
+
 - SMS notifications (SMSAPI.pl)
 - Multi-product cart with localStorage
 - 5-step cake builder (interactive wizard)
@@ -149,18 +150,21 @@ Complexity: Low (ideal for start)
 - Advanced error handling
 
 ### Phase 3: Custom Admin Panel
+
 - Custom UI for owner
 - Order status management
 - Automatic emails to customers after status changes
 - Basic statistics
 
 ### Phase 4: Customer Accounts
+
 - Registration/login
 - Order history
 - Status tracking
 - Newsletter
 
 ### Backlog
+
 - Online payments
 - Mobile application
 

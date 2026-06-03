@@ -11,6 +11,7 @@ Future development phases include adding an interactive multi-product cart and a
 The product targets two user groups: bakery customers (primarily women aged 30-60, Szczecin area and surroundings, with shipping available nationwide in Poland) and the bakery owner who manages orders through Supabase Dashboard.
 
 ### Key MVP Assumptions (Phase 1)
+
 - Simple order form with textarea for product description - no builder or cart
 - Form is a quote request, not a purchase - every order requires owner confirmation
 - No online payment system - cash on pickup or private bank transfer
@@ -20,12 +21,14 @@ The product targets two user groups: bakery customers (primarily women aged 30-6
 - Photos and content hardcoded in code with placeholders initially
 
 ### Development Roadmap
+
 - **Phase 1 (MVP)**: 5 public pages + simple form + email + Supabase Dashboard
 - **Phase 2**: SMS + multi-product cart + 5-step cake builder + advanced error handling
 - **Phase 3**: Custom admin panel + status management + automated emails
 - **Phase 4**: Customer accounts + order history + status tracking
 
 ### Tech Stack
+
 - Frontend: Astro + React (form and gallery only) + Tailwind CSS + shadcn/ui
 - Backend: Astro API endpoints
 - Database: Supabase (PostgreSQL)
@@ -38,11 +41,13 @@ The product targets two user groups: bakery customers (primarily women aged 30-6
 - Analytics: Google Analytics 4 + Microsoft Clarity
 
 ### Design Strategy
+
 - UI components: shadcn/ui (faster development + accessibility)
 - Design approach: wireframe + Figma template customization OR design-as-you-code
 - Placeholders: Unsplash API for MVP, then real photos in Supabase Storage
 
 ### Architecture Decisions
+
 - **React usage:** only for interactive components (order form, gallery filters)
 - **Astro pages:** static pages (Home, About, Contact) without React for better performance
 - **API strategy:** Astro API endpoints instead of direct Supabase calls (better security)
@@ -55,6 +60,7 @@ The product targets two user groups: bakery customers (primarily women aged 30-6
 The customer is looking for a cake or pastry for an occasion (birthday, wedding, gathering). They need a single place where they can check the bakery's offerings with photos and prices, then place an order online in a simple way. Currently, they must search for information on Instagram, send DMs or call, which is inefficient and provides no assurance that the inquiry reached the owner. The customer doesn't know what options are available, how much they cost, and what the ordering process looks like.
 
 Additional customer problems:
+
 - No centralized product catalog with indicative pricing
 - No structured way to describe an order (especially custom cakes with multiple parameters)
 - No confirmation that the inquiry was received
@@ -65,6 +71,7 @@ Additional customer problems:
 The owner runs a home bakery and needs a professional online business card with a form that standardizes the order intake process. Currently, inquiries come chaotically through various channels, making them difficult to track. There's no issue with order volume (3-4 weekly), but with lack of a unified process. The website is also intended to serve as a tool for documenting work and business development.
 
 Additional owner problems:
+
 - No order history in one place
 - Risk of missing inquiries coming through DM or phone
 - No professional presentation of offerings that would attract new customers
@@ -79,6 +86,7 @@ Additional owner problems:
 ### 3.1 Public Pages
 
 #### 3.1.1 Homepage
+
 - Hero section with main photo and brief bakery description
 - Gallery of selected projects (photos of cakes and pastries)
 - Brief description of offerings and bakery values
@@ -86,6 +94,7 @@ Additional owner problems:
 - Responsive layout (mobile-first)
 
 #### 3.1.2 Products
+
 - Three product categories displayed on one page:
   - Occasion/custom cakes: indicative pricing ("from X PLN"), gallery, description
   - Standard pastries (cookies, alfajores, cakes): concrete pricing (per piece, kilogram, or portion)
@@ -97,17 +106,20 @@ Additional owner problems:
 - CTA directing to order form
 
 #### 3.1.3 About Us
+
 - Bakery history and values
 - Owner/team photo
 - Social media profile links (Instagram, Facebook)
 - Optional: Instagram post grid (dependent on Instagram Business API, decision deferred)
 
 #### 3.1.4 Contact
+
 - Contact details (email, phone)
 - Social media links (Instagram, Facebook)
 - Location information (Szczecin)
 
 #### 3.1.5 Order Terms
+
 - Information that the form constitutes a quote request, not a commercial offer
 - Order modification rules (up to 48h before planned pickup)
 - Cancellation policy
@@ -116,11 +128,13 @@ Additional owner problems:
 - Link to terms visible near order form
 
 #### 3.1.6 Privacy Policy
+
 - Generated privacy policy (generator)
 - Personal data processing information (GDPR)
 - Cookie information (GA4, Microsoft Clarity)
 
 #### 3.1.7 Common Elements (layout)
+
 - Main navigation: Homepage, Products, About Us, Orders, Contact
 - Footer on every page: social media links (Instagram, Facebook), contact details, terms link, privacy policy link
 - Cookie banner (consent for GA4 and Microsoft Clarity)
@@ -174,6 +188,7 @@ Simple, structural form accessible from a separate "Orders" page:
 - "Submit Inquiry" button
 
 Form validation:
+
 - Frontend: validation of all fields before submission (required fields, email/phone formats, future date min. +48h, textarea length)
 - Backend: server-side validation duplication
 - Error messages in Polish, displayed inline at respective fields
@@ -181,6 +196,7 @@ Form validation:
 ### 3.3 Backend and Order Processing
 
 #### 3.3.1 Order Storage
+
 - Astro API endpoint accepting form data
 - Server-side data validation (frontend validation duplication)
 - Input sanitization (XSS and SQL injection protection)
@@ -190,6 +206,7 @@ Form validation:
 - RLS (Row Level Security) policies in Supabase
 
 #### 3.3.2 Customer Email
+
 - HTML template (Resend + React Email)
 - Branding: logo (placeholder), brand colors (placeholder), footer with contact details
 - Content:
@@ -200,12 +217,14 @@ Form validation:
 - Sent within 2 minutes of inquiry submission
 
 #### 3.3.3 Owner Email
+
 - Complete order details: product category, order details (textarea content), customer contact details, pickup date, notes, inspiration photo link
 - All data needed for customer contact
 
 #### 3.3.4 Rate Limiting and Security
 
 **Must-have in MVP:**
+
 - **Server-side validation:** Zod schema validation for all form fields
 - **Rate limiting:** Maximum 5 inquiries per IP/hour (in-memory for MVP)
 - **Upload security:** MIME type and file size validation (max 5MB, JPG/PNG/WEBP only)
@@ -214,6 +233,7 @@ Form validation:
 - **HTTPS enforcement:** Provided automatically by Vercel
 
 **Nice-to-have (post-MVP):**
+
 - **CAPTCHA:** Cloudflare Turnstile if spam appears
 - **Content Security Policy:** Security headers against XSS
 - **Input sanitization:** DOMPurify for rich HTML email content
@@ -315,6 +335,7 @@ Five-step builder displayed in modal, launched from Products page:
   - Radio buttons with description/photo
 
 Builder UI elements:
+
 - Progress bar (Step X/5)
 - Back/Next navigation
 - Live summary preview on right side (desktop) or bottom (mobile)
@@ -465,6 +486,7 @@ Extended form displayed after clicking "Proceed to Form" from cart:
 Title: Browsing Homepage
 Description: As a customer, I want to see the bakery's homepage with hero section, project gallery, and description, so I can quickly understand what the bakery does and whether its offerings interest me.
 Acceptance Criteria:
+
 - Homepage displays hero section with photo and brief bakery description
 - Project gallery presents minimum 3 pastry photos
 - CTA button directing to Orders or Products page is visible
@@ -475,6 +497,7 @@ Acceptance Criteria:
 Title: Browsing Product Offerings
 Description: As a customer, I want to browse the bakery's complete offerings divided into categories with photos and prices, so I know what to expect and how much products cost approximately.
 Acceptance Criteria:
+
 - Products page displays products in three categories: Occasion/custom cakes, Standard pastries, Other custom cakes
 - Each product is presented as a card with photo thumbnail, name, brief description, and price
 - Cakes and other custom cakes have indicative prices ("from X PLN")
@@ -488,6 +511,7 @@ Acceptance Criteria:
 Title: Browsing About Us Page
 Description: As a customer, I want to read about the bakery's history and values, so I can get to know the people behind the brand and build trust before placing an order.
 Acceptance Criteria:
+
 - About Us page contains text about bakery history and values
 - Owner/team photo is displayed
 - Social media profile links are visible (Instagram, Facebook)
@@ -497,6 +521,7 @@ Acceptance Criteria:
 Title: Browsing Contact Details
 Description: As a customer, I want to find the bakery's contact details, so I can contact them directly if I have questions beyond the form.
 Acceptance Criteria:
+
 - Contact page displays bakery email address
 - Contact page displays bakery phone number
 - Social media profile links are visible (Instagram, Facebook)
@@ -507,6 +532,7 @@ Acceptance Criteria:
 Title: Browsing Order Terms
 Description: As a customer, I want to read the order terms before submitting an inquiry, so I know the modification, cancellation, and confirmation rules.
 Acceptance Criteria:
+
 - Terms page contains information that form constitutes a quote request
 - Order modification rules are described (up to 48h before pickup)
 - Cancellation policy is described
@@ -520,6 +546,7 @@ Acceptance Criteria:
 Title: Filling Out Order Form
 Description: As a customer, I want to fill out a simple form with category selection and order description, so I can quickly send an inquiry to the bakery without unnecessary complications.
 Acceptance Criteria:
+
 - Form contains product category selection (radio buttons: Cake/Pastry/Cookies/Alfajores/Other)
 - Form contains "Order Details" textarea (500-1000 characters) with counter
 - Form contains contact detail fields: name, email, phone (all required)
@@ -533,6 +560,7 @@ Acceptance Criteria:
 Title: Selecting Pickup Date
 Description: As a customer, I want to select order pickup date from calendar, so I can specify when I need the products.
 Acceptance Criteria:
+
 - Form contains calendar picker for date selection
 - Past dates are blocked (unavailable for selection)
 - Dates closer than 48h from inquiry date are blocked
@@ -544,6 +572,7 @@ Acceptance Criteria:
 Title: Uploading Inspiration Photo
 Description: As a customer, I want to attach an inspiration photo to the order, so I can show the bakery what visual effect I'd like to achieve.
 Acceptance Criteria:
+
 - Form enables 1 photo upload
 - Accepted formats: JPG, PNG, WEBP
 - Maximum size: 5 MB
@@ -557,6 +586,7 @@ Acceptance Criteria:
 Title: Adding Notes to Order
 Description: As a customer, I want to add text notes to the order, so I can convey additional information (e.g., dietary preferences, special wishes, shipping information).
 Acceptance Criteria:
+
 - Form contains "Additional Notes" textarea field
 - Field displays character counter (X/500)
 - Maximum text length: 500 characters
@@ -568,6 +598,7 @@ Acceptance Criteria:
 Title: Expressing GDPR Consent
 Description: As a customer, I want to express consent to processing my personal data, so my inquiry can be processed in compliance with data protection regulations.
 Acceptance Criteria:
+
 - Form contains GDPR consent checkbox
 - Consent text contains link to privacy policy
 - Checkbox is required - form cannot be submitted without checking
@@ -577,6 +608,7 @@ Acceptance Criteria:
 Title: Submitting Quote Request
 Description: As a customer, I want to submit a complete quote request, so the bakery receives my order and contacts me.
 Acceptance Criteria:
+
 - "Submit Inquiry" button is active only when all required fields are correctly filled
 - After clicking, button is deactivated and displays loading state (spinner or "Submitting..." text)
 - Form data is validated server-side before storage
@@ -592,6 +624,7 @@ Acceptance Criteria:
 Title: Receiving Confirmation Email
 Description: As a customer, I want to receive email confirming inquiry submission, so I'm assured my message reached the bakery and know the next steps.
 Acceptance Criteria:
+
 - Email is sent to address provided in form within 2 minutes of inquiry submission
 - Email contains thank you for choosing the offer
 - Email contains information about response time (within 24h)
@@ -605,6 +638,7 @@ Acceptance Criteria:
 Title: Receiving Email About New Order
 Description: As the owner, I want to receive email with complete new order details, so I have all data needed for customer contact and order fulfillment.
 Acceptance Criteria:
+
 - Email is sent to owner's address within 2 minutes of inquiry submission
 - Email contains product category and complete details from textarea
 - Email contains customer contact details (name, email, phone)
@@ -616,6 +650,7 @@ Acceptance Criteria:
 Title: Browsing Orders in Supabase Dashboard
 Description: As the owner, I want to browse all orders in Supabase Dashboard, so I have history and overview of orders.
 Acceptance Criteria:
+
 - Orders are visible in orders table in Supabase Dashboard
 - Orders are sorted chronologically (newest on top)
 - Each order contains: customer data, category, details, pickup date, status, submission date
@@ -627,6 +662,7 @@ Acceptance Criteria:
 Title: Sharing Website on Social Media
 Description: As a customer, I want to share the bakery's website on social media with photo and description, so I can recommend the bakery to friends.
 Acceptance Criteria:
+
 - Each page has Open Graph tags set (og:title, og:description, og:image)
 - Sharing link on Facebook/Instagram displays appropriate preview with title, description, and photo
 - Homepage has dedicated og:image promoting the bakery
@@ -635,6 +671,7 @@ Acceptance Criteria:
 Title: Finding Bakery in Search Results
 Description: As a customer, I want to find Tilulu Bakery in Google search results after typing phrases related to bakery in Szczecin, so I can learn about the offerings.
 Acceptance Criteria:
+
 - Each page has meta tags set (title, description) with appropriate keywords
 - schema.org LocalBusiness implemented with bakery data
 - schema.org Product implemented for products in offerings
@@ -648,6 +685,7 @@ Acceptance Criteria:
 Title: Managing Cookie Consent
 Description: As a customer, I want to decide whether I consent to analytical cookies, so I have control over my data.
 Acceptance Criteria:
+
 - Cookie banner is displayed on first visit with information about used cookies
 - Customer can accept or decline analytical cookies
 - GA4 and Microsoft Clarity launch only after consent
@@ -660,6 +698,7 @@ Acceptance Criteria:
 Title: Navigating the Website
 Description: As a customer, I want to easily navigate between bakery pages, so I can quickly find needed information.
 Acceptance Criteria:
+
 - Main navigation contains links: Homepage, Products, About Us, Orders, Contact
 - Navigation is visible on every page
 - On mobile devices, navigation is available as hamburger menu
@@ -669,6 +708,7 @@ Acceptance Criteria:
 Title: Browsing Footer
 Description: As a customer, I want access to important links and contact details in footer, so I can quickly find them from any page.
 Acceptance Criteria:
+
 - Footer is displayed on every page
 - Footer contains social media links (Instagram, Facebook)
 - Footer contains bakery contact details
@@ -681,6 +721,7 @@ Acceptance Criteria:
 Title: Handling Form Submission Error
 Description: As a customer, I want to see a readable message when something goes wrong during order submission, so I know what to do next.
 Acceptance Criteria:
+
 - In case of server error, message in Polish with problem information is displayed
 - Message contains retry suggestion
 - Form data is not lost after error (remains filled)
@@ -691,6 +732,7 @@ Acceptance Criteria:
 Title: Handling Inquiry Limit
 Description: As a customer, I want to see information when I exceed the hourly inquiry limit, so I understand why I can't submit another form.
 Acceptance Criteria:
+
 - After reaching limit of 5 inquiries per IP per hour, next submission attempt displays informational message
 - Message explains that the hourly limit has been reached
 - Message suggests phone or email contact
@@ -700,6 +742,7 @@ Acceptance Criteria:
 Title: Form Validation Before Submission
 Description: As a customer, I want to see validation error messages at respective fields, so I can quickly correct data and submit the order.
 Acceptance Criteria:
+
 - Error messages display at specific fields, not as general list
 - Validation triggers on form submission attempt
 - Inline validation triggers on field blur for required fields
@@ -714,6 +757,7 @@ Acceptance Criteria:
 Title: Mobile Device Responsiveness
 Description: As a customer using smartphone, I want to conveniently browse offerings and place orders, so I can use the website in any conditions.
 Acceptance Criteria:
+
 - All pages display correctly on screens from 320px width
 - Navigation changes to hamburger menu on mobile screens
 - Calendar picker is usable on touch screens
@@ -723,6 +767,7 @@ Acceptance Criteria:
 Title: Information About Special Dietary Orders
 Description: As a customer with dietary restrictions, I want to know that the bakery fulfills gluten-free and vegan orders, so I can submit appropriate inquiry.
 Acceptance Criteria:
+
 - On Products page in "Other custom cakes" category, information about gluten-free and vegan cake fulfillment possibility is visible
 - Customer can describe their dietary requirements in form textarea fields (Order Details or Additional Notes)
 - Information about special orders is visible without needing to go to form
@@ -731,6 +776,7 @@ Acceptance Criteria:
 Title: Handling Cookies Without Consent
 Description: As a customer who didn't consent to analytical cookies, I want to normally use the website, so browsing offerings and placing orders is not restricted.
 Acceptance Criteria:
+
 - Declining analytical cookies doesn't affect any website functionality
 - GA4 and Microsoft Clarity don't load without consent
 - Order form works without analytical cookies
@@ -739,6 +785,7 @@ Acceptance Criteria:
 Title: Form Data Security
 Description: As a customer, I want assurance that my personal data is securely processed, so I feel comfortable providing email and phone.
 Acceptance Criteria:
+
 - Form data is transmitted via HTTPS
 - Inputs are sanitized server-side (XSS and SQL injection protection)
 - Supabase database has configured RLS policies restricting data access
@@ -749,6 +796,7 @@ Acceptance Criteria:
 Title: Owner Access to Supabase Dashboard
 Description: As the owner, I want to log into Supabase Dashboard, so I can browse orders and manage their status.
 Acceptance Criteria:
+
 - Owner has Supabase account with project access
 - After login, sees orders table with orders
 - Can filter and sort orders
@@ -759,6 +807,7 @@ Acceptance Criteria:
 Title: Displaying Form Loading State
 Description: As a customer, I want to see visual loading indicators during form submission and photo upload, so I know the process is ongoing and not click again.
 Acceptance Criteria:
+
 - After clicking "Submit Inquiry", button displays spinner or "Submitting..." text
 - Button is deactivated during processing
 - During photo upload, progress bar or spinner is displayed at thumbnail
@@ -768,6 +817,7 @@ Acceptance Criteria:
 Title: Retry on Backend Error
 Description: As the system, I want to automatically retry order storage attempt on temporary Supabase unavailability, so orders aren't lost due to momentary infrastructure issues.
 Acceptance Criteria:
+
 - On timeout or connection error with Supabase, system automatically retries
 - Retry occurs maximum 3 times with exponential backoff
 - If all 3 attempts fail, customer sees message with temporary problem information
@@ -784,6 +834,7 @@ Acceptance Criteria:
 Title: Receiving SMS About New Order
 Description: As the owner, I want to receive SMS about a new order, so I can react quickly even when not checking email.
 Acceptance Criteria:
+
 - SMS is sent to owner number simultaneously with email
 - SMS format: "New order: [Name], [Category], [Pickup Date]. Check email."
 - SMS is sent through SMSAPI.pl
@@ -795,6 +846,7 @@ Acceptance Criteria:
 Title: Displaying Product Details in Modal
 Description: As a customer, I want to click product card and see details in modal, so I can learn full description and photos without leaving Products page.
 Acceptance Criteria:
+
 - Clicking product card opens modal with enlarged photos and full description
 - Modal contains lightbox for photo enlargement with navigation (previous/next)
 - Modal contains appropriate CTA button for category ("Build" for cakes, "Add" for standard pastries)
@@ -805,6 +857,7 @@ Acceptance Criteria:
 Title: Adding Standard Pastries to Cart
 Description: As a customer, I want to add cookies, alfajores, or cakes to cart with quantity specification, so I can compose multi-product order within one inquiry.
 Acceptance Criteria:
+
 - Clicking "Add" at standard pastry opens modal with quantity selector
 - Customer can set quantity using +/- buttons or numeric field
 - Indicative total is displayed for selected quantity
@@ -816,6 +869,7 @@ Acceptance Criteria:
 Title: Adding Custom Cake to Cart (5-step builder)
 Description: As a customer, I want to compose cake step-by-step in builder, so I can precisely describe what I need and see indicative price.
 Acceptance Criteria:
+
 - Clicking "Build" at cake opens modal with 5-step builder
 - Step 1: customer selects cake type (classic/tall) and size (4 options per type) with indicative price
 - Step 2: customer selects sponge (vanilla/cocoa/lemon)
@@ -832,6 +886,7 @@ Acceptance Criteria:
 Title: Browsing Cart Contents
 Description: As a customer, I want to review cart contents with summary of all selected products and indicative total, so I can ensure order is complete before submitting inquiry.
 Acceptance Criteria:
+
 - Clicking mini cart widget opens full cart view
 - Product list contains names, configurations (e.g., cake size, sponge flavor), quantities, and indicative prices
 - Indicative total for entire order is displayed
@@ -842,6 +897,7 @@ Acceptance Criteria:
 Title: Editing and Removing Products from Cart
 Description: As a customer, I want to edit product quantity or configuration in cart and remove products, so I can adjust order to my needs without starting over.
 Acceptance Criteria:
+
 - Customer can change standard pastry quantity in cart view
 - Customer can remove any product from cart
 - Customer can edit cake configuration (return to builder with preserved state)
@@ -852,6 +908,7 @@ Acceptance Criteria:
 Title: Cart Persistence Between Sessions
 Description: As a customer, I want my cart to persist after closing browser or refreshing page, so I don't lose progress in completing order.
 Acceptance Criteria:
+
 - Cart contents are saved to localStorage after each change
 - After page refresh, cart contains same products as before refresh
 - After closing and reopening browser, cart is restored
@@ -861,6 +918,7 @@ Acceptance Criteria:
 Title: Marking Package Shipping Preference
 Description: As a customer, I want to indicate I want to receive order by package instead of picking up in person, so I don't have to travel to Szczecin.
 Acceptance Criteria:
+
 - "I want to receive order by package" checkbox is visible in form when cart contains products with shipping option (cookies, alfajores)
 - Checkbox is not visible when cart contains only products without shipping option (cakes)
 - Information is displayed at checkbox: "Shipping costs and details arranged after contact. Shipping within Poland only."
@@ -872,6 +930,7 @@ Acceptance Criteria:
 Title: Recovering Abandoned Form
 Description: As a customer, I want to return to unfinished form after accidentally closing browser, so I don't lose progress and don't fill everything again.
 Acceptance Criteria:
+
 - Form data (contact details, date, notes) is automatically saved to localStorage after each field change
 - Draft data expires after 30 days
 - On return to page with saved draft, message "You have an incomplete order, want to continue?" is displayed
@@ -882,6 +941,7 @@ Acceptance Criteria:
 Title: Handling Empty Cart on Checkout Attempt
 Description: As a customer, I want to see appropriate message when I try to proceed to form with empty cart, so I know I must first add products.
 Acceptance Criteria:
+
 - Attempt to proceed to checkout form with empty cart displays informational message
 - Message encourages browsing offerings and adding products
 - Link/button directing to Products page is displayed
@@ -890,6 +950,7 @@ Acceptance Criteria:
 Title: Adding Multiple Cakes to Cart
 Description: As a customer, I want to add several different cakes to one order, so I can order e.g., two cakes for the same occasion.
 Acceptance Criteria:
+
 - Customer can use cake builder multiple times and add different configurations to cart
 - Each cake is displayed separately in cart with own summary
 - Each cake can be edited or removed independently
@@ -899,6 +960,7 @@ Acceptance Criteria:
 Title: Composing Boxes from Standard Pastries
 Description: As a customer, I want to compose mixed box from different cookies and alfajores, so I can order set for gift or gathering.
 Acceptance Criteria:
+
 - Customer can add multiple different standard pastries to cart (e.g., 5 alfajores + 3 chocolate cookies + 2 nut cookies)
 - Each product is displayed separately in cart with quantity and price
 - Indicative total includes all products
@@ -907,6 +969,7 @@ Acceptance Criteria:
 Title: Uploading Multiple Inspiration Photos
 Description: As a customer, I want to attach up to 3 inspiration photos to order, so I can show bakery different aspects of visual effect I'd like to achieve.
 Acceptance Criteria:
+
 - Form enables maximum 3 photo uploads
 - Accepted formats: JPG, PNG, WEBP
 - Maximum size per photo: 5 MB
