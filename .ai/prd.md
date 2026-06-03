@@ -447,8 +447,6 @@ Extended form displayed after clicking "Proceed to Form" from cart:
 - Accounting system integration
 - Automated invoicing
 - Loyalty program
-- Coupons / discount codes (decision deferred)
-- Blog / news
 - Customer ratings and reviews system (decision deferred)
 - PWA / offline mode
 - Real-time updates
@@ -691,10 +689,10 @@ Acceptance Criteria:
 
 **[MVP] US-030**
 Title: Handling Inquiry Limit
-Description: As a customer, I want to see information when I exceed daily inquiry limit, so I understand why I can't submit another form.
+Description: As a customer, I want to see information when I exceed the hourly inquiry limit, so I understand why I can't submit another form.
 Acceptance Criteria:
-- After reaching limit of 5 inquiries per IP per day, next submission attempt displays informational message
-- Message explains that daily limit has been reached
+- After reaching limit of 5 inquiries per IP per hour, next submission attempt displays informational message
+- Message explains that the hourly limit has been reached
 - Message suggests phone or email contact
 - Form is not submitted after limit exceeded
 

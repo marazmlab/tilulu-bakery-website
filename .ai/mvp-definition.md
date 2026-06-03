@@ -57,7 +57,6 @@
 - User accounts / order history for customers
 - Availability calendar / appointment booking
 - Language versions (English and others)
-- Blog / news
 - Customer review / rating system
 
 ### Technical Features
@@ -72,7 +71,6 @@
 - Accounting system integration
 - Automatic invoices
 - Loyalty program
-- Coupons / discount codes
 
 ---
 
@@ -164,10 +162,7 @@ Complexity: Low (ideal for start)
 
 ### Backlog
 - Online payments
-- Discount codes
-- Blog
 - Mobile application
-- AI cake design generator
 
 ---
 
