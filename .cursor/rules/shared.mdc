@@ -1,0 +1,132 @@
+---
+description: Core project context, MVP scope, architecture, and coding standards for Tilulu Bakery
+alwaysApply: true
+---
+
+# AI Rules for Tilulu Bakery
+
+Home bakery website in Szczecin, Poland. MVP is a business card plus a single inquiry channel — not an e-commerce shop with online payments. Every submission is an offer request; the owner follows up manually.
+
+## Sources of Truth
+
+Before significant changes, read:
+
+- `.ai/mvp-definition.md` — MVP scope (in/out)
+- `.ai/prd.md` — product requirements
+- `.ai/notebook.md` — planning decisions
+
+Keep changes minimal and MVP-scoped unless the user explicitly asks for Phase 2+ features.
+
+## Tech Stack
+
+- **Astro** 6 — static pages, layouts, API endpoints
+- **React** 19 — interactive islands only (order form, optional gallery filters)
+- **TypeScript** — strict mode (`tsconfig.json`)
+- **Tailwind CSS** — planned (not yet installed)
+- **shadcn/ui** — planned (after Tailwind)
+- **Supabase** — PostgreSQL + RLS + Storage (inspiration photo, max 5 MB)
+- **Resend** + React Email — transactional emails
+- **Zod** — server-side validation (and optional client-side UX validation)
+- **Hosting target:** Vercel
+- **Node.js:** >= 22.12.0
+
+Tooling already in place: ESLint, Prettier, `eslint-plugin-astro`, `eslint-plugin-react`.
+
+## MVP Product Summary
+
+**Customer:** Browse offer (photos, indicative prices) → submit inquiry form → receive confirmation email.
+
+**Owner:** Receives email with full details → reviews orders in Supabase Dashboard (no custom admin UI in MVP).
+
+**Constraints:**
+
+- UI language: Polish only; keep structure i18n-ready (no language switcher in MVP)
+- Pickup date: minimum +48 hours from today
+- Rate limit: 5 inquiries per IP per hour
+- No direct Supabase calls from the browser — use Astro API endpoints only
+
+## Public Pages (Routing)
+
+| File                         | URL           | Purpose                                             |
+| ---------------------------- | ------------- | --------------------------------------------------- |
+| `src/pages/index.astro`      | `/`           | Home — hero, brief description, product photos, CTA |
+| `src/pages/oferta.astro`     | `/oferta`     | Offer gallery with indicative prices                |
+| `src/pages/o-nas.astro`      | `/o-nas`      | About the bakery                                    |
+| `src/pages/zamowienia.astro` | `/zamowienia` | Order inquiry form                                  |
+| `src/pages/kontakt.astro`    | `/kontakt`    | Contact details and social links                    |
+
+## Project Structure
+
+Follow this layout when adding or moving files:
+
+```
+src/
+  layouts/           # BaseLayout.astro — shared HTML shell
+  pages/             # Astro file-based routing
+  pages/api/         # Server endpoints (orders, uploads)
+  components/        # .astro (static) and .tsx (interactive)
+  components/ui/     # shadcn/ui components (after init)
+  lib/               # Shared logic (Supabase server client, Zod schemas, helpers)
+  types/             # Domain TypeScript types (Order, InquiryPayload, etc.)
+  styles/            # Global CSS / Tailwind entry (after Tailwind)
+public/              # Static assets served as-is
+.ai/                 # PRD, MVP definition, planning notes — do not delete
+```
+
+Update this section if the directory structure changes.
+
+## Architecture Rules
+
+1. **Astro first** — Use `.astro` for static pages, layouts, SEO, and navigation. Do not wrap entire pages in React.
+2. **React islands** — Use React only where interactivity is required. Hydrate with `client:load` or `client:visible` (prefer `client:visible` for below-the-fold forms).
+3. **API boundary** — All Supabase, Resend, and file-upload logic lives in `src/pages/api/` or `src/lib/` consumed by API routes. Never expose service-role keys to the client.
+4. **Validation** — Zod on the server is mandatory for form submissions. Client validation is optional UX only.
+5. **Security (MVP)** — RLS (anon INSERT only on orders), upload MIME/size checks, rate limiting on inquiry endpoint.
+6. **Images** — Unsplash placeholders are fine for MVP; real photos go to Supabase Storage later.
+
+## Coding Practices
+
+### General
+
+- Prefer early returns and guard clauses over deep nesting.
+- Handle errors at the start of functions; keep the happy path last.
+- Use TypeScript strictly; avoid `any` unless unavoidable and documented.
+- Match existing ESLint and Prettier configuration; run `npm run lint` after substantive changes.
+- User-facing copy and labels: **Polish**.
+- Do not create git commits unless the user explicitly asks.
+
+### Clean Code
+
+- Prioritize edge cases (empty states, validation errors, network failures).
+- Log server errors appropriately; show user-friendly messages in the UI.
+- Reuse existing components and helpers instead of duplicating logic.
+
+## Explicitly Out of Scope (Do Not Implement Unless Asked)
+
+**Phase 2+**
+
+- SMS notifications (SMSAPI.pl)
+- Shopping cart / multi-product orders
+- 5-step cake builder wizard
+- Custom admin panel (owner uses Supabase Dashboard)
+- Online payments / Stripe
+- Customer accounts, order history, login
+- Language switcher / English version
+- Blog, reviews, loyalty program, coupons
+
+**Technical**
+
+- PWA / offline mode
+- Real-time subscriptions
+- Direct Supabase client usage in browser-side React components
+
+When unsure whether a feature belongs in MVP, check `.ai/mvp-definition.md` first.
+
+## Commands
+
+```bash
+npm run dev      # local development
+npm run build    # production build
+npm run lint     # ESLint
+npm run format   # Prettier
+```
