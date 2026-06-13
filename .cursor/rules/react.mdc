@@ -6,16 +6,20 @@ alwaysApply: false
 
 ## React
 
+### Scope (MVP)
+
+- React islands only: order inquiry form and optional offer-gallery filters
+- Do not use React for static pages, layout, navigation, or SEO
+- Phase 1 state: `useState` and controlled form fields — no Zustand or global store
+- Never call Supabase directly from React — use Astro API routes
+
 ### React Coding Standards
 
 - Use functional components with hooks instead of class components
-- Implement React.memo() for expensive components that render often with the same props
-- Utilize React.lazy() and Suspense for code-splitting and performance optimization
-- Use the useCallback hook for event handlers passed to child components to prevent unnecessary re-renders
-- Prefer useMemo for expensive calculations to avoid recomputation on every render
-- Implement useId() for generating unique IDs for accessibility attributes
-- Consider using the new useOptimistic hook for optimistic UI updates in forms
-- Use useTransition for non-urgent state updates to keep the UI responsive
+- Implement `useId()` for generating unique IDs for accessibility attributes
+- Consider `useOptimistic` for optimistic UI updates in the order form
+- Use `useTransition` for non-urgent state updates to keep the UI responsive
+- Apply `React.memo`, `useCallback`, `useMemo`, and `React.lazy` only when profiling shows a real need — keep MVP components simple
 
 ### Key Principles
 
@@ -24,6 +28,6 @@ alwaysApply: false
 - Favor named exports for components.
 - Use TypeScript for all code. Prefer interfaces over types.
 - File structure: imports, types, main component, subcomponents, helpers, static content.
-- Use Zod for form validation.
-- Use Zustand for state management.
-- Use Shadcn UI, Radix, and Tailwind CSS for components and styling.
+- Zod: mandatory in API routes; optional shared schema on the client for UX validation only.
+- Zustand: Phase 2+ only (cart, builder draft) — do not add in MVP.
+- Use shadcn/ui, Radix, and Tailwind CSS for components and styling (after Tailwind is installed).

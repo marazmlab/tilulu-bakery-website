@@ -1,0 +1,33 @@
+---
+description: Astro pages — SEO, meta tags, schema.org, sitemap, cookie consent
+globs: **/*.{astro,ts}
+alwaysApply: false
+---
+
+## Astro
+
+### SEO (MVP — per PRD § 3.5)
+
+- Set unique `title` and `description` meta tags on every public page
+- Add Open Graph tags (`og:title`, `og:description`, `og:image`) for social sharing
+- Implement `schema.org` JSON-LD: `LocalBusiness` (bakery) and `Product` (offer items)
+- Generate `sitemap.xml` and `robots.txt` at build time
+- Use semantic HTML and descriptive `alt` attributes on all images
+
+### Layout and Navigation
+
+- Shared layout: main nav (Home, Offer, About, Orders, Contact), footer with social links, terms, and privacy policy
+- Highlight the current page in navigation (`aria-current="page"`)
+- Mobile: hamburger menu for navigation on small screens
+
+### Cookie Consent and Analytics
+
+- Show a cookie banner on first visit; remember the user's choice
+- Load GA4 and Microsoft Clarity only after consent (`PUBLIC_GA_MEASUREMENT_ID`, `PUBLIC_CLARITY_PROJECT_ID`)
+- Declining analytics must not block form submission or browsing
+
+### Analytics Events (MVP)
+
+- `form_started` — user opened the orders page
+- `form_submitted` — inquiry submitted successfully
+- `cta_clicked` — main call-to-action clicked

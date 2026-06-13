@@ -13,6 +13,7 @@ Before significant changes, read:
 
 - `.ai/mvp-definition.md` — MVP scope (in/out)
 - `.ai/prd.md` — product requirements
+- `.ai/tech-stack.md` — stack versions, architecture, env vars
 - `.ai/notebook.md` — planning decisions
 
 Keep changes minimal and MVP-scoped unless the user explicitly asks for Phase 2+ features.
@@ -44,6 +45,8 @@ Tooling already in place: ESLint, Prettier, `eslint-plugin-astro`, `eslint-plugi
 - Pickup date: minimum +48 hours from today
 - Rate limit: 5 inquiries per IP per hour
 - No direct Supabase calls from the browser — use Astro API endpoints only
+- State (Phase 1): local component state and controlled forms — no global store
+- Analytics: GA4 + Microsoft Clarity load only after cookie consent (see `.env.example`)
 
 ## Public Pages (Routing)
 
@@ -54,6 +57,8 @@ Tooling already in place: ESLint, Prettier, `eslint-plugin-astro`, `eslint-plugi
 | `src/pages/o-nas.astro`      | `/o-nas`      | About the bakery                                    |
 | `src/pages/zamowienia.astro` | `/zamowienia` | Order inquiry form                                  |
 | `src/pages/kontakt.astro`    | `/kontakt`    | Contact details and social links                    |
+| `src/pages/regulamin.astro`  | `/regulamin`  | Order terms — link near form and in footer          |
+| `src/pages/polityka-prywatnosci.astro` | `/polityka-prywatnosci` | Privacy policy (GDPR, cookies) |
 
 ## Project Structure
 
@@ -107,6 +112,7 @@ Update this section if the directory structure changes.
 
 - SMS notifications (SMSAPI.pl)
 - Shopping cart / multi-product orders
+- Global state store (Zustand) — Phase 1 uses local component state only
 - 5-step cake builder wizard
 - Custom admin panel (owner uses Supabase Dashboard)
 - Online payments / Stripe
