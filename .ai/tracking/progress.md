@@ -11,57 +11,25 @@ Full checklist: [`roadmap.md`](./roadmap.md)
 ```
 Project: Tilulu Bakery (tilulu-bakery-website)
 Phase: 1 — Bootstrap (Course 2x2)
-Current step: 1.6 — Cursor rules (shared done; frontend + react pending)
-Last session: 2026-06-09 — React, ESLint/Prettier, folder structure, shared.mdc
-Next tasks:
-  1. Complete .cursor/rules/frontend.mdc and react.mdc
-  2. README + .env.example + fix package.json name
-  3. npx astro add tailwind
+Current step: | 1.9 | Tailwind CSS | `astro add tailwind`; styles entry wired |
+Last session: 2026-06-15 — `.nvmrc` | File contains `22` |
+Next: 1.9
 Blockers: none
 Workflow: Implement in Tilulu myself; web-dev-assistant = planner/mentor only
 ```
 
-**Last updated:** 2026-06-09
+**Last updated:** 2026-06-15
 
 ---
 
 ## Quick Reference
 
-| Item | Value |
-|------|-------|
-| Repo | `marazmlab/tilulu-bakery-website` |
+| Item             | Value                                                    |
+| ---------------- | -------------------------------------------------------- |
+| Repo             | `marazmlab/tilulu-bakery-website`                        |
 | Sources of truth | `.ai/prd.md`, `.ai/mvp-definition.md`, `.ai/notebook.md` |
-| Course / planner | `web-dev-assistant` (no app code commits there) |
-| Node | >= 22.12.0 (`.nvmrc` not yet added) |
-
----
-
-## Completed So Far
-
-- [x] Phase 0 — Planning (PRD, MVP, notebook)
-- [x] Astro 6 minimal bootstrap in repo root
-- [x] TypeScript strict; `npm run dev` / `npm run build` OK
-- [x] React 19 + `@astrojs/react`; smoke test (`Counter.tsx`)
-- [x] ESLint + Prettier configured
-- [x] Folder structure: `layouts/`, `components/`, `pages/api/`, `lib/`, `types/`, `styles/`
-- [x] `BaseLayout.astro`, `index.astro`
-- [x] `.cursor/rules/shared.mdc` (complete)
-
----
-
-## In Progress
-
-- [~] **Step 1.6** — Cursor rules: `frontend.mdc` and `react.mdc` are placeholders
-
----
-
-## Not Started (next up)
-
-- [ ] Step 1.7 — README, `.env.example`, rename `package.json` from `afraid-satellite`
-- [ ] Step 1.8 — `.nvmrc`
-- [ ] Step 1.9 — Tailwind
-- [ ] Step 1.10 — shadcn/ui
-- [ ] Step 1.11 — Walking skeleton + 4 placeholder routes (`oferta`, `o-nas`, `zamowienia`, `kontakt`)
+| Course / planner | `web-dev-assistant` (no app code commits there)          |
+| Node             | >= 22.12.0 (`.nvmrc` not yet added)                      |
 
 ---
 
@@ -78,6 +46,19 @@ Append a short entry after each session. Max 5 bullets per entry.
 
 ---
 
+### 2026-06-13 — Bootstrap fundamentals
+
+- **Done:** rules for AI added; recreated `tech-stack.md` missing file, fixed and standardized `ai/` files.
+- **Learned:** structure for ai rules documentation
+
+---
+
+### 2026-06-13 — Bootstrap fundamentals 1.8 -
+
+- **Done** file .nvrmc added,
+
+---
+
 ## Planner Chat Template
 
 Paste at the start of a new conversation in `web-dev-assistant`:
@@ -89,6 +70,7 @@ Mode: mentor/planner. Do not implement Tilulu app code.
 
 Question: Guide me through the current step. I implement myself in tilulu-bakery-website.
 What is the order of tasks, how do I verify done, and what mistakes should I avoid?
+
 ```
 
 ## When to Start a New Planner Conversation

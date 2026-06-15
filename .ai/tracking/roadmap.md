@@ -28,9 +28,9 @@ Foundation before MVP features. Implement in `tilulu-bakery-website`; use course
 | 1.3 | React integration | [x] | `@astrojs/react` configured; test component renders |
 | 1.4 | ESLint + Prettier | [x] | `npm run lint` and `npm run format` work; Astro + React covered |
 | 1.5 | Folder structure | [x] | `layouts/`, `components/`, `pages/api/`, `lib/`, `types/`, `styles/` exist |
-| 1.6 | Cursor rules | [~] | `shared.mdc` complete; `frontend.mdc` + `react.mdc` filled in |
-| 1.7 | Project docs + env template | [ ] | Tilulu `README.md`, `.env.example`, sensible `package.json` name |
-| 1.8 | `.nvmrc` | [ ] | File contains `22` |
+| 1.6 | Cursor rules | [x] | `shared.mdc` complete; `frontend.mdc` + `react.mdc` filled in |
+| 1.7 | Project docs + env template | [x] | Tilulu `README.md`, `.env.example`, sensible `package.json` name |
+| 1.8 | `.nvmrc` | [x] | File contains `22` |
 | 1.9 | Tailwind CSS | [ ] | `astro add tailwind`; styles entry wired |
 | 1.10 | shadcn/ui init | [ ] | `components/ui/` ready; at least one component added |
 | 1.11 | Walking skeleton | [ ] | `BaseLayout` with nav; real-ish `index.astro`; placeholder pages for all 5 routes |
