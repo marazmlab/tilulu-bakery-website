@@ -1,0 +1,38 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Oferta - Piekarnia Tilulu">
+  <h1 class="text-3xl font-bold tracking-tight">Oferta</h1>
+
+  <p class="mt-4 max-w-2xl text-muted-foreground">
+    Tutaj pojawi się galeria produktów: torty okolicznościowe, ciasta,
+    ciasteczka i alfajores — z cenami orientacyjnymi i informacją o odbiorze
+    lub wysyłce.
+  </p>
+
+  <ul class="mt-8 grid gap-4 sm:grid-cols-2">
+    <li class="rounded-xl border border-border p-4">
+      <h2 class="font-semibold">Torty okolicznościowe</h2>
+      <p class="mt-1 text-sm text-muted-foreground">od — PLN · odbiór osobisty</p>
+    </li>
+    <li class="rounded-xl border border-border p-4">
+      <h2 class="font-semibold">Ciastka i alfajores</h2>
+      <p class="mt-1 text-sm text-muted-foreground">cena za sztukę · możliwa wysyłka</p>
+    </li>
+    <li class="rounded-xl border border-border p-4">
+      <h2 class="font-semibold">Ciasta na zamówienie</h2>
+      <p class="mt-1 text-sm text-muted-foreground">od — PLN · opcje bezglutenowe na zapytanie</p>
+    </li>
+    <li class="rounded-xl border border-border p-4">
+      <h2 class="font-semibold">Inne na zamówienie</h2>
+      <p class="mt-1 text-sm text-muted-foreground">opisz potrzeby w formularzu zapytania</p>
+    </li>
+  </ul>
+
+  <p class="mt-8">
+    <a href="/zamowienia" class="font-medium text-primary hover:underline">
+      Przejdź do formularza zapytań
+    </a>
+  </p>
+</BaseLayout>
