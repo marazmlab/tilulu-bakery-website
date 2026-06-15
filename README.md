@@ -3,7 +3,7 @@
 [![Node.js](https://img.shields.io/badge/node-%3E%3D22.12.0-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![Astro](https://img.shields.io/badge/Astro-6.x-BC52EE?logo=astro&logoColor=white)](https://astro.build/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Phase](https://img.shields.io/badge/phase-MVP%20(Phase%201)-orange)](#project-status)
+[![Phase](<https://img.shields.io/badge/phase-MVP%20(Phase%201)-orange>)](#project-status)
 
 Website for **Tilulu Bakery** — a home bakery in Szczecin, Poland. The product serves as an online business card and a single channel for quote requests, replacing scattered communication through Instagram DM, WhatsApp, and phone.
 
@@ -33,17 +33,17 @@ Customers browse products with photos and indicative prices, then submit a quote
 
 ### Planned for MVP (Phase 1)
 
-| Layer        | Technology              | Role                                              |
-| ------------ | ----------------------- | ------------------------------------------------- |
-| Styling      | Tailwind CSS 4          | Utility-first styling                             |
-| Components   | shadcn/ui + Radix       | Accessible UI primitives                          |
-| Validation   | Zod                     | Server-side (and client) form validation          |
-| Database     | Supabase (PostgreSQL)   | Orders table with RLS policies                    |
-| File storage | Supabase Storage        | Inspiration photo uploads (max 5 MB)              |
-| Email        | Resend + React Email    | Customer confirmation and owner notification      |
-| Hosting      | Vercel                  | Static site + Astro API endpoints                 |
-| Analytics    | GA4 + Microsoft Clarity | Loaded only after cookie consent                  |
-| Runtime      | Node.js                 | >= 22.12.0 (local dev and CI)                     |
+| Layer        | Technology              | Role                                         |
+| ------------ | ----------------------- | -------------------------------------------- |
+| Styling      | Tailwind CSS 4          | Utility-first styling                        |
+| Components   | shadcn/ui + Radix       | Accessible UI primitives                     |
+| Validation   | Zod                     | Server-side (and client) form validation     |
+| Database     | Supabase (PostgreSQL)   | Orders table with RLS policies               |
+| File storage | Supabase Storage        | Inspiration photo uploads (max 5 MB)         |
+| Email        | Resend + React Email    | Customer confirmation and owner notification |
+| Hosting      | Vercel                  | Static site + Astro API endpoints            |
+| Analytics    | GA4 + Microsoft Clarity | Loaded only after cookie consent             |
+| Runtime      | Node.js                 | >= 22.12.0 (local dev and CI)                |
 
 ### Architecture Highlights
 
@@ -83,16 +83,16 @@ Customers browse products with photos and indicative prices, then submit a quote
 
    Fill in the values in `.env`. Required for full MVP functionality:
 
-   | Variable                    | Scope  | Purpose                          |
-   | --------------------------- | ------ | -------------------------------- |
-   | `SUPABASE_URL`              | server | Supabase project URL             |
-   | `SUPABASE_SERVICE_ROLE_KEY` | server | API routes (DB + storage)        |
-   | `RESEND_API_KEY`            | server | Transactional email              |
-   | `RESEND_FROM_EMAIL`         | server | Verified sender domain           |
-   | `OWNER_EMAIL`               | server | Owner notification recipient     |
-   | `SITE_URL`                  | server | Links in emails                  |
-   | `PUBLIC_GA_MEASUREMENT_ID`  | client | Google Analytics (after consent) |
-   | `PUBLIC_CLARITY_PROJECT_ID` | client | Microsoft Clarity (after consent)|
+   | Variable                    | Scope  | Purpose                           |
+   | --------------------------- | ------ | --------------------------------- |
+   | `SUPABASE_URL`              | server | Supabase project URL              |
+   | `SUPABASE_SERVICE_ROLE_KEY` | server | API routes (DB + storage)         |
+   | `RESEND_API_KEY`            | server | Transactional email               |
+   | `RESEND_FROM_EMAIL`         | server | Verified sender domain            |
+   | `OWNER_EMAIL`               | server | Owner notification recipient      |
+   | `SITE_URL`                  | server | Links in emails                   |
+   | `PUBLIC_GA_MEASUREMENT_ID`  | client | Google Analytics (after consent)  |
+   | `PUBLIC_CLARITY_PROJECT_ID` | client | Microsoft Clarity (after consent) |
 
    > **Note:** Supabase and Resend credentials are only needed once backend features are implemented. The dev server runs without them for static page development.
 
@@ -115,15 +115,15 @@ npm run preview
 
 All commands are run from the project root:
 
-| Script            | Description                                      |
-| ----------------- | ------------------------------------------------ |
-| `npm run dev`     | Start local dev server at `localhost:4321`       |
-| `npm run build`   | Build production site to `./dist/`               |
-| `npm run preview` | Preview the production build locally             |
-| `npm run lint`    | Run ESLint across the project                    |
-| `npm run lint:fix`| Run ESLint and auto-fix issues where possible    |
-| `npm run format`  | Format code with Prettier                        |
-| `npm run astro`   | Run Astro CLI commands (e.g. `astro add`, `check`)|
+| Script             | Description                                        |
+| ------------------ | -------------------------------------------------- |
+| `npm run dev`      | Start local dev server at `localhost:4321`         |
+| `npm run build`    | Build production site to `./dist/`                 |
+| `npm run preview`  | Preview the production build locally               |
+| `npm run lint`     | Run ESLint across the project                      |
+| `npm run lint:fix` | Run ESLint and auto-fix issues where possible      |
+| `npm run format`   | Format code with Prettier                          |
+| `npm run astro`    | Run Astro CLI commands (e.g. `astro add`, `check`) |
 
 ## Project Scope
 
@@ -131,15 +131,15 @@ All commands are run from the project root:
 
 **Public pages**
 
-| Route              | Page            | Purpose                                      |
-| ------------------ | --------------- | -------------------------------------------- |
-| `/`                | Home            | Hero, gallery, brief description, CTA        |
-| `/oferta`          | Offer           | Product gallery with indicative prices       |
-| `/o-nas`           | About Us        | Bakery history, values, owner photo          |
-| `/zamowienia`      | Orders          | Quote request form                           |
-| `/kontakt`         | Contact         | Contact details and social links             |
-| `/regulamin`       | Order Terms     | Quote request rules, cancellation policy     |
-| `/polityka-prywatnosci` | Privacy Policy | GDPR, cookies (GA4, Clarity)            |
+| Route                   | Page           | Purpose                                  |
+| ----------------------- | -------------- | ---------------------------------------- |
+| `/`                     | Home           | Hero, gallery, brief description, CTA    |
+| `/oferta`               | Offer          | Product gallery with indicative prices   |
+| `/o-nas`                | About Us       | Bakery history, values, owner photo      |
+| `/zamowienia`           | Orders         | Quote request form                       |
+| `/kontakt`              | Contact        | Contact details and social links         |
+| `/regulamin`            | Order Terms    | Quote request rules, cancellation policy |
+| `/polityka-prywatnosci` | Privacy Policy | GDPR, cookies (GA4, Clarity)             |
 
 **Order form**
 
@@ -167,11 +167,11 @@ All commands are run from the project root:
 
 ### Development Roadmap (Beyond MVP)
 
-| Phase   | Focus                                                                 |
-| ------- | --------------------------------------------------------------------- |
+| Phase   | Focus                                                                             |
+| ------- | --------------------------------------------------------------------------------- |
 | Phase 2 | SMS (SMSAPI.pl), multi-product cart, 5-step cake builder, advanced error handling |
-| Phase 3 | Custom admin panel, order status management, automated customer emails |
-| Phase 4 | Customer accounts, order history, status tracking                   |
+| Phase 3 | Custom admin panel, order status management, automated customer emails            |
+| Phase 4 | Customer accounts, order history, status tracking                                 |
 
 ### Explicitly Out of Scope
 
@@ -187,15 +187,15 @@ All commands are run from the project root:
 
 **Version:** `0.0.1` — **Phase 1 (MVP) — early development**
 
-| Area              | Status        | Notes                                           |
-| ----------------- | ------------- | ----------------------------------------------- |
-| Project scaffold  | Done          | Astro 6 + React 19, ESLint, Prettier            |
-| Base layout       | In progress   | `BaseLayout.astro` started                      |
-| Public pages      | Not started   | 7 routes planned (see scope above)              |
-| Order form        | Not started   | React island with API integration               |
-| Supabase / Resend | Not started   | Dependencies and API routes pending             |
-| Tailwind / shadcn | Not started   | Planned per tech stack                          |
-| Deployment        | Not started   | Target: Vercel (GitHub → auto deploy)           |
+| Area              | Status      | Notes                                 |
+| ----------------- | ----------- | ------------------------------------- |
+| Project scaffold  | Done        | Astro 6 + React 19, ESLint, Prettier  |
+| Base layout       | In progress | `BaseLayout.astro` started            |
+| Public pages      | Not started | 7 routes planned (see scope above)    |
+| Order form        | Not started | React island with API integration     |
+| Supabase / Resend | Not started | Dependencies and API routes pending   |
+| Tailwind / shadcn | Not started | Planned per tech stack                |
+| Deployment        | Not started | Target: Vercel (GitHub → auto deploy) |
 
 MVP success criteria include Lighthouse scores above 80, page load under 3 seconds, server-side validation, and owner email delivery within 2 minutes of submission.
 
@@ -203,12 +203,12 @@ MVP success criteria include Lighthouse scores above 80, page load under 3 secon
 
 Internal planning and requirements live in the `.ai/` directory:
 
-| Document                 | Description                              |
-| ------------------------ | ---------------------------------------- |
-| [`.ai/prd.md`](.ai/prd.md)               | Product Requirements Document            |
-| [`.ai/mvp-definition.md`](.ai/mvp-definition.md) | MVP scope and success criteria   |
-| [`.ai/tech-stack.md`](.ai/tech-stack.md) | Stack versions, architecture, env vars   |
-| [`.env.example`](.env.example)           | Environment variable template            |
+| Document                                         | Description                            |
+| ------------------------------------------------ | -------------------------------------- |
+| [`.ai/prd.md`](.ai/prd.md)                       | Product Requirements Document          |
+| [`.ai/mvp-definition.md`](.ai/mvp-definition.md) | MVP scope and success criteria         |
+| [`.ai/tech-stack.md`](.ai/tech-stack.md)         | Stack versions, architecture, env vars |
+| [`.env.example`](.env.example)                   | Environment variable template          |
 
 Cursor AI rules for contributors: [`.cursor/rules/`](.cursor/rules/).
 
