@@ -1,9 +1,66 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { Button } from "@/components/ui/button";
 ---
 
-<BaseLayout title="Tilulu Bakery">
-  <h1 class="text-3xl font-bold text-amber-800">Tilulu Bakery</h1>
-  <Button client:load variant="outline">CLICK</Button>
+<BaseLayout title="Tilulu Bakery -Piekarnia domowa w Szczecinie">
+  <section class="space-y-6">
+    <p class="text-sm font-medium text-primary">Piekarnia domowa - Szczecin</p>
+
+    <h1 class="text-4xl font-bold sm:text-5xl">
+      Argentyńskie smaki w centrum Szczecina
+    </h1>
+
+    <p class="max-w-2xl text-lg text-muted-foreground">
+      Torty okolicznościowe, ciasta, ciasteczka i tradycyjne Argentyńskie wypieki na zamówienie. Przeglądaj ofertę i wyślij zaptanie - każde zamówienie potwierdzamy indywidualnie.
+    </p>
+
+    <div class="flex flex-wrap gap-3">
+      <a
+        href="/oferta"
+        class="inline-flex h-10 items-center justify-center rounded-4xl bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
+      >
+        Zobacz ofertę
+      </a>
+    </div>
+
+    <div class="flex flex-wrap gap-3">
+      <a 
+        href="/zamowienia"
+        class="inline-flex h-10 items-center justify-center rounded-4xl border border-border bg-input/30 px-5 text-sm font-medium transition-colors hover:bg-input/50"
+      >
+        Zapytaj o zamówienie
+      </a>
+    </div>
+  </section>
+
+  <section class="mt-12">
+    <h2 class="text-2xl font-semibold">Wybrane realizacje</h2>
+    <p class="mt-2 text-muted-foreground">
+      real pictures in next project phaze
+    </p>
+
+    <div class="mt-6 grid gap-4 sm:grid-cols-3">
+      <div class="flex aspect-4/3 items-center justify-center rpimded-xl border border-border bg-muted/40 text-sm text-muted-foreground">
+        cookies photo
+      </div>
+      <div class="flex aspect-4/3 items-center justify-center rpimded-xl border border-border bg-muted/40 text-sm text-muted-foreground">
+        cookies photo
+      </div>
+      <div class="flex aspect-4/3 items-center justify-center rpimded-xl border border-border bg-muted/40 text-sm text-muted-foreground">
+        cookies photo
+      </div>
+      <div class="flex aspect-4/3 items-center justify-center rpimded-xl border border-border bg-muted/40 text-sm text-muted-foreground">
+        cookies photo
+      </div>
+      <div class="flex aspect-4/3 items-center justify-center rpimded-xl border border-border bg-muted/40 text-sm text-muted-foreground">
+        cookies photo
+      </div>
+      <div class="flex aspect-4/3 items-center justify-center rpimded-xl border border-border bg-muted/40 text-sm text-muted-foreground">
+        cookies photo
+      </div>
+
+    </div>
+  </section>
+
+
 </BaseLayout>
