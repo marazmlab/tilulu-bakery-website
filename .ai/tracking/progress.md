@@ -10,11 +10,10 @@ Full checklist: [`roadmap.md`](./roadmap.md)
 
 ```
 Project: Tilulu Bakery (tilulu-bakery-website)
-Phase: 1 — Bootstrap (Course 2x2) → final stretch
-Current step: 1.11 | Walking skeleton | BaseLayout + nav; index + 5 routes with MVP stubs
-Last session: 2026-06-16 — finish phase 1 - walking skeleton.
+Phase: 2 — Public Pages (Course 2x5)
+Current step: 2.1 UI architecture plan
+Last session: 2026-06-16 — finished phase 1 - walking skeleton.
 Blockers: none
-Next: start phase 2
 Workflow: Implement in Tilulu myself; web-dev-assistant = planner/mentor only
 ```
 
@@ -58,7 +57,7 @@ Append a short entry after each session. Max 5 bullets per entry.
 
 - **Done:** `.nvmrc`; Tailwind CSS 4 + `global.css`; shadcn/ui + `Button`; `BaseLayout` (nav, footer, active link); `index.astro` with hero and CTA; MVP stubs on `/oferta`, `/o-nas`, `/zamowienia`, `/kontakt`; Prettier disabled for `.astro`, walking skeleton builded
 - **Verified:** `npm run lint` and `npm run build` pass; build outputs 5 pages
-- **Next:** Phase 2 (content and photos on public pages)
+- **Next:** start Phase 2
 
 ---
 
