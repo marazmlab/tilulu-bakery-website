@@ -23,8 +23,8 @@ Keep changes minimal and MVP-scoped unless the user explicitly asks for Phase 2+
 - **Astro** 6 — static pages, layouts, API endpoints
 - **React** 19 — interactive islands only (order form, optional gallery filters)
 - **TypeScript** — strict mode (`tsconfig.json`)
-- **Tailwind CSS** — planned (not yet installed)
-- **shadcn/ui** — planned (after Tailwind)
+- **Tailwind CSS** — planned
+- **shadcn/ui** —
 - **Supabase** — PostgreSQL + RLS + Storage (inspiration photo, max 5 MB)
 - **Resend** + React Email — transactional emails
 - **Zod** — server-side validation (and optional client-side UX validation)
@@ -50,15 +50,15 @@ Tooling already in place: ESLint, Prettier, `eslint-plugin-astro`, `eslint-plugi
 
 ## Public Pages (Routing)
 
-| File                         | URL           | Purpose                                             |
-| ---------------------------- | ------------- | --------------------------------------------------- |
-| `src/pages/index.astro`      | `/`           | Home — hero, brief description, product photos, CTA |
-| `src/pages/oferta.astro`     | `/oferta`     | Offer gallery with indicative prices                |
-| `src/pages/o-nas.astro`      | `/o-nas`      | About the bakery                                    |
-| `src/pages/zamowienia.astro` | `/zamowienia` | Order inquiry form                                  |
-| `src/pages/kontakt.astro`    | `/kontakt`    | Contact details and social links                    |
-| `src/pages/regulamin.astro`  | `/regulamin`  | Order terms — link near form and in footer          |
-| `src/pages/polityka-prywatnosci.astro` | `/polityka-prywatnosci` | Privacy policy (GDPR, cookies) |
+| File                                   | URL                     | Purpose                                             |
+| -------------------------------------- | ----------------------- | --------------------------------------------------- |
+| `src/pages/index.astro`                | `/`                     | Home — hero, brief description, product photos, CTA |
+| `src/pages/oferta.astro`               | `/oferta`               | Offer gallery with indicative prices                |
+| `src/pages/o-nas.astro`                | `/o-nas`                | About the bakery                                    |
+| `src/pages/zamowienia.astro`           | `/zamowienia`           | Order inquiry form                                  |
+| `src/pages/kontakt.astro`              | `/kontakt`              | Contact details and social links                    |
+| `src/pages/regulamin.astro`            | `/regulamin`            | Order terms — link near form and in footer          |
+| `src/pages/polityka-prywatnosci.astro` | `/polityka-prywatnosci` | Privacy policy (GDPR, cookies)                      |
 
 ## Project Structure
 
