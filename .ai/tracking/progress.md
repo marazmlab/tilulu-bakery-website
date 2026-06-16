@@ -10,10 +10,11 @@ Full checklist: [`roadmap.md`](./roadmap.md)
 
 ```
 Project: Tilulu Bakery (tilulu-bakery-website)
-Phase: 2 — Public Pages (Course 2x5)
-Current step: 2.1 UI architecture plan
-Last session: 2026-06-16 — finished phase 1 - walking skeleton.
+Phase: 2 — Data & API Planning (Courses 2x3, 2x4)
+Current step: 2.1 DB planning session
+Last session: 2026-06-16 — Phase 1 complete (walking skeleton); roadmap reordered (DB/API plan before UI).
 Blockers: none
+Next: 2.1 → 2.2 db-plan.md → 2.3–2.4 api-plan.md → Phase 3 ui-plan.md
 Workflow: Implement in Tilulu myself; web-dev-assistant = planner/mentor only
 ```
 
@@ -58,6 +59,14 @@ Append a short entry after each session. Max 5 bullets per entry.
 - **Done:** `.nvmrc`; Tailwind CSS 4 + `global.css`; shadcn/ui + `Button`; `BaseLayout` (nav, footer, active link); `index.astro` with hero and CTA; MVP stubs on `/oferta`, `/o-nas`, `/zamowienia`, `/kontakt`; Prettier disabled for `.astro`, walking skeleton builded
 - **Verified:** `npm run lint` and `npm run build` pass; build outputs 5 pages
 - **Next:** start Phase 2
+
+---
+
+### 2026-06-16 — Roadmap reorder (planning first)
+
+- **Done:** Roadmap restructured — Phase 2 = DB/API planning (2x3, 2x4); Phase 3 = Public Pages (2x5); Phase 4 = backend implementation; Phase 5 = go-live
+- **Decided:** Plan `db-plan.md` + `api-plan.md` before `ui-plan.md`; `
+- **Next:** Step 2.1 — DB planning session (2 rounds, reasoning model)
 
 ---
 
