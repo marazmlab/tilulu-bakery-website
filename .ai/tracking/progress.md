@@ -12,14 +12,13 @@ Full checklist: [`roadmap.md`](./roadmap.md)
 Project: Tilulu Bakery (tilulu-bakery-website)
 Phase: 1 — Bootstrap (Course 2x2) → final stretch
 Current step: 1.11 | Walking skeleton | BaseLayout + nav; index + 5 routes with MVP stubs
-Last session: 2026-06-15 — Tailwind 4, shadcn/ui, layout, placeholder pages
+Last session: 2026-06-16 — finish phase 1 - walking skeleton.
 Blockers: none
-Verify: npm run lint + build OK; open /, /oferta, /o-nas, /zamowienia, /kontakt in browser
-Next: close 1.11 in roadmap → Phase 2 Public Pages (2.2 Home — real content and photos)
+Next: start phase 2
 Workflow: Implement in Tilulu myself; web-dev-assistant = planner/mentor only
 ```
 
-**Last updated:** 2026-06-15
+**Last updated:** 2026-06-16
 
 ---
 
@@ -57,10 +56,9 @@ Append a short entry after each session. Max 5 bullets per entry.
 
 ### 2026-06-15 — Bootstrap 1.8–1.11
 
-- **Done:** `.nvmrc`; Tailwind CSS 4 + `global.css`; shadcn/ui + `Button`; `BaseLayout` (nav, footer, active link); `index.astro` with hero and CTA; MVP stubs on `/oferta`, `/o-nas`, `/zamowienia`, `/kontakt`; Prettier disabled for `.astro`
+- **Done:** `.nvmrc`; Tailwind CSS 4 + `global.css`; shadcn/ui + `Button`; `BaseLayout` (nav, footer, active link); `index.astro` with hero and CTA; MVP stubs on `/oferta`, `/o-nas`, `/zamowienia`, `/kontakt`; Prettier disabled for `.astro`, walking skeleton builded
 - **Verified:** `npm run lint` and `npm run build` pass; build outputs 5 pages
-- **Learned:** `@/` alias in page imports; Tailwind 4 via `@tailwindcss/vite`
-- **Next:** manual route check in browser → check off 1.11 in `roadmap.md` → Phase 2 (content and photos on public pages)
+- **Next:** Phase 2 (content and photos on public pages)
 
 ---
 

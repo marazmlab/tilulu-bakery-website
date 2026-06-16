@@ -33,7 +33,7 @@ Foundation before MVP features. Implement in `tilulu-bakery-website`; use course
 | 1.8  | `.nvmrc`                               | [x]    | File contains `22`                                                                |
 | 1.9  | Tailwind CSS                           | [x]    | `astro add tailwind`; styles entry wired                                          |
 | 1.10 | shadcn/ui init                         | [x]    | `components/ui/` ready; at least one component added                              |
-| 1.11 | Walking skeleton                       | [ ]    | `BaseLayout` with nav; real-ish `index.astro`; placeholder pages for all 5 routes |
+| 1.11 | Walking skeleton                       | [x]    | `BaseLayout` with nav; real-ish `index.astro`; placeholder pages for all 5 routes |
 
 **Phase 1 complete when:** steps 1.1–1.11 are checked; `npm run lint` + `npm run build` pass; all 5 routes open in browser.
 
