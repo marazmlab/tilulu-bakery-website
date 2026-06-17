@@ -47,8 +47,8 @@ Foundation before MVP features. Implement in `tilulu-bakery-website`; use course
 
 | #   | Step                 | Status | Definition of Done                                                                                     |
 | --- | -------------------- | ------ | ------------------------------------------------------------------------------------------------------ |
-| 2.1 | DB planning session  | [ ]    | ≥2 Q&A rounds with reasoning model;                                                                    |
-| 2.2 | Database plan        | [ ]    | `.ai/db-plan.md`: `orders` table, Storage bucket, RLS, indexes; OUT OF SCOPE for cart/products noted   |
+| 2.1 | DB planning session  | [x]    | ≥2 Q&A rounds with reasoning model;                                                                    |
+| 2.2 | Database plan        | [x]    | `.ai/db-plan.md`: `orders` table, Storage bucket, RLS, indexes; OUT OF SCOPE for cart/products noted   |
 | 2.3 | API planning session | [ ]    | Integration decisions documented (Astro API only, no direct Supabase from browser, upload strategy)    |
 | 2.4 | API plan             | [ ]    | `.ai/api-plan.md`: `POST /api/orders` contract, HTTP codes, rate limit, env vars; aligned with db-plan |
 | 2.5 | Plans cross-review   | [ ]    | Every form field in PRD maps to DB column + API field; RLS matches “server service_role via Astro API” |
