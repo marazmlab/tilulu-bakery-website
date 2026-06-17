@@ -86,7 +86,7 @@ Update this section if the directory structure changes.
 2. **React islands** — Use React only where interactivity is required. Hydrate with `client:load` or `client:visible` (prefer `client:visible` for below-the-fold forms).
 3. **API boundary** — All Supabase, Resend, and file-upload logic lives in `src/pages/api/` or `src/lib/` consumed by API routes. Never expose service-role keys to the client.
 4. **Validation** — Zod on the server is mandatory for form submissions. Client validation is optional UX only.
-5. **Security (MVP)** — RLS (anon INSERT only on orders), upload MIME/size checks, rate limiting on inquiry endpoint.
+5. **Security (MVP)** — RLS (enabled on `orders`, no `anon`/`authenticated` policies; writes via API `service_role` only), upload MIME/size checks, rate limiting on inquiry endpoint.
 6. **Images** — Unsplash placeholders are fine for MVP; real photos go to Supabase Storage later.
 
 ## Coding Practices

@@ -144,7 +144,8 @@ Additional owner problems:
 Simple, structural form accessible from a separate "Orders" page:
 
 - Product category selection:
-  - Radio buttons: Occasion Cake / Cake / Cookies / Alfajores / Other
+  - Radio buttons (labels PL): Tort okazjonalny / Ciasta / Ciastka / Alfajory / Inne
+  - Technical values (DB ENUM source of truth): `tort_okazjonalny`, `ciasta`, `ciastka`, `alfajory`, `inne` — see `db-plan` note 4
   - Required field
 
 - Order details:
@@ -228,7 +229,7 @@ Form validation:
 - **Server-side validation:** Zod schema validation for all form fields
 - **Rate limiting:** Maximum 5 inquiries per IP/hour (in-memory for MVP)
 - **Upload security:** MIME type and file size validation (max 5MB, JPG/PNG/WEBP only)
-- **Supabase RLS:** Row Level Security policies (anon can INSERT only, no SELECT/UPDATE/DELETE)
+- **Supabase RLS:** Row Level Security enabled on `orders` with no policies for `anon`/`authenticated` (all direct client access denied); API writes via `service_role` only
 - **Environment variables:** All API keys (Supabase, Resend) in `.env` (not in code)
 - **HTTPS enforcement:** Provided automatically by Vercel
 
@@ -547,7 +548,7 @@ Title: Filling Out Order Form
 Description: As a customer, I want to fill out a simple form with category selection and order description, so I can quickly send an inquiry to the bakery without unnecessary complications.
 Acceptance Criteria:
 
-- Form contains product category selection (radio buttons: Cake/Pastry/Cookies/Alfajores/Other)
+- Form contains product category selection (radio buttons: Occasion Cake / Tort okazjonalny, Ciasta, Ciastka, Alfajory, Inne — enum: `tort_okazjonalny`, `ciasta`, `ciastka`, `alfajory`, `inne`)
 - Form contains "Order Details" textarea (500-1000 characters) with counter
 - Form contains contact detail fields: name, email, phone (all required)
 - Email field validates email address format correctness

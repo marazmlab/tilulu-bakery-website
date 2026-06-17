@@ -24,7 +24,7 @@
 
 ### Order Form
 
-1. Product category selection (cake, pastry, cookies, alfajores)
+1. Product category selection — 5 options (DB ENUM source of truth): tort okazjonalny, ciasta, ciastka, alfajory, inne (`tort_okazjonalny`, `ciasta`, `ciastka`, `alfajory`, `inne`)
 2. Textarea for order details (500-1000 characters) - flavor, size, colors, decorations etc.
 3. Pickup date (no time - arranged after contact)
 4. Customer data: name, email, phone

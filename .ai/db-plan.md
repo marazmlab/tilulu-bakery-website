@@ -34,7 +34,7 @@ A single, denormalized table holding all data for one inquiry. No customer/produ
 ```sql
 CREATE TYPE public.order_category AS ENUM (
   'tort_okazjonalny',  -- Tort okazjonalny (Occasion cake)
-  'tort',              -- Tort (Cake)
+  'ciasta',            -- Ciasta (Cake)
   'ciastka',           -- Ciastka (Cookies)
   'alfajory',          -- Alfajory (Alfajores)
   'inne'               -- Inne (Other)
@@ -55,7 +55,7 @@ CREATE TYPE public.order_status AS ENUM (
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE TYPE public.order_category AS ENUM (
-  'tort_okazjonalny', 'tort', 'ciastka', 'alfajory', 'inne'
+  'tort_okazjonalny', 'ciasta', 'ciastka', 'alfajory', 'inne'
 );
 
 CREATE TYPE public.order_status AS ENUM (
@@ -111,25 +111,18 @@ Partitioning, full-text indexes, and column-specific indexes are intentionally o
 
 ## 4. PostgreSQL Row Level Security (RLS)
 
-RLS is enabled on `orders` as a second line of defense against direct browser traffic. The Astro API connects with the `service_role` key, which **bypasses RLS**; the only policy granted to anonymous clients is `INSERT`.
+RLS is enabled on `orders` as defense-in-depth against direct browser access via the public Supabase `anon` key. **No policies** are granted to `anon` or `authenticated` — with RLS enabled and no matching policy, all operations are denied by default.
 
 ```sql
--- Enable RLS on the table.
+-- Enable RLS on the table. No policies for anon/authenticated.
 ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
-
--- Allow anonymous clients to INSERT only (no SELECT/UPDATE/DELETE).
-CREATE POLICY orders_anon_insert
-  ON public.orders
-  FOR INSERT
-  TO anon
-  WITH CHECK (true);
 ```
 
 Policy notes:
 
-- **No** `SELECT`, `UPDATE`, or `DELETE` policies exist for `anon` (or `authenticated`), so anonymous reads/edits are denied by default.
+- **No** `INSERT`, `SELECT`, `UPDATE`, or `DELETE` policies exist for `anon` or `authenticated`. Direct client-side writes to `orders` are impossible even if the `anon` key is exposed.
+- The Astro API connects with the `service_role` key, which **bypasses RLS**, and is the only write path after Zod validation, sanitization, and in-memory rate limiting (5 inquiries / IP / hour).
 - The owner browses and edits orders through the Supabase Dashboard, which operates with elevated privileges (`service_role` / project owner) and is not subject to these policies.
-- All real writes flow through server-side Astro API endpoints using `service_role` after Zod validation, sanitization, and in-memory rate limiting (5 inquiries / IP / hour).
 
 ### Storage (informational)
 
@@ -145,7 +138,17 @@ Inspiration photos live in a **private** bucket (no public read). Access is prov
 
 3. **Time columns** — Only `created_at`. `updated_at` and update triggers were intentionally dropped: status changes are rare, manual, and audited via the Dashboard; the extra column/trigger added no MVP value.
 
-4. **ENUM types vs free text** — `category` and `status` use PostgreSQL `ENUM` for data integrity and clean Dashboard display. Technical values avoid Polish characters/spaces. Adding a value later is a simple migration (`ALTER TYPE ... ADD VALUE ...`). Polish display labels are kept in i18n JSON translation files (i18n-ready, per PRD §3.8).
+4. **ENUM types vs free text** — `category` and `status` use PostgreSQL `ENUM` for data integrity and clean Dashboard display. Technical values avoid Polish characters/spaces. The `order_category` ENUM is the **single source of truth** for category values across DB, API, and form. Polish display labels live in i18n JSON files (i18n-ready, per PRD §3.8). Adding a value later is a simple migration (`ALTER TYPE ... ADD VALUE ...`).
+
+   **`order_category` — enum → label PL (UI / email):**
+
+   | ENUM value | Label PL |
+   | --- | --- |
+   | `tort_okazjonalny` | Tort okazjonalny |
+   | `ciasta` | Ciasta |
+   | `ciastka` | Ciastka |
+   | `alfajory` | Alfajory |
+   | `inne` | Inne |
 
 5. **`text` + `CHECK` length guards** — Text columns use `text` rather than `varchar(n)`. Length is enforced only where the PRD specifies it: `details` 500–1000 chars (PRD §3.2), `notes` ≤ 500 chars. These cheap CHECK constraints act as an integrity backstop behind the primary Zod validation, with no performance cost at this scale.
 
@@ -164,6 +167,5 @@ Inspiration photos live in a **private** bucket (no public read). Access is prov
 ### Open items (do not block schema creation)
 
 - Final maximum pickup-date horizon value (app-side config constant; TBD with owner).
-- Final confirmation of category ENUM value list against UI labels and i18n mapping.
 - Whether to create `orders_created_at_desc_idx` in MVP (negligible practical difference at current volume).
 - Private bucket configuration details (name, path layout, signed-URL TTL) — implementation-time, outside this table schema.

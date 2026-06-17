@@ -4,7 +4,7 @@
 **Phase:** 1 — MVP
 **Related docs:** `.ai/prd.md`, `.ai/db-plan.md`, `.ai/tech-stack.md`, `.ai/notebook.md`
 
-This plan describes the server-side HTTP API for the MVP. The scope is deliberately small: the only public write path is the quote-request submission. There is no customer-facing read/update/delete API — the owner browses and edits orders exclusively in the Supabase Dashboard (PRD §3.3.1, US-022, US-039), and the database RLS grants anonymous clients `INSERT` only (`db-plan` §4).
+This plan describes the server-side HTTP API for the MVP. The scope is deliberately small: the only public write path is the quote-request submission. There is no customer-facing read/update/delete API — the owner browses and edits orders exclusively in the Supabase Dashboard (PRD §3.3.1, US-022, US-039). RLS on `orders` denies all access for `anon`/`authenticated`; writes go exclusively through this API via `service_role` (`db-plan` §4).
 
 All endpoints are implemented as Astro API routes under `src/pages/api/` and run with the Supabase `service_role` key (server-only). No Supabase, Resend, or Storage call is ever made directly from the browser (tech-stack "API strategy").
 
@@ -19,7 +19,7 @@ All endpoints are implemented as Astro API routes under `src/pages/api/` and run
 
 Resources intentionally **not** exposed over the API in MVP:
 
-- Order listing / detail / status update — handled in the Supabase Dashboard (PRD §3.3.1, US-022). RLS provides no anon `SELECT`/`UPDATE`/`DELETE`, so building these would be out of scope and an unnecessary security surface.
+- Order listing / detail / status update — handled in the Supabase Dashboard (PRD §3.3.1, US-022). RLS denies all `anon`/`authenticated` access on `orders`, so building these would be out of scope and an unnecessary security surface.
 - Rate-limit, cart, builder, accounts — Phase 2+ (PRD §4).
 
 ---
@@ -40,7 +40,7 @@ Creates one inquiry: validates input, optionally uploads the inspiration photo t
 
 | Field | Type | Required | Constraints |
 | --- | --- | --- | --- |
-| `category` | string (enum) | yes | One of `tort_okazjonalny`, `tort`, `ciastka`, `alfajory`, `inne`. |
+| `category` | string (enum) | yes | One of `tort_okazjonalny`, `ciasta`, `ciastka`, `alfajory`, `inne` (DB ENUM source of truth — `db-plan` note 4). |
 | `details` | string | yes | 500–1000 characters (after trim). |
 | `name` | string | yes | Non-empty after trim; max 200 chars (sanity cap). |
 | `email` | string | yes | Valid email format. |
@@ -149,8 +149,8 @@ Not a REST resource exposed to browsers. The owner's notification email (US-020)
 
 ### 3.2 Database / Storage authorization
 
-- The API authenticates to Supabase with the **`service_role`** key, read from server-only env `SUPABASE_SERVICE_ROLE_KEY`. This key bypasses RLS and is never sent to the client (tech-stack §Environment Variables, `db-plan` §4).
-- **RLS** on `public.orders`: only `anon INSERT` policy exists; no `SELECT`/`UPDATE`/`DELETE` for `anon`/`authenticated` (`db-plan` §4). This is defense-in-depth in case of any accidental browser-side access.
+- The API authenticates to Supabase with the **`service_role`** key, read from server-only env `SUPABASE_SERVICE_ROLE_KEY`. This key bypasses RLS and is never sent to the client (tech-stack §Environment Variables, `db-plan` §4). It is the **only** write path to `public.orders`.
+- **RLS** on `public.orders`: enabled with **no policies** for `anon` or `authenticated` — all direct client access is denied by default (`db-plan` §4). Defense-in-depth: even if the public `anon` key is exposed, orders cannot be read or written without going through this API.
 - **Storage bucket** is private (no public read). Access only via server-generated signed URLs (US-038).
 
 ### 3.3 Owner access
@@ -167,7 +167,7 @@ Not a REST resource exposed to browsers. The owner's notification email (US-020)
 
 | Field | Validation | Source |
 | --- | --- | --- |
-| `category` | required; enum `['tort_okazjonalny','tort','ciastka','alfajory','inne']` | `order_category` ENUM (`db-plan` §1.1) |
+| `category` | required; enum `['tort_okazjonalny','ciasta','ciastka','alfajory','inne']` | `order_category` ENUM (`db-plan` §1.1, note 4) |
 | `details` | required; trimmed length **500–1000** | `orders_details_length_chk` (`db-plan`), PRD §3.2 |
 | `name` | required; non-empty trimmed; ≤ 200 | `name NOT NULL` |
 | `email` | required; valid email format | `email NOT NULL`, PRD §3.2 / US-012 |
@@ -215,7 +215,7 @@ Ordered server-side steps; each guard returns early on failure (clean-code rules
 | Server-side validation | Zod on every field before side effects | PRD §3.3.4 |
 | Rate limiting | In-memory, 5/IP/hour, `429` + `Retry-After` | PRD §3.3.4, US-030 |
 | Upload validation | MIME + 5 MB checks → `413`/`415` | PRD §3.3.4, US-014-SIMPLIFIED |
-| RLS | anon `INSERT` only; API uses `service_role` | `db-plan` §4, US-038 |
+| RLS | enabled, no `anon`/`authenticated` policies; API uses `service_role` | `db-plan` §4, US-038 |
 | Private storage | Private bucket + signed URLs only | `db-plan` §4, US-038 |
 | Secrets | Server-only env (`SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, …) | tech-stack §Env, US-038 |
 | HTTPS | Enforced by Vercel | PRD §3.3.4, US-038 |
