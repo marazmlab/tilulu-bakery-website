@@ -23,8 +23,8 @@ A single, denormalized table holding all data for one inquiry. No customer/produ
 | `name`                   | `text`        | `NOT NULL`                                                                   | Customer full name.                                                                    |
 | `email`                  | `text`        | `NOT NULL`                                                                   | Customer email (format validated by Zod on the server).                                |
 | `phone`                  | `text`        | `NOT NULL`                                                                   | Polish phone number (format validated/normalized by Zod on the server).                |
-| `details`                | `text`        | `NOT NULL`, `CHECK (char_length(details) BETWEEN 500 AND 1000)`             | Order description from the form textarea.                                              |
-| `pickup_date`            | `date`        | `NOT NULL`                                                                   | Pickup day only (no time). "+48h min" and upper horizon enforced in the app, not here. |
+| `details`                | `text`        | `NOT NULL`, `CHECK (char_length(details) BETWEEN 20 AND 1000)`              | Order description from the form textarea.                                              |
+| `pickup_date`            | `date`        | `NOT NULL`                                                                   | Pickup day only (no time). Min/max enforced in app: `pickup_date >= (current_date + INTERVAL '2 days')`. |
 | `notes`                  | `text`        | `NULL`, `CHECK (notes IS NULL OR char_length(notes) <= 500)`                | Optional additional notes.                                                             |
 | `inspiration_photo_path` | `text`        | `NULL`                                                                       | Path to the file in a private Supabase Storage bucket. No original filename stored.    |
 | `gdpr_consent`           | `boolean`     | `NOT NULL`, `CHECK (gdpr_consent = true)`                                   | GDPR accountability; timestamp implied by `created_at`.                                |
@@ -77,7 +77,7 @@ CREATE TABLE public.orders (
   gdpr_consent           boolean              NOT NULL,
 
   CONSTRAINT orders_details_length_chk
-    CHECK (char_length(details) BETWEEN 500 AND 1000),
+    CHECK (char_length(details) BETWEEN 20 AND 1000),
   CONSTRAINT orders_notes_length_chk
     CHECK (notes IS NULL OR char_length(notes) <= 500),
   CONSTRAINT orders_gdpr_consent_chk
@@ -150,11 +150,11 @@ Inspiration photos live in a **private** bucket (no public read). Access is prov
    | `alfajory` | Alfajory |
    | `inne` | Inne |
 
-5. **`text` + `CHECK` length guards** — Text columns use `text` rather than `varchar(n)`. Length is enforced only where the PRD specifies it: `details` 500–1000 chars (PRD §3.2), `notes` ≤ 500 chars. These cheap CHECK constraints act as an integrity backstop behind the primary Zod validation, with no performance cost at this scale.
+5. **`text` + `CHECK` length guards** — Text columns use `text` rather than `varchar(n)`. Length is enforced only where the PRD specifies it: `details` 20–1000 chars (PRD §3.2), `notes` ≤ 500 chars. These cheap CHECK constraints act as an integrity backstop behind the primary Zod validation, with no performance cost at this scale.
 
 6. **Nullability** — `NOT NULL`: `name`, `email`, `phone`, `details`, `category`, `pickup_date`, `gdpr_consent`, `status`, `created_at`. Nullable: `notes`, `inspiration_photo_path` (both optional in the form).
 
-7. **`pickup_date` as `date`** — Day only; no time component (arranged after contact, PRD §3.2). The "minimum +48h" rule and the (still-undecided) maximum horizon are enforced exclusively in the application (calendar + Zod + a config constant). Keeping these out of the database means the horizon can change without a migration.
+7. **`pickup_date` as `date`** — Day only; no time component (arranged after contact, PRD §3.2). Minimum lead time is enforced exclusively in the application (calendar + Zod + a config constant) using calendar days: `pickup_date >= (current_date + INTERVAL '2 days')`. The (still-undecided) maximum horizon uses `ORDER_MAX_PICKUP_DAYS`. Keeping these out of the database means the horizon can change without a migration.
 
 8. **`gdpr_consent`** — Minimal but accountable: a single `boolean NOT NULL CHECK (gdpr_consent = true)` guarantees no record can be stored without consent. A separate consent timestamp is unnecessary because it coincides with `created_at`.
 

@@ -16,20 +16,26 @@
 
 ### Public Pages
 
-1. **Home page** - hero section, brief description, product photos, CTA "See our work"
-2. **Offer** - product gallery (cakes, pastries, cookies, alfajores) with descriptions and approximate prices - reference info
-3. **About us** - bakery history, values, owner/team photo
-4. **Orders** - order form
-5. **Contact** - contact details, social media
+**7 routes total:** 5 in main navigation + Regulamin + Polityka prywatności (aligned with project routing rules).
+
+1. **Home page** (`/`) — hero section, brief description, product photos, CTA "See our work"
+2. **Offer** (`/oferta`) — product gallery (cakes, pastries, cookies, alfajores) with descriptions and approximate prices — reference info
+3. **About us** (`/o-nas`) — bakery history, values, owner/team photo
+4. **Orders** (`/zamowienia`) — order form
+5. **Contact** (`/kontakt`) — contact details, social media
+6. **Order terms** (`/regulamin`) — linked from footer and near the form (not in main nav)
+7. **Privacy policy** (`/polityka-prywatnosci`) — GDPR, cookies (footer link)
 
 ### Order Form
 
 1. Product category selection — 5 options (DB ENUM source of truth): tort okazjonalny, ciasta, ciastka, alfajory, inne (`tort_okazjonalny`, `ciasta`, `ciastka`, `alfajory`, `inne`)
-2. Textarea for order details (500-1000 characters) - flavor, size, colors, decorations etc.
-3. Pickup date (no time - arranged after contact)
+2. Textarea for order details (20–1000 characters) — flavor, size, colors, decorations etc.
+3. Pickup date (no time — arranged after contact; min. `pickup_date >= (current_date + INTERVAL '2 days')`)
 4. Customer data: name, email, phone
 5. Optional: inspiration photo (upload, max 5 MB)
-6. Validation: required fields, email/phone format, future date (min. +48h)
+6. Validation: required fields, email/phone format, pickup date per calendar-day rule above
+7. GDPR consent (required)
+8. Additional notes (optional, ≤500 characters)
 
 ### Backend
 
@@ -107,7 +113,7 @@
 ## SIMPLIFIED PROJECT SCOPE
 
 ```
-MVP = 5 pages + 1 form + email + database + security
+MVP = 7 routes (5 nav + Regulamin + Polityka prywatności) + 1 form + email + database + security
 Implementation time: ~20-30 hours of work
 Complexity: Low (ideal for start)
 ```
@@ -127,7 +133,7 @@ Complexity: Low (ideal for start)
 
 ### Key Decisions
 
-1. **Lead time:** Minimum 48 hours (date blocking: today + tomorrow)
+1. **Lead time:** Minimum 2 calendar days — `pickup_date >= (current_date + INTERVAL '2 days')` (today and tomorrow blocked)
 2. **No order limit:** Owner has flexible working hours
 3. **Photo storage:** Supabase Storage (5 MB max)
 4. **Notifications:** Email only in MVP (SMS in Phase 2)

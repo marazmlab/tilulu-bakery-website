@@ -22,7 +22,7 @@ The product targets two user groups: bakery customers (primarily women aged 30-6
 
 ### Development Roadmap
 
-- **Phase 1 (MVP)**: 5 public pages + simple form + email + Supabase Dashboard
+- **Phase 1 (MVP)**: 7 routes (5 in main navigation + Regulamin + Polityka prywatności) + simple form + email + Supabase Dashboard
 - **Phase 2**: SMS + multi-product cart + 5-step cake builder + advanced error handling
 - **Phase 3**: Custom admin panel + status management + automated emails
 - **Phase 4**: Customer accounts + order history + status tracking
@@ -149,7 +149,7 @@ Simple, structural form accessible from a separate "Orders" page:
   - Required field
 
 - Order details:
-  - Textarea (500-1000 characters)
+  - Textarea (20–1000 characters)
   - Placeholder: "Describe what you need: flavor, size, colors, decorations, number of servings, special requirements..."
   - Character counter
   - Required field
@@ -162,7 +162,7 @@ Simple, structural form accessible from a separate "Orders" page:
 - Pickup date:
   - Calendar picker
   - Past dates blocked
-  - Dates closer than 48h from today blocked (today + 2 days minimum)
+  - Minimum lead time: `pickup_date >= (current_date + INTERVAL '2 days')` (calendar days; today and tomorrow blocked)
   - Maximum horizon: to be determined with owner
   - No time selection (arranged after contact)
   - Required field
@@ -190,7 +190,7 @@ Simple, structural form accessible from a separate "Orders" page:
 
 Form validation:
 
-- Frontend: validation of all fields before submission (required fields, email/phone formats, future date min. +48h, textarea length)
+- Frontend: validation of all fields before submission (required fields, email/phone formats, pickup date per `pickup_date >= (current_date + INTERVAL '2 days')`, textarea length)
 - Backend: server-side validation duplication
 - Error messages in Polish, displayed inline at respective fields
 
@@ -384,7 +384,7 @@ Extended form displayed after clicking "Proceed to Form" from cart:
 
 ### In Scope for MVP (Phase 1)
 
-- 5 public pages (Homepage, Products, About Us, Orders, Contact, Terms) + Privacy Policy
+- 7 routes: 5 in main navigation (Homepage, Products, About Us, Orders, Contact) + Regulamin + Polityka prywatności
 - Simple order form with category selection and textarea for details description
 - 1 inspiration photo upload (optional, max 5 MB)
 - Order storage to Supabase with RLS policies
@@ -549,7 +549,7 @@ Description: As a customer, I want to fill out a simple form with category selec
 Acceptance Criteria:
 
 - Form contains product category selection (radio buttons: Occasion Cake / Tort okazjonalny, Ciasta, Ciastka, Alfajory, Inne — enum: `tort_okazjonalny`, `ciasta`, `ciastka`, `alfajory`, `inne`)
-- Form contains "Order Details" textarea (500-1000 characters) with counter
+- Form contains "Order Details" textarea (20–1000 characters) with counter
 - Form contains contact detail fields: name, email, phone (all required)
 - Email field validates email address format correctness
 - Phone field validates Polish phone number format and auto-formats entered number
@@ -564,7 +564,7 @@ Acceptance Criteria:
 
 - Form contains calendar picker for date selection
 - Past dates are blocked (unavailable for selection)
-- Dates closer than 48h from inquiry date are blocked
+- Dates before `pickup_date >= (current_date + INTERVAL '2 days')` are blocked (calendar days; today and tomorrow unavailable)
 - Customer doesn't select time (arranged after contact with owner)
 - Selecting blocked date is technically impossible (dates are grayed out/unavailable)
 - Date field is required
@@ -750,7 +750,7 @@ Acceptance Criteria:
 - Message at name field: "Name is required"
 - Message at email field: "Enter valid email address"
 - Message at phone field: "Enter valid phone number"
-- Message at date field: "Select pickup date (minimum 48h from now)"
+- Message at date field: "Select pickup date (minimum 2 calendar days from today)"
 - Message at GDPR checkbox: "Consent to data processing is required"
 - After correcting error, message disappears
 

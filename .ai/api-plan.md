@@ -41,11 +41,11 @@ Creates one inquiry: validates input, optionally uploads the inspiration photo t
 | Field | Type | Required | Constraints |
 | --- | --- | --- | --- |
 | `category` | string (enum) | yes | One of `tort_okazjonalny`, `ciasta`, `ciastka`, `alfajory`, `inne` (DB ENUM source of truth — `db-plan` note 4). |
-| `details` | string | yes | 500–1000 characters (after trim). |
+| `details` | string | yes | 20–1000 characters (after trim). |
 | `name` | string | yes | Non-empty after trim; max 200 chars (sanity cap). |
 | `email` | string | yes | Valid email format. |
 | `phone` | string | yes | Valid Polish phone number; server normalizes (e.g. `+48XXXXXXXXX`). |
-| `pickup_date` | string (`YYYY-MM-DD`) | yes | ≥ today + 48h; ≤ today + `ORDER_MAX_PICKUP_DAYS` (config constant). |
+| `pickup_date` | string (`YYYY-MM-DD`) | yes | `pickup_date >= (current_date + INTERVAL '2 days')`; ≤ today + `ORDER_MAX_PICKUP_DAYS` (config constant). |
 | `notes` | string | no | ≤ 500 characters. |
 | `gdpr_consent` | boolean (`"true"`) | yes | Must be exactly `true`. |
 | `inspiration_photo` | file | no | MIME ∈ {`image/jpeg`, `image/png`, `image/webp`}; size ≤ 5 MB. |
@@ -57,7 +57,7 @@ Example JSON variant (no photo):
 ```json
 {
   "category": "tort_okazjonalny",
-  "details": "Bardzo szczegółowy opis zamówienia o długości od 500 do 1000 znaków ...",
+  "details": "Tort urodzinowy 20 porcji, waniliowy biszkopt, truskawki i bita śmietana.",
   "name": "Anna Kowalska",
   "email": "anna.kowalska@example.com",
   "phone": "+48 600 123 456",
@@ -82,7 +82,7 @@ Returns only non-sensitive identifiers; never echoes back full PII.
 }
 ```
 
-- The response is returned after the row is persisted. Email dispatch is awaited within the request when feasible (target ≤ 2 min, PRD US-018/US-020); an email failure does **not** roll back the saved order and does **not** fail the request — it is logged and reported via `meta.emailDelivered: false`.
+- **`201 Created` is returned only after the order row is successfully persisted (INSERT).** Customer and owner emails are dispatched **synchronously, best-effort** in the same request (target delivery ≤ 2 min per PRD US-018/US-020). An email failure is logged and surfaced via `meta.emailDelivered: false`; it does **not** roll back the saved order and does **not** change the HTTP status.
 
 ```json
 {
@@ -103,7 +103,7 @@ All errors use a consistent envelope. Messages shown to the user are in Polish (
     "message": "Formularz zawiera błędy. Popraw zaznaczone pola.",
     "fieldErrors": {
       "email": "Podaj poprawny adres e-mail",
-      "pickup_date": "Wybierz datę odbioru (minimum 48h od teraz)"
+      "pickup_date": "Wybierz datę odbioru (minimum za 2 dni kalendarzowe)"
     }
   }
 }
@@ -111,8 +111,9 @@ All errors use a consistent envelope. Messages shown to the user are in Polish (
 
 | HTTP status | `code` | When | User message (PL) |
 | --- | --- | --- | --- |
-| `400 Bad Request` | `VALIDATION_ERROR` | Zod validation fails (missing/invalid fields, `details` length, `gdpr_consent` not true, bad date, bad phone/email). | Per-field messages, e.g. "Imię jest wymagane", "Podaj poprawny adres e-mail", "Podaj poprawny numer telefonu", "Wybierz datę odbioru (minimum 48h od teraz)", "Zgoda na przetwarzanie danych jest wymagana". |
+| `400 Bad Request` | `VALIDATION_ERROR` | Zod validation fails (missing/invalid fields, `details` length, `gdpr_consent` not true, bad date, bad phone/email). | Per-field messages, e.g. "Imię jest wymagane", "Podaj poprawny adres e-mail", "Podaj poprawny numer telefonu", "Wybierz datę odbioru (minimum za 2 dni kalendarzowe)", "Zgoda na przetwarzanie danych jest wymagana". |
 | `400 Bad Request` | `MALFORMED_REQUEST` | Body not parseable / wrong content type. | "Nieprawidłowe żądanie. Spróbuj ponownie." |
+| `405 Method Not Allowed` | `METHOD_NOT_ALLOWED` | HTTP method other than `POST`. | "Nieprawidłowe żądanie. Spróbuj ponownie." |
 | `413 Payload Too Large` | `FILE_TOO_LARGE` | Photo > 5 MB. | "Zdjęcie jest za duże. Maksymalny rozmiar to 5 MB." |
 | `415 Unsupported Media Type` | `UNSUPPORTED_FILE_TYPE` | Photo MIME not JPG/PNG/WEBP. | "Nieobsługiwany format pliku. Dozwolone: JPG, PNG, WEBP." |
 | `429 Too Many Requests` | `RATE_LIMITED` | > 5 submissions per IP per hour (US-030). Include `Retry-After` header (seconds). | "Przekroczono limit zapytań (5 na godzinę). Skontaktuj się z nami telefonicznie lub mailowo." |
@@ -168,11 +169,11 @@ Not a REST resource exposed to browsers. The owner's notification email (US-020)
 | Field | Validation | Source |
 | --- | --- | --- |
 | `category` | required; enum `['tort_okazjonalny','ciasta','ciastka','alfajory','inne']` | `order_category` ENUM (`db-plan` §1.1, note 4) |
-| `details` | required; trimmed length **500–1000** | `orders_details_length_chk` (`db-plan`), PRD §3.2 |
+| `details` | required; trimmed length **20–1000** | `orders_details_length_chk` (`db-plan`), PRD §3.2 |
 | `name` | required; non-empty trimmed; ≤ 200 | `name NOT NULL` |
 | `email` | required; valid email format | `email NOT NULL`, PRD §3.2 / US-012 |
 | `phone` | required; valid PL phone; normalized to canonical form before persisting | `phone NOT NULL`, PRD §3.2 / US-012 |
-| `pickup_date` | required; valid date; **≥ today + 48h**; **≤ today + `ORDER_MAX_PICKUP_DAYS`** | `pickup_date NOT NULL` + app rule (`db-plan` note 7), PRD §3.2 / US-013 |
+| `pickup_date` | required; valid date; **`pickup_date >= (current_date + INTERVAL '2 days')`**; **≤ today + `ORDER_MAX_PICKUP_DAYS`** | `pickup_date NOT NULL` + app rule (`db-plan` note 7), PRD §3.2 / US-013 |
 | `notes` | optional; if present, trimmed length **≤ 500** | `orders_notes_length_chk` (`db-plan`), PRD §3.2 |
 | `gdpr_consent` | required; must equal `true` | `orders_gdpr_consent_chk` (`db-plan`), PRD §3.2 / US-016 |
 | `inspiration_photo` | optional; MIME ∈ {jpeg,png,webp}; size ≤ 5 MB | PRD §3.2, §3.3.4 / US-014-SIMPLIFIED |
@@ -181,7 +182,7 @@ Not a REST resource exposed to browsers. The owner's notification email (US-020)
 
 Validation runs server-side as the mandatory gate (PRD §3.3.4). Client-side validation mirrors these rules for UX only (PRD §3.2, US-032) and is non-authoritative.
 
-The DB `CHECK` constraints (`details` 500–1000, `notes` ≤ 500, `gdpr_consent = true`) act as an integrity backstop behind Zod (`db-plan` note 5).
+The DB `CHECK` constraints (`details` 20–1000, `notes` ≤ 500, `gdpr_consent = true`) act as an integrity backstop behind Zod (`db-plan` note 5).
 
 ### 4.2 Business logic implementation (request flow for `POST /api/orders`)
 
@@ -195,11 +196,11 @@ Ordered server-side steps; each guard returns early on failure (clean-code rules
 6. **Generate order `id`** (uuid) up front so the Storage path can reuse it.
 7. **Upload photo first** to the private bucket at `inspirations/{id}.{ext}` (write-ordering note 10 in `db-plan`, prevents rows pointing to missing files). Wrap in **retry (≤ 3×, exponential backoff)** (US-041); on exhaustion → `502 STORAGE_ERROR`.
 8. **Insert order row** (`service_role`) including `inspiration_photo_path` when a file was uploaded; `status` = `new`. Wrap in **retry (≤ 3×, exponential backoff)** (US-041); on exhaustion → `503 DB_UNAVAILABLE` with alternative-contact message.
-9. **Send emails** via Resend + React Email (PRD §3.3.2/§3.3.3):
+9. **Send emails** via Resend + React Email (PRD §3.3.2/§3.3.3) — synchronously, best-effort after successful INSERT:
    - **Customer** (`email`): thanks, 24h response info, order summary (category label, details, pickup date, notes), branded HTML, bakery signature (US-018).
    - **Owner** (`OWNER_EMAIL`): full details — category, full `details`, contact (name/email/phone), pickup date, notes, and **signed URL** to the inspiration photo if present (US-020).
    - Email failure is logged and surfaced via `meta.emailDelivered: false`; it does **not** roll back the saved order.
-10. **Respond `201 Created`** with `{ id, status, created_at }` and a Polish success message (US-017).
+10. **Respond `201 Created`** with `{ id, status, created_at }` and a Polish success message (US-017). HTTP `201` reflects INSERT success only; email outcome is informational (`meta.emailDelivered`).
 
 ### 4.3 Cross-cutting business rules
 
