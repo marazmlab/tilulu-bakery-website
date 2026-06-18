@@ -10,15 +10,14 @@ Full checklist: [`roadmap.md`](./roadmap.md)
 
 ```
 Project: Tilulu Bakery (tilulu-bakery-website)
-Phase: 2 — Data & API Planning (Courses 2x3, 2x4)
-Current step: 2.1 DB planning session
-Last session: 2026-06-16 — Phase 1 complete (walking skeleton); roadmap reordered (DB/API plan before UI).
+Phase: 2 — Data & API Planning
+Current step: 2.5 plans cross-review
+Last session: 2026-06-18 — very form field in PRD maps to DB column + API field; RLS matches “server service_role via Astro API” |
 Blockers: none
-Next: 2.1 → 2.2 db-plan.md → 2.3–2.4 api-plan.md → Phase 3 ui-plan.md
 Workflow: Implement in Tilulu myself; web-dev-assistant = planner/mentor only
 ```
 
-**Last updated:** 2026-06-16
+**Last updated:** 2026-06-18
 
 ---
 
@@ -69,6 +68,28 @@ Append a short entry after each session. Max 5 bullets per entry.
 - **Next:** Step 2.1 — DB planning session (2 rounds, reasoning model)
 
 ---
+
+### 2026-06-17 — DB/API plans draft (2.1–2.4)
+- **Done:** DB + API planning sessions; `db-plan.md` (`orders` table, RLS, Storage); `api-plan.md` (`POST /api/orders`, HTTP codes, INSERT flow)
+- **Decided:** RLS with no client policies; category ENUM as source of truth; writes only via Astro API
+- **Next:** Cross-review consistency with PRD (2.5)
+
+---
+
+### 2026-06-18 — Plans cross-review (2.5) — Phase 2 closed
+- **Done:** Consistency audit; D-01–D-07 in `notebook.md`; roadmap 2.5 `[x]`; PRD, env, and Cursor rules updated
+- **Decided:** Best-effort email, 365-day pickup horizon, `inspirations` bucket, per-instance rate limit
+- **Verified:** Every PRD §3.2 form field maps to DB column + API field; RLS matches server `service_role` via Astro API
+- **Next:** Phase 3 — ui-plan + public pages
+
+
+
+
+
+
+
+
+
 
 ## Planner Chat Template
 
