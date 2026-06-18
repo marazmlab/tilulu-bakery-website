@@ -4,7 +4,7 @@
 
 Tilulu Bakery is a website for a home bakery located in Szczecin, Poland. The product serves a dual role: an online business card showcasing the bakery's offerings and a central point for accepting quote requests from customers.
 
-The website replaces scattered communication channels (Instagram DM, WhatsApp, phone) with a unified interface where customers can browse products with photos and prices, then submit quote requests through a simple form. The owner receives email notifications for each new inquiry (SMS in later phases), and all data is stored in a Supabase database.
+The website replaces scattered communication channels (Instagram DM, WhatsApp, phone) with a unified interface where customers can browse products with photos and prices, then submit quote requests through a simple form. The system attempts email notifications for each new inquiry (best-effort; see §3.3.2); SMS in later phases. All inquiry data is stored in a Supabase database regardless of email delivery.
 
 Future development phases include adding an interactive multi-product cart and a 5-step cake builder, enabling more advanced order composition.
 
@@ -49,7 +49,7 @@ The product targets two user groups: bakery customers (primarily women aged 30-6
 ### Architecture Decisions
 
 - **React usage:** only for interactive components (order form, gallery filters)
-- **Astro pages:** static pages (Home, About, Contact) without React for better performance
+- **Astro pages:** static pages (Home, Oferta `/oferta`, About, Contact) without React for better performance
 - **API strategy:** Astro API endpoints instead of direct Supabase calls (better security)
 - **Hosting:** Vercel preferred over Cloudflare Pages for API endpoint support
 
@@ -93,7 +93,9 @@ Additional owner problems:
 - CTA directing to orders page ("View Offer" / "Place Order")
 - Responsive layout (mobile-first)
 
-#### 3.1.2 Products
+#### 3.1.2 Oferta (`/oferta`)
+
+- Route: `/oferta` — nav label (PL): **Oferta** (aligned with MVP routing; not "Products")
 
 - Three product categories displayed on one page:
   - Occasion/custom cakes: indicative pricing ("from X PLN"), gallery, description
@@ -135,7 +137,7 @@ Additional owner problems:
 
 #### 3.1.7 Common Elements (layout)
 
-- Main navigation: Homepage, Products, About Us, Orders, Contact
+- Main navigation: Homepage, Oferta (`/oferta`), About Us, Orders, Contact
 - Footer on every page: social media links (Instagram, Facebook), contact details, terms link, privacy policy link
 - Cookie banner (consent for GA4 and Microsoft Clarity)
 
@@ -155,7 +157,7 @@ Simple, structural form accessible from a separate "Orders" page:
   - Required field
 
 - Contact details:
-  - Name (text field, required)
+  - Name (text field, required, 1–200 characters — Zod only, D-07)
   - Email (text field, required, format validation)
   - Phone (text field, required, Polish number format validation, auto-formatting)
 
@@ -163,7 +165,7 @@ Simple, structural form accessible from a separate "Orders" page:
   - Calendar picker
   - Past dates blocked
   - Minimum lead time: `pickup_date >= (current_date + INTERVAL '2 days')` (calendar days; today and tomorrow blocked)
-  - Maximum horizon: to be determined with owner
+  - Maximum horizon: `pickup_date <= (current_date + ORDER_MAX_PICKUP_DAYS days)`; default **`ORDER_MAX_PICKUP_DAYS = 365`** (1 year) — app config constant (D-01)
   - No time selection (arranged after contact)
   - Required field
 
@@ -190,9 +192,13 @@ Simple, structural form accessible from a separate "Orders" page:
 
 Form validation:
 
-- Frontend: validation of all fields before submission (required fields, email/phone formats, pickup date per `pickup_date >= (current_date + INTERVAL '2 days')`, textarea length)
-- Backend: server-side validation duplication
+- Frontend: validation of all fields before submission (required fields, email/phone formats, pickup date per `pickup_date >= (current_date + INTERVAL '2 days')` and `pickup_date <= (current_date + ORDER_MAX_PICKUP_DAYS days)`, textarea length)
+- Backend: server-side validation duplication (Zod)
 - Error messages in Polish, displayed inline at respective fields
+
+**Decision D-07 (closed):** `name` length (1–200 chars) enforced **only by Zod** in the API layer — no PostgreSQL CHECK on `orders.name`. Limit adjustable without migration. Other text fields keep DB CHECK backstops where specified (`details`, `notes`, `email_error`; `db-plan` note 5).
+
+**Decision D-01 (closed):** Maximum pickup-date horizon = **`ORDER_MAX_PICKUP_DAYS = 365`** calendar days (1 year). App config constant (server-side Zod + client calendar `max`), kept out of the database so the value can change without a migration (`db-plan` note 7). Rationale: allows advance bookings (weddings/occasions) up to a year while rejecting absurd far-future dates and typos. Confirm exact value with owner; default applies until then.
 
 ### 3.3 Backend and Order Processing
 
@@ -204,9 +210,22 @@ Form validation:
 - Order saved to orders table in Supabase (PostgreSQL)
 - Inspiration photo uploaded to Supabase Storage (if added)
 - Order status column: new/confirmed/completed (manual change in Supabase Dashboard)
+- Email delivery outcome persisted on each row: `email_delivered` (boolean), `email_error` (text, nullable) — visible to owner in Dashboard (US-022)
 - RLS (Row Level Security) policies in Supabase
 
-#### 3.3.2 Customer Email
+#### 3.3.2 Email delivery semantics (best-effort)
+
+**Decision D-02 (closed):** Email dispatch is **best-effort**, not guaranteed. Inquiry acceptance = successful `INSERT` into `orders`. The canonical customer success copy on `201 Created` is always: *„Dziękujemy! Twoje zapytanie zostało wysłane. Odpowiemy w ciągu 24 godzin.”* — never branch on `meta.emailDelivered`. Failed sends are persisted (`email_delivered`, `email_error`) for the owner in Dashboard. Supersedes any earlier PRD wording implying guaranteed delivery (resolved with C-01, N-02).
+
+**Authoritative rule for MVP:** inquiry acceptance is decoupled from email delivery.
+
+- The inquiry is **accepted and persisted** as soon as the order row is successfully INSERTed; email delivery does **not** gate acceptance.
+- After successful INSERT, the system **attempts** to send customer and owner emails synchronously in the same request (Resend); target delivery ≤ 2 minutes (**best-effort**, not guaranteed).
+- After the email attempt, the API **UPDATE**s `email_delivered` and `email_error` on the order row (`db-plan` §1.1, note 11). `email_delivered = true` only when **both** emails succeed; on failure, `email_error` stores a brief sanitized diagnostic (no PII).
+- Email outcome is also mirrored in API response `meta.emailDelivered` (derived from `email_delivered`); it does **not** roll back the saved order or change HTTP status (`201 Created` reflects INSERT success only).
+- The UI shows a **single neutral success message** regardless of email outcome (see US-017); `meta.emailDelivered: false` is for server logging only — **not** shown to the customer. The **owner** sees `email_delivered` / `email_error` in the Supabase Dashboard (US-022).
+
+#### 3.3.3 Customer Email
 
 - HTML template (Resend + React Email)
 - Branding: logo (placeholder), brand colors (placeholder), footer with contact details
@@ -215,26 +234,33 @@ Form validation:
   - Information about response time (within 24h)
   - Order summary: product category, order details, pickup date, additional notes
   - Signature: bakery name
-- Sent within 2 minutes of inquiry submission
+- Dispatch attempted within 2 minutes of inquiry submission (best-effort per §3.3.2)
 
-#### 3.3.3 Owner Email
+#### 3.3.4 Owner Email
 
 - Complete order details: product category, order details (textarea content), customer contact details, pickup date, notes, inspiration photo link
+- Inspiration photo link (when present): server-generated signed URL to private Storage; **TTL 7 days** (D-03, `604800` s) — generated at email-composition time
 - All data needed for customer contact
+- Dispatch attempted within 2 minutes of inquiry submission (best-effort per §3.3.2)
 
-#### 3.3.4 Rate Limiting and Security
+#### 3.3.5 Rate Limiting and Security
+
+**Decision D-04 (closed):** MVP uses **in-memory rate limiting per serverless instance** on Vercel — **no cross-instance / global 5/h/IP store** (no KV, Redis, or DB table). The 5 inquiries/IP/hour rule is **best-effort** (same warm instance only). Conscious trade-off at ~3–4 inquiries/week; shared store deferred to post-MVP if abuse appears (see nice-to-have below). Documented as N-03 in audit.
+
+**Decision D-05 (closed):** Inspiration photos in private Supabase bucket **`inspirations`** (`STORAGE_INSPIRATION_BUCKET`, Public: off). Object key **`{order_id}.{ext}`** (`jpg`/`png`/`webp` from validated MIME); `inspiration_photo_path` stores the key only. No Storage policies for `anon`/`authenticated`; upload and signed URL generation exclusively via Astro API (`service_role`, US-038). See `db-plan` §4, `api-plan` §2.2.
 
 **Must-have in MVP:**
 
 - **Server-side validation:** Zod schema validation for all form fields
-- **Rate limiting:** Maximum 5 inquiries per IP/hour (in-memory for MVP)
-- **Upload security:** MIME type and file size validation (max 5MB, JPG/PNG/WEBP only)
+- **Rate limiting:** Maximum 5 inquiries per IP/hour — **in-memory, per serverless instance** (D-04 / N-03). On Vercel each function instance keeps its own counter; cold starts and routing across instances mean the limit is **best-effort**, not a hard global 5/h/IP guarantee. Acceptable at ~3–4 inquiries/week.
+- **Upload security:** MIME type and file size validation (max 5MB, JPG/PNG/WEBP only); private bucket `inspirations`, object key `{order_id}.{ext}` (D-05)
 - **Supabase RLS:** Row Level Security enabled on `orders` with no policies for `anon`/`authenticated` (all direct client access denied); API writes via `service_role` only
 - **Environment variables:** All API keys (Supabase, Resend) in `.env` (not in code)
 - **HTTPS enforcement:** Provided automatically by Vercel
 
 **Nice-to-have (post-MVP):**
 
+- **Shared rate-limit store:** Vercel KV, Upstash Redis, or DB-backed counter for global 5/h/IP enforcement across serverless instances (upgrade from D-04/N-03 per-instance approach)
 - **CAPTCHA:** Cloudflare Turnstile if spam appears
 - **Content Security Policy:** Security headers against XSS
 - **Input sanitization:** DOMPurify for rich HTML email content
@@ -292,7 +318,7 @@ Form validation:
 
 - Global state managed by Zustand or Context API
 - Cart persistence in localStorage (survives page refresh)
-- Adding products from Products page:
+- Adding products from Oferta page (`/oferta`):
   - Cakes: clicking "Build" opens modal with builder (5 steps)
   - Standard pastries: clicking "Add" opens modal with quantity selector
   - Other cakes: clicking "Add" opens modal with description field and quantity
@@ -309,7 +335,7 @@ Form validation:
 
 ### 3.10 5-Step Cake Builder (PHASE 2)
 
-Five-step builder displayed in modal, launched from Products page:
+Five-step builder displayed in modal, launched from Oferta page (`/oferta`):
 
 - Step 1 - Cake Size:
   - Type: classic (2 layers) or tall (4 layers)
@@ -373,30 +399,30 @@ Extended form displayed after clicking "Proceed to Form" from cart:
 
 ### 3.13 Product Modals with Lightbox (PHASE 2)
 
-- Clicking product card on Products page opens modal with details
+- Clicking product card on Oferta page (`/oferta`) opens modal with details
 - Modal contains enlarged photos, full description, and options
 - Lightbox for photo enlargement with navigation (previous/next)
 - Modal contains appropriate CTA button for category ("Build" for cakes, "Add" for standard pastries)
-- Closing modal restores Products page view without losing scroll position
+- Closing modal restores Oferta page (`/oferta`) view without losing scroll position
 - Responsive design (fullscreen on mobile)
 
 ## 4. Product Boundaries
 
 ### In Scope for MVP (Phase 1)
 
-- 7 routes: 5 in main navigation (Homepage, Products, About Us, Orders, Contact) + Regulamin + Polityka prywatności
+- 7 routes: 5 in main navigation (Homepage, Oferta `/oferta`, About Us, Orders, Contact) + Regulamin + Polityka prywatności
 - Simple order form with category selection and textarea for details description
 - 1 inspiration photo upload (optional, max 5 MB)
 - Order storage to Supabase with RLS policies
-- HTML email to customer (confirmation + summary)
-- Detailed email to owner
+- HTML email to customer (confirmation + summary) — best-effort dispatch after INSERT (§3.3.2)
+- Detailed email to owner — best-effort dispatch after INSERT (§3.3.2)
 - Order browsing through Supabase Dashboard
 - Manual order status change in Supabase Dashboard
 - Basic SEO (meta tags, Open Graph, schema.org, sitemap, robots.txt)
 - Google Analytics 4 + Microsoft Clarity
 - Cookie banner (GDPR)
 - Responsive design (mobile + desktop) with shadcn/ui components
-- Security: server-side validation, rate limiting (5 inquiries/IP/hour), upload validation
+- Security: server-side validation, rate limiting (5 inquiries/IP/hour target, in-memory per instance — D-04), upload validation
 - Basic error handling (validation, retry, duplicate prevention, loading states)
 - Hardcoded photos and content with placeholders (Unsplash API)
 - i18n-ready structure (JSON files) without language switching implementation
@@ -490,7 +516,7 @@ Acceptance Criteria:
 
 - Homepage displays hero section with photo and brief bakery description
 - Project gallery presents minimum 3 pastry photos
-- CTA button directing to Orders or Products page is visible
+- CTA button directing to Orders or Oferta page (`/oferta`) is visible
 - Page is responsive and displays correctly on mobile devices (320px+ width) and desktop
 - Page load time doesn't exceed 3 seconds
 
@@ -499,7 +525,7 @@ Title: Browsing Product Offerings
 Description: As a customer, I want to browse the bakery's complete offerings divided into categories with photos and prices, so I know what to expect and how much products cost approximately.
 Acceptance Criteria:
 
-- Products page displays products in three categories: Occasion/custom cakes, Standard pastries, Other custom cakes
+- Oferta page (`/oferta`) displays products in three categories: Occasion/custom cakes, Standard pastries, Other custom cakes
 - Each product is presented as a card with photo thumbnail, name, brief description, and price
 - Cakes and other custom cakes have indicative prices ("from X PLN")
 - Standard pastries have concrete prices (per piece, kilogram, or portion)
@@ -565,6 +591,7 @@ Acceptance Criteria:
 - Form contains calendar picker for date selection
 - Past dates are blocked (unavailable for selection)
 - Dates before `pickup_date >= (current_date + INTERVAL '2 days')` are blocked (calendar days; today and tomorrow unavailable)
+- Dates beyond the maximum horizon are blocked: `pickup_date <= (current_date + ORDER_MAX_PICKUP_DAYS days)`, default `ORDER_MAX_PICKUP_DAYS = 365` (D-01)
 - Customer doesn't select time (arranged after contact with owner)
 - Selecting blocked date is technically impossible (dates are grayed out/unavailable)
 - Date field is required
@@ -615,18 +642,17 @@ Acceptance Criteria:
 - Form data is validated server-side before storage
 - Order is saved to Supabase database
 - Inspiration photo is uploaded to Supabase Storage (if added)
-- Confirmation email is sent to customer
-- Detailed email is sent to owner
-- After successful submission, customer sees message confirming inquiry acceptance
+- System attempts to send confirmation email to customer and notification email to owner (best-effort, target ≤ 2 min per §3.3.2); email failure does **not** block inquiry acceptance
+- After successful submission (`201 Created`), customer always sees the same neutral success message: *„Dziękujemy! Twoje zapytanie zostało wysłane. Odpowiemy w ciągu 24 godzin.”* — regardless of `meta.emailDelivered`
 - In case of server error, message with retry request is displayed
 - Re-clicking button during processing doesn't cause duplicate
 
 **[MVP] US-018**
 Title: Receiving Confirmation Email
-Description: As a customer, I want to receive email confirming inquiry submission, so I'm assured my message reached the bakery and know the next steps.
+Description: As a customer, I want the system to attempt sending me an email confirming inquiry submission, so I'm assured my message reached the bakery and know the next steps when delivery succeeds.
 Acceptance Criteria:
 
-- Email is sent to address provided in form within 2 minutes of inquiry submission
+- System attempts to send email to address provided in form within 2 minutes of inquiry submission (best-effort per §3.3.2); failed delivery does **not** block inquiry acceptance
 - Email contains thank you for choosing the offer
 - Email contains information about response time (within 24h)
 - Email contains order summary (category, details, pickup date, notes)
@@ -637,15 +663,15 @@ Acceptance Criteria:
 
 **[MVP] US-020**
 Title: Receiving Email About New Order
-Description: As the owner, I want to receive email with complete new order details, so I have all data needed for customer contact and order fulfillment.
+Description: As the owner, I want the system to attempt sending me email with complete new order details, so I have all data needed for customer contact and order fulfillment when delivery succeeds.
 Acceptance Criteria:
 
-- Email is sent to owner's address within 2 minutes of inquiry submission
+- System attempts to send email to owner's address within 2 minutes of inquiry submission (best-effort per §3.3.2); failed delivery does **not** block inquiry acceptance — order remains visible in Supabase Dashboard with `email_delivered = false` and `email_error` populated
 - Email contains product category and complete details from textarea
 - Email contains customer contact details (name, email, phone)
 - Email contains selected pickup date
 - Email contains additional notes (if provided)
-- Email contains inspiration photo link (if added)
+- Email contains inspiration photo link (if added) — signed URL, valid **7 days** from generation (D-03)
 
 **[MVP] US-022**
 Title: Browsing Orders in Supabase Dashboard
@@ -654,7 +680,7 @@ Acceptance Criteria:
 
 - Orders are visible in orders table in Supabase Dashboard
 - Orders are sorted chronologically (newest on top)
-- Each order contains: customer data, category, details, pickup date, status, submission date
+- Each order contains: customer data, category, details, pickup date, status, submission date, **`email_delivered`**, **`email_error`** (when delivery failed)
 - Status column enables manual value change (new/confirmed/completed)
 
 ### SEO and Accessibility (MVP)
@@ -700,7 +726,7 @@ Title: Navigating the Website
 Description: As a customer, I want to easily navigate between bakery pages, so I can quickly find needed information.
 Acceptance Criteria:
 
-- Main navigation contains links: Homepage, Products, About Us, Orders, Contact
+- Main navigation contains links: Homepage, Oferta (`/oferta`), About Us, Orders, Contact
 - Navigation is visible on every page
 - On mobile devices, navigation is available as hamburger menu
 - Currently open page is visually highlighted in navigation
@@ -734,7 +760,7 @@ Title: Handling Inquiry Limit
 Description: As a customer, I want to see information when I exceed the hourly inquiry limit, so I understand why I can't submit another form.
 Acceptance Criteria:
 
-- After reaching limit of 5 inquiries per IP per hour, next submission attempt displays informational message
+- After reaching limit of 5 inquiries per IP per hour **on the same warm serverless instance**, next submission attempt displays informational message (see §3.3.5 / D-04 — global enforcement not guaranteed on Vercel)
 - Message explains that the hourly limit has been reached
 - Message suggests phone or email contact
 - Form is not submitted after limit exceeded
@@ -769,7 +795,7 @@ Title: Information About Special Dietary Orders
 Description: As a customer with dietary restrictions, I want to know that the bakery fulfills gluten-free and vegan orders, so I can submit appropriate inquiry.
 Acceptance Criteria:
 
-- On Products page in "Other custom cakes" category, information about gluten-free and vegan cake fulfillment possibility is visible
+- On Oferta page (`/oferta`) in "Other custom cakes" category, information about gluten-free and vegan cake fulfillment possibility is visible
 - Customer can describe their dietary requirements in form textarea fields (Order Details or Additional Notes)
 - Information about special orders is visible without needing to go to form
 
@@ -845,13 +871,13 @@ Acceptance Criteria:
 
 **[PHASE 2] US-003**
 Title: Displaying Product Details in Modal
-Description: As a customer, I want to click product card and see details in modal, so I can learn full description and photos without leaving Products page.
+Description: As a customer, I want to click product card and see details in modal, so I can learn full description and photos without leaving Oferta page (`/oferta`).
 Acceptance Criteria:
 
 - Clicking product card opens modal with enlarged photos and full description
 - Modal contains lightbox for photo enlargement with navigation (previous/next)
 - Modal contains appropriate CTA button for category ("Build" for cakes, "Add" for standard pastries)
-- Closing modal restores Products page view without losing scroll position
+- Closing modal restores Oferta page (`/oferta`) view without losing scroll position
 - Modal is responsive and displays correctly on mobile screens
 
 **[PHASE 2] US-007**
@@ -864,7 +890,7 @@ Acceptance Criteria:
 - Indicative total is displayed for selected quantity
 - After clicking "Add to Cart", modal closes, product is in cart
 - Mini cart widget in navigation updates product count and total
-- Customer remains on Products page after adding product
+- Customer remains on Oferta page (`/oferta`) after adding product
 
 **[PHASE 2] US-008**
 Title: Adding Custom Cake to Cart (5-step builder)
@@ -945,7 +971,7 @@ Acceptance Criteria:
 
 - Attempt to proceed to checkout form with empty cart displays informational message
 - Message encourages browsing offerings and adding products
-- Link/button directing to Products page is displayed
+- Link/button directing to Oferta page (`/oferta`) is displayed
 
 **[PHASE 2] US-033**
 Title: Adding Multiple Cakes to Cart
@@ -995,8 +1021,8 @@ Acceptance Criteria:
 - Page load time (First Contentful Paint) below 3 seconds
 - Zero browser console errors on all pages
 - 100% form validation works correctly (frontend + backend)
-- Email to customer sent within 2 minutes of inquiry submission
-- Email to owner sent within 2 minutes of inquiry submission
+- System attempts email dispatch to customer within 2 minutes of inquiry submission (best-effort; failure does not block acceptance)
+- System attempts email dispatch to owner within 2 minutes of inquiry submission (best-effort; failure does not block acceptance)
 - Website uptime 99.9% (Vercel hosting)
 
 #### Business Metrics
@@ -1010,7 +1036,7 @@ Acceptance Criteria:
 
 - Customer completes inquiry in less than 3 minutes (from opening form to submission)
 - Order form abandonment rate below 30%
-- Customer receives confirmation email after each submitted inquiry
+- Inquiry acceptance is not blocked by email delivery failure; failed attempts are persisted on the order row (`email_delivered`, `email_error`) and visible to the owner in the Dashboard
 - Zero reports of incomprehensible error messages
 
 #### Measurement Tools (MVP)
@@ -1037,7 +1063,7 @@ Acceptance Criteria:
 - Cake builder completion rate >70% (users who start will complete)
 - Cake builder abandonment rate close to 0% in usability tests
 - Average number of products in cart before inquiry submission: 1.5-2.5
-- Users add products to cart in >50% of visits to Products page
+- Users add products to cart in >50% of visits to Oferta page (`/oferta`)
 
 #### Additional Custom Events (Phase 2)
 
@@ -1048,9 +1074,9 @@ Acceptance Criteria:
 
 #### Conversion Funnel Rate (Phase 2)
 
-Products visit → add to cart → open full cart view → proceed to form → submit inquiry
+Oferta visit → add to cart → open full cart view → proceed to form → submit inquiry
 
-Goal: min. 10% conversion from Products visit to inquiry submission
+Goal: min. 10% conversion from Oferta visit to inquiry submission
 
 ### Phase 3 and Beyond
 

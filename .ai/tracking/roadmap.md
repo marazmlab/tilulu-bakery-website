@@ -51,7 +51,7 @@ Foundation before MVP features. Implement in `tilulu-bakery-website`; use course
 | 2.2 | Database plan        | [x]    | `.ai/db-plan.md`: `orders` table, Storage bucket, RLS, indexes; OUT OF SCOPE for cart/products noted   |
 | 2.3 | API planning session | [x]    | Integration decisions documented (Astro API only, no direct Supabase from browser, upload strategy)    |
 | 2.4 | API plan             | [x]    | `.ai/api-plan.md`: `POST /api/orders` contract, HTTP codes, rate limit, env vars; aligned with db-plan |
-| 2.5 | Plans cross-review   | [ ]    | Every form field in PRD maps to DB column + API field; RLS matches “server service_role via Astro API” |
+| 2.5 | Plans cross-review   | [x]    | Every form field in PRD maps to DB column + API field; RLS matches “server service_role via Astro API” |
 
 **Phase 2 complete when:** `db-plan.md` and `api-plan.md` exist, reviewed, and consistent with PRD §3.2–3.3.
 
@@ -73,26 +73,25 @@ UI planning + static page implementation. Form stays a stub until Phase 4.
 | 3.8 | Placeholder images          | [ ]    | Unsplash or similar until real assets; lazy loading where applicable              |
 | 3.9 | Orders stub (`/zamowienia`) | [ ]    | Page shell only — “form coming in Phase 4”; no API integration yet                |
 
-**Phase 3 complete when:** all public pages match MVP definition; mobile + desktop OK; no console errors; `/zamowienia` remains non-functional stub.
----
+## **Phase 3 complete when:** all public pages match MVP definition; mobile + desktop OK; no console errors; `/zamowienia` remains non-functional stub.
 
 ## Phase 4 — Order Form + Backend (Courses 2x3, 2x4 implementation)
 
 Implement what was planned in Phase 2.
 
-| #   | Step                           | Status | Definition of Done                                                                   |
-| --- | ------------------------------ | ------ | ------------------------------------------------------------------------------------ |
-| 4.1 | Supabase local + migrations    | [ ]    | `supabase init/start`; migration from db-plan applied; types generated               |
-| 4.2 | DTO / command types            | [ ]    | Request/response types aligned with api-plan (Zod schemas + TS types)                |
-| 4.3 | API endpoint                   | [ ]    | `POST /api/orders`: Zod validation, rate limit 5/IP/h, Supabase insert via server    |
-| 4.4 | File upload                    | [ ]    | Max 5 MB; MIME validation; private Supabase Storage bucket                           |
-| 4.5 | Order form (React)             | [ ]    | Category, details, pickup date (+48h), contact fields, optional photo, RODO checkbox |
-| 4.6 | Client validation (UX)         | [ ]    | Required fields, email/phone format, date rules; Polish inline errors                |
-| 4.7 | Resend — owner email           | [ ]    | Full inquiry details to owner                                                        |
-| 4.8 | Resend — customer confirmation | [ ]    | Thank-you + summary + 24h response expectation                                       |
-| 4.9 | Orders page integration        | [ ]    | Form on `/zamowienia`; success/error/loading states; duplicate-submit prevention     |
+| #   | Step                           | Status | Definition of Done                                                                                    |
+| --- | ------------------------------ | ------ | ----------------------------------------------------------------------------------------------------- |
+| 4.1 | Supabase local + migrations    | [ ]    | `supabase init/start`; migration from db-plan applied; types generated                                |
+| 4.2 | DTO / command types            | [ ]    | Request/response types aligned with api-plan (Zod schemas + TS types)                                 |
+| 4.3 | API endpoint                   | [ ]    | `POST /api/orders`: Zod validation, rate limit 5/IP/h per instance (D-04), Supabase insert via server |
+| 4.4 | File upload                    | [ ]    | Max 5 MB; MIME validation; bucket `inspirations`, key `{order_id}.{ext}` (D-05)                       |
+| 4.5 | Order form (React)             | [ ]    | Category, details, pickup date (+48h), contact fields, optional photo, RODO checkbox                  |
+| 4.6 | Client validation (UX)         | [ ]    | Required fields, email/phone format, date rules; Polish inline errors                                 |
+| 4.7 | Resend — owner email           | [ ]    | Full inquiry details to owner (best-effort; update `email_delivered`)                                 |
+| 4.8 | Resend — customer confirmation | [ ]    | Thank-you + summary + 24h expectation (best-effort; D-02)                                             |
+| 4.9 | Orders page integration        | [ ]    | Form on `/zamowienia`; success/error/loading states; duplicate-submit prevention                      |
 
-**Phase 4 complete when:** end-to-end inquiry works locally; emails send; order visible in Supabase Dashboard.
+**Phase 4 complete when:** end-to-end inquiry works locally; email dispatch attempted (best-effort, D-02); `email_delivered` visible in Supabase Dashboard.
 
 ---
 

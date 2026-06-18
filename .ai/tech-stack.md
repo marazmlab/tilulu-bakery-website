@@ -26,7 +26,7 @@ MVP = 5 public pages + simple form + email + Supabase storage. No admin panel, n
 | Validation       | Zod                     | latest           | Server-side (+ client) form validation      |
 | Database         | Supabase (PostgreSQL)   | —                | Orders table, RLS policies                  |
 | File storage     | Supabase Storage        | —                | Inspiration photo uploads (max 5 MB)        |
-| Email            | Resend + React Email    | —                | Customer confirmation + owner notification  |
+| Email            | Resend + React Email    | —                | Customer + owner notification (best-effort; D-02 / PRD §3.3.2) |
 | Hosting          | Vercel                  | —                | Astro API endpoints + SSR/API support       |
 | Analytics        | GA4 + Microsoft Clarity | —                | Load only after cookie consent              |
 | Node.js          | Node                    | 22 LTS           | Local dev and CI                            |
@@ -49,8 +49,8 @@ MVP = 5 public pages + simple form + email + Supabase storage. No admin panel, n
 
 ### Security (MVP)
 
-- Supabase RLS: anonymous INSERT only on orders; no public SELECT/UPDATE/DELETE.
-- Rate limiting: max 5 inquiries per IP per hour.
+- Supabase RLS: enabled on `orders` with **no policies** for `anon`/`authenticated` → **deny-all** by default (no direct INSERT/SELECT/UPDATE/DELETE from the browser). All writes go through the Astro API using the `service_role` key, which bypasses RLS and is the only write path (db-plan §4, api-plan §3.2, PRD §3.3.5).
+- Rate limiting: max 5 inquiries per IP per hour — in-memory **per serverless instance** (best-effort on Vercel; **D-04 closed** — no cross-instance store in MVP). Global enforcement deferred to post-MVP (KV/Redis) if needed.
 - Upload validation: type, size (5 MB), server-side checks.
 - Secrets in .env only — never commit .env.
 
@@ -68,7 +68,7 @@ MVP = 5 public pages + simple form + email + Supabase storage. No admin panel, n
 - 5 public pages + privacy policy
 - Simple order form (textarea, no cart, no builder)
 - 1 optional inspiration photo upload
-- Email to customer + owner (Resend)
+- Email to customer + owner (Resend, best-effort after INSERT; `email_delivered` / `email_error` on row — D-02)
 - Orders visible in Supabase Dashboard (no custom admin)
 - Cookie banner, GA4, Clarity (after consent)
 - Polish UI only (i18n-ready structure for future)
@@ -96,6 +96,7 @@ See .env.example in project root.
 | ------------------------- | ------ | --------------------------------- |
 | SUPABASE_URL              | server | Supabase project URL              |
 | SUPABASE_SERVICE_ROLE_KEY | server | API routes (DB + storage)         |
+| STORAGE_INSPIRATION_BUCKET | server | Private bucket name (`inspirations`, D-05) |
 | RESEND_API_KEY            | server | Transactional email               |
 | RESEND_FROM_EMAIL         | server | Verified sender domain            |
 | OWNER_EMAIL               | server | Owner notification recipient      |
@@ -135,8 +136,9 @@ Why this stack for Tilulu MVP:
 | ------------------------------------------ | ---------------------------------------------------------- |
 | Branding not ready (logo, colors)          | Placeholders + Tailwind theme tokens; easy swap later      |
 | Vercel free tier limits for commercial use | Monitor usage; plan paid tier if needed                    |
-| Email deliverability (Resend domain)       | Verify domain early in Resend dashboard                    |
+| Email delivery not guaranteed (best-effort) | Decision D-02: INSERT = acceptance; owner sees `email_delivered`/`email_error` in Dashboard; verify Resend domain early |
 | Over-using React                           | Enforced in Cursor rules: React only for interactive parts |
+| In-memory rate limit on Vercel (not global 5/h/IP) | **D-04 closed:** per-instance in-memory accepted for MVP; ~3–4 inquiries/week; KV/Redis/CAPTCHA if abuse |
 | PRD vs implementation drift                | Keep .ai/prd.md and this file in sync                      |
 
 ---
