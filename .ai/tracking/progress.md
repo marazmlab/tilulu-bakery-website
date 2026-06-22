@@ -11,8 +11,8 @@ Full checklist: [`roadmap.md`](./roadmap.md)
 ```
 Project: Tilulu Bakery (tilulu-bakery-website)
 Phase 3 — Public Pages
-Current step: 3.1 - UI architecture plan
-Last session: 2026-06-18 — very form field in PRD maps to DB column + API field; RLS matches “server service_role via Astro API”
+Current step: 3.2 - Shared layout polish
+Last session: 2026-06-19 — add ui-plan for MVP views and OrderForm architecture
 Blockers: none
 Workflow: Implement in Tilulu myself; web-dev-assistant = planner/mentor only
 ```
@@ -83,6 +83,12 @@ Append a short entry after each session. Max 5 bullets per entry.
 - **Decided:** Best-effort email, 365-day pickup horizon, `inspirations` bucket, per-instance rate limit
 - **Verified:** Every PRD §3.2 form field maps to DB column + API field; RLS matches server `service_role` via Astro API
 - **Next:** Phase 3 — ui-plan + public pages
+
+  ***
+
+### 2026-06-19 — UI architecture plan (3.1) — Phase 3 started
+
+- **Done:**
 
 ## Planner Chat Template
 

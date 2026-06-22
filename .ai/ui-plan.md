@@ -153,7 +153,7 @@ Every view is wrapped in `BaseLayout.astro`, which statically renders:
   - "O nas" → `/o-nas`
   - "Zamówienia" → `/zamowienia`
   - "Kontakt" → `/kontakt`
-  The active item is determined from `Astro.url.pathname` and marked with `aria-current="page"` (US-027).
+    The active item is determined from `Astro.url.pathname` and marked with `aria-current="page"` (US-027).
 - **Footer** on every page: social links (Instagram, Facebook, `rel="noopener"`), clickable `tel:`/`mailto:`, links to Regulamin and Polityka prywatności, a "Zmień zgody" link, and a short Szczecin location note. All texts from i18n (US-028).
 - **Cookie banner**: a lightweight island that stores the choice in localStorage/cookie and dynamically injects GA4/Clarity only after consent (`PUBLIC_GA_MEASUREMENT_ID`, `PUBLIC_CLARITY_PROJECT_ID`); nothing analytical loads by default (US-026, US-037).
 - **SEO props**: `title`/`description`/`ogImage` props with defaults; `LocalBusiness` schema.org rendered globally; `sitemap.xml`/`robots.txt` via the official Astro integrator (US-024, US-025).

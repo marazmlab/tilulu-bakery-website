@@ -215,7 +215,7 @@ Form validation:
 
 #### 3.3.2 Email delivery semantics (best-effort)
 
-**Decision D-02 (closed):** Email dispatch is **best-effort**, not guaranteed. Inquiry acceptance = successful `INSERT` into `orders`. The canonical customer success copy on `201 Created` is always: *„Dziękujemy! Twoje zapytanie zostało wysłane. Odpowiemy w ciągu 24 godzin.”* — never branch on `meta.emailDelivered`. Failed sends are persisted (`email_delivered`, `email_error`) for the owner in Dashboard. Supersedes any earlier PRD wording implying guaranteed delivery (resolved with C-01, N-02).
+**Decision D-02 (closed):** Email dispatch is **best-effort**, not guaranteed. Inquiry acceptance = successful `INSERT` into `orders`. The canonical customer success copy on `201 Created` is always: _„Dziękujemy! Twoje zapytanie zostało wysłane. Odpowiemy w ciągu 24 godzin.”_ — never branch on `meta.emailDelivered`. Failed sends are persisted (`email_delivered`, `email_error`) for the owner in Dashboard. Supersedes any earlier PRD wording implying guaranteed delivery (resolved with C-01, N-02).
 
 **Authoritative rule for MVP:** inquiry acceptance is decoupled from email delivery.
 
@@ -643,7 +643,7 @@ Acceptance Criteria:
 - Order is saved to Supabase database
 - Inspiration photo is uploaded to Supabase Storage (if added)
 - System attempts to send confirmation email to customer and notification email to owner (best-effort, target ≤ 2 min per §3.3.2); email failure does **not** block inquiry acceptance
-- After successful submission (`201 Created`), customer always sees the same neutral success message: *„Dziękujemy! Twoje zapytanie zostało wysłane. Odpowiemy w ciągu 24 godzin.”* — regardless of `meta.emailDelivered`
+- After successful submission (`201 Created`), customer always sees the same neutral success message: _„Dziękujemy! Twoje zapytanie zostało wysłane. Odpowiemy w ciągu 24 godzin.”_ — regardless of `meta.emailDelivered`
 - In case of server error, message with retry request is displayed
 - Re-clicking button during processing doesn't cause duplicate
 

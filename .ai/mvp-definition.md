@@ -46,7 +46,7 @@
 5. Upload security (MIME type validation, maximum file size)
 6. Persist email outcome on each order: `email_delivered`, `email_error` (visible in Supabase Dashboard)
 
-**Email delivery (best-effort, D-02):** inquiry is saved regardless of email outcome; failed sends are recorded on the order row (`email_delivered = false`, `email_error`) for the owner — not shown in customer UI (see PRD §3.3.2). Canonical success message: *„Dziękujemy! Twoje zapytanie zostało wysłane. Odpowiemy w ciągu 24 godzin.”*
+**Email delivery (best-effort, D-02):** inquiry is saved regardless of email outcome; failed sends are recorded on the order row (`email_delivered = false`, `email_error`) for the owner — not shown in customer UI (see PRD §3.3.2). Canonical success message: _„Dziękujemy! Twoje zapytanie zostało wysłane. Odpowiemy w ciągu 24 godzin.”_
 
 ### Owner Access
 

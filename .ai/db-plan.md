@@ -14,22 +14,22 @@ This schema covers the single MVP flow: accepting a quote request from the order
 
 A single, denormalized table holding all data for one inquiry. No customer/product child tables — justified by the absence of user accounts and the low volume.
 
-| Column                   | Type          | Constraints / Default                                                        | Notes                                                                                  |
-| ------------------------ | ------------- | ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `id`                     | `uuid`        | `PRIMARY KEY DEFAULT gen_random_uuid()`                                       | Unpredictable identifier; also reused for naming Storage files.                        |
-| `created_at`             | `timestamptz` | `NOT NULL DEFAULT now()`                                                      | Submission timestamp. Used for chronological sorting in the Dashboard.                 |
-| `category`               | `order_category` (ENUM) | `NOT NULL`                                                         | Technical values without Polish chars/spaces; display labels live in i18n JSON files.  |
-| `status`                 | `order_status` (ENUM)   | `NOT NULL DEFAULT 'new'`                                           | Changed manually by the owner in the Dashboard.                                        |
-| `name`                   | `text`        | `NOT NULL`                                                                   | Customer full name. Length 1–200 enforced by Zod only (D-07); PRD §3.2.              |
-| `email`                  | `text`        | `NOT NULL`                                                                   | Customer email (format validated by Zod on the server).                                |
-| `phone`                  | `text`        | `NOT NULL`                                                                   | Polish phone number (format validated/normalized by Zod on the server).                |
-| `details`                | `text`        | `NOT NULL`, `CHECK (char_length(details) BETWEEN 20 AND 1000)`              | Order description from the form textarea.                                              |
-| `pickup_date`            | `date`        | `NOT NULL`                                                                   | Pickup day only (no time). Min/max enforced in app: `pickup_date >= (current_date + INTERVAL '2 days')`. |
-| `notes`                  | `text`        | `NULL`, `CHECK (notes IS NULL OR char_length(notes) <= 500)`                | Optional additional notes.                                                             |
-| `inspiration_photo_path` | `text`        | `NULL`                                                                       | Object key in bucket `inspirations` (D-05), e.g. `{order_id}.webp`. Bucket name not stored. No original client filename. |
-| `gdpr_consent`           | `boolean`     | `NOT NULL`, `CHECK (gdpr_consent = true)`                                   | GDPR accountability; timestamp implied by `created_at`.                                |
-| `email_delivered`        | `boolean`     | `NOT NULL DEFAULT false`                                                     | `true` after customer + owner emails both dispatch successfully; visible in Dashboard (US-022). |
-| `email_error`            | `text`        | `NULL`, `CHECK (email_error IS NULL OR char_length(email_error) <= 500)`    | Sanitized failure diagnostic when `email_delivered = false`; `NULL` on success. No PII. |
+| Column                   | Type                    | Constraints / Default                                                    | Notes                                                                                                                    |
+| ------------------------ | ----------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| `id`                     | `uuid`                  | `PRIMARY KEY DEFAULT gen_random_uuid()`                                  | Unpredictable identifier; also reused for naming Storage files.                                                          |
+| `created_at`             | `timestamptz`           | `NOT NULL DEFAULT now()`                                                 | Submission timestamp. Used for chronological sorting in the Dashboard.                                                   |
+| `category`               | `order_category` (ENUM) | `NOT NULL`                                                               | Technical values without Polish chars/spaces; display labels live in i18n JSON files.                                    |
+| `status`                 | `order_status` (ENUM)   | `NOT NULL DEFAULT 'new'`                                                 | Changed manually by the owner in the Dashboard.                                                                          |
+| `name`                   | `text`                  | `NOT NULL`                                                               | Customer full name. Length 1–200 enforced by Zod only (D-07); PRD §3.2.                                                  |
+| `email`                  | `text`                  | `NOT NULL`                                                               | Customer email (format validated by Zod on the server).                                                                  |
+| `phone`                  | `text`                  | `NOT NULL`                                                               | Polish phone number (format validated/normalized by Zod on the server).                                                  |
+| `details`                | `text`                  | `NOT NULL`, `CHECK (char_length(details) BETWEEN 20 AND 1000)`           | Order description from the form textarea.                                                                                |
+| `pickup_date`            | `date`                  | `NOT NULL`                                                               | Pickup day only (no time). Min/max enforced in app: `pickup_date >= (current_date + INTERVAL '2 days')`.                 |
+| `notes`                  | `text`                  | `NULL`, `CHECK (notes IS NULL OR char_length(notes) <= 500)`             | Optional additional notes.                                                                                               |
+| `inspiration_photo_path` | `text`                  | `NULL`                                                                   | Object key in bucket `inspirations` (D-05), e.g. `{order_id}.webp`. Bucket name not stored. No original client filename. |
+| `gdpr_consent`           | `boolean`               | `NOT NULL`, `CHECK (gdpr_consent = true)`                                | GDPR accountability; timestamp implied by `created_at`.                                                                  |
+| `email_delivered`        | `boolean`               | `NOT NULL DEFAULT false`                                                 | `true` after customer + owner emails both dispatch successfully; visible in Dashboard (US-022).                          |
+| `email_error`            | `text`                  | `NULL`, `CHECK (email_error IS NULL OR char_length(email_error) <= 500)` | Sanitized failure diagnostic when `email_delivered = false`; `NULL` on success. No PII.                                  |
 
 #### Enumerated types
 
@@ -150,13 +150,13 @@ Inspiration photos live in a **private** Supabase Storage bucket named **`inspir
 
    **`order_category` — enum → label PL (UI / email):**
 
-   | ENUM value | Label PL |
-   | --- | --- |
+   | ENUM value         | Label PL         |
+   | ------------------ | ---------------- |
    | `tort_okazjonalny` | Tort okazjonalny |
-   | `ciasta` | Ciasta |
-   | `ciastka` | Ciastka |
-   | `alfajory` | Alfajory |
-   | `inne` | Inne |
+   | `ciasta`           | Ciasta           |
+   | `ciastka`          | Ciastka          |
+   | `alfajory`         | Alfajory         |
+   | `inne`             | Inne             |
 
 5. **`text` + `CHECK` length guards** — Text columns use `text` rather than `varchar(n)`. Length CHECK constraints on `details`, `notes`, and `email_error` act as a cheap integrity backstop behind Zod. **`name` length (1–200) is Zod-only (D-07)** — no DB CHECK, so the limit can change without a migration.
 

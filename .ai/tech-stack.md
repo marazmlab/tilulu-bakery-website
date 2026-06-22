@@ -16,20 +16,20 @@ MVP = 5 public pages + simple form + email + Supabase storage. No admin panel, n
 
 ## Core Stack
 
-| Layer            | Technology              | Version (target) | Role                                        |
-| ---------------- | ----------------------- | ---------------- | ------------------------------------------- |
-| Framework        | Astro                   | 6.x              | SSG pages, API routes, islands architecture |
-| UI (interactive) | React                   | 19.x             | Order form, gallery filters only            |
-| Language         | TypeScript              | 5.x              | Type safety across frontend and API         |
-| Styling          | Tailwind CSS            | 4.x              | Utility-first styling                       |
-| Components       | shadcn/ui + Radix       | latest           | Accessible UI primitives                    |
-| Validation       | Zod                     | latest           | Server-side (+ client) form validation      |
-| Database         | Supabase (PostgreSQL)   | —                | Orders table, RLS policies                  |
-| File storage     | Supabase Storage        | —                | Inspiration photo uploads (max 5 MB)        |
+| Layer            | Technology              | Version (target) | Role                                                           |
+| ---------------- | ----------------------- | ---------------- | -------------------------------------------------------------- |
+| Framework        | Astro                   | 6.x              | SSG pages, API routes, islands architecture                    |
+| UI (interactive) | React                   | 19.x             | Order form, gallery filters only                               |
+| Language         | TypeScript              | 5.x              | Type safety across frontend and API                            |
+| Styling          | Tailwind CSS            | 4.x              | Utility-first styling                                          |
+| Components       | shadcn/ui + Radix       | latest           | Accessible UI primitives                                       |
+| Validation       | Zod                     | latest           | Server-side (+ client) form validation                         |
+| Database         | Supabase (PostgreSQL)   | —                | Orders table, RLS policies                                     |
+| File storage     | Supabase Storage        | —                | Inspiration photo uploads (max 5 MB)                           |
 | Email            | Resend + React Email    | —                | Customer + owner notification (best-effort; D-02 / PRD §3.3.2) |
-| Hosting          | Vercel                  | —                | Astro API endpoints + SSR/API support       |
-| Analytics        | GA4 + Microsoft Clarity | —                | Load only after cookie consent              |
-| Node.js          | Node                    | 22 LTS           | Local dev and CI                            |
+| Hosting          | Vercel                  | —                | Astro API endpoints + SSR/API support                          |
+| Analytics        | GA4 + Microsoft Clarity | —                | Load only after cookie consent                                 |
+| Node.js          | Node                    | 22 LTS           | Local dev and CI                                               |
 
 ---
 
@@ -92,17 +92,17 @@ MVP = 5 public pages + simple form + email + Supabase storage. No admin panel, n
 
 See .env.example in project root.
 
-| Variable                  | Scope  | Purpose                           |
-| ------------------------- | ------ | --------------------------------- |
-| SUPABASE_URL              | server | Supabase project URL              |
-| SUPABASE_SERVICE_ROLE_KEY | server | API routes (DB + storage)         |
+| Variable                   | Scope  | Purpose                                    |
+| -------------------------- | ------ | ------------------------------------------ |
+| SUPABASE_URL               | server | Supabase project URL                       |
+| SUPABASE_SERVICE_ROLE_KEY  | server | API routes (DB + storage)                  |
 | STORAGE_INSPIRATION_BUCKET | server | Private bucket name (`inspirations`, D-05) |
-| RESEND_API_KEY            | server | Transactional email               |
-| RESEND_FROM_EMAIL         | server | Verified sender domain            |
-| OWNER_EMAIL               | server | Owner notification recipient      |
-| SITE_URL                  | server | Links in emails                   |
-| PUBLIC_GA_MEASUREMENT_ID  | client | Google Analytics (after consent)  |
-| PUBLIC_CLARITY_PROJECT_ID | client | Microsoft Clarity (after consent) |
+| RESEND_API_KEY             | server | Transactional email                        |
+| RESEND_FROM_EMAIL          | server | Verified sender domain                     |
+| OWNER_EMAIL                | server | Owner notification recipient               |
+| SITE_URL                   | server | Links in emails                            |
+| PUBLIC_GA_MEASUREMENT_ID   | client | Google Analytics (after consent)           |
+| PUBLIC_CLARITY_PROJECT_ID  | client | Microsoft Clarity (after consent)          |
 
 ---
 
@@ -132,14 +132,14 @@ Why this stack for Tilulu MVP:
 
 ## Risks and Mitigations
 
-| Risk                                       | Mitigation                                                 |
-| ------------------------------------------ | ---------------------------------------------------------- |
-| Branding not ready (logo, colors)          | Placeholders + Tailwind theme tokens; easy swap later      |
-| Vercel free tier limits for commercial use | Monitor usage; plan paid tier if needed                    |
-| Email delivery not guaranteed (best-effort) | Decision D-02: INSERT = acceptance; owner sees `email_delivered`/`email_error` in Dashboard; verify Resend domain early |
-| Over-using React                           | Enforced in Cursor rules: React only for interactive parts |
-| In-memory rate limit on Vercel (not global 5/h/IP) | **D-04 closed:** per-instance in-memory accepted for MVP; ~3–4 inquiries/week; KV/Redis/CAPTCHA if abuse |
-| PRD vs implementation drift                | Keep .ai/prd.md and this file in sync                      |
+| Risk                                               | Mitigation                                                                                                              |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Branding not ready (logo, colors)                  | Placeholders + Tailwind theme tokens; easy swap later                                                                   |
+| Vercel free tier limits for commercial use         | Monitor usage; plan paid tier if needed                                                                                 |
+| Email delivery not guaranteed (best-effort)        | Decision D-02: INSERT = acceptance; owner sees `email_delivered`/`email_error` in Dashboard; verify Resend domain early |
+| Over-using React                                   | Enforced in Cursor rules: React only for interactive parts                                                              |
+| In-memory rate limit on Vercel (not global 5/h/IP) | **D-04 closed:** per-instance in-memory accepted for MVP; ~3–4 inquiries/week; KV/Redis/CAPTCHA if abuse                |
+| PRD vs implementation drift                        | Keep .ai/prd.md and this file in sync                                                                                   |
 
 ---
 
