@@ -11,13 +11,13 @@ Full checklist: [`roadmap.md`](./roadmap.md)
 ```
 Project: Tilulu Bakery (tilulu-bakery-website)
 Phase 3 — Public Pages
-Current step: 3.2 - Shared layout polish
-Last session: 2026-06-19 — add ui-plan for MVP views and OrderForm architecture
+Current step: 3.3 - Home (/)
+Last session: 2026-06-23 — 3.2 shared layout complete (Header/Nav/Footer, i18n, legal stubs, kontakt)
 Blockers: none
 Workflow: Implement in Tilulu myself; web-dev-assistant = planner/mentor only
 ```
 
-**Last updated:** 2026-06-18
+**Last updated:** 2026-06-23
 
 ---
 
@@ -64,7 +64,7 @@ Append a short entry after each session. Max 5 bullets per entry.
 ### 2026-06-16 — Roadmap reorder (planning first)
 
 - **Done:** Roadmap restructured — Phase 2 = DB/API planning (2x3, 2x4); Phase 3 = Public Pages (2x5); Phase 4 = backend implementation; Phase 5 = go-live
-- **Decided:** Plan `db-plan.md` + `api-plan.md` before `ui-plan.md`; `
+- **Decided:** Plan `db-plan.md` + `api-plan.md` before `ui-plan.md`; Phase 2 planning before public UI implementation
 - **Next:** Step 2.1 — DB planning session (2 rounds, reasoning model)
 
 ---
@@ -84,11 +84,28 @@ Append a short entry after each session. Max 5 bullets per entry.
 - **Verified:** Every PRD §3.2 form field maps to DB column + API field; RLS matches server `service_role` via Astro API
 - **Next:** Phase 3 — ui-plan + public pages
 
-  ***
+---
 
 ### 2026-06-19 — UI architecture plan (3.1) — Phase 3 started
 
-- **Done:**
+- **Done:** `.ai/ui-plan.md` — 8 views, component tree, Astro vs React (OrderForm island), i18n-ready structure; roadmap 3.1 `[x]`
+- **Decided:** Single write path (`POST /api/orders`); shared Zod + i18n labels; cookie banner as lightweight island (Phase 5)
+- **Next:** Step 3.2 — shared layout polish (nav, footer, mobile)
+
+---
+
+### 2026-06-22 — Layout foundations + repo hygiene
+
+- **Done:** `.editorconfig` + `.gitattributes` (LF repo-wide); `src/lib/site.ts` (contact, social, tagline); i18n scaffold — `t()` helper + `nav.json` / `footer.json` (initially under `src/i118n/`)
+- **Next:** Split `BaseLayout` into components; mobile nav; legal stubs
+
+---
+
+### 2026-06-23 — Shared layout polish (3.2) — Phase 3 layout closed
+
+- **Done:** `Header`, `Nav` (desktop + mobile `<details>`), `Footer`, `SocialLinks`; `BaseLayout` as flex shell; i18n moved to `src/i18n/`; Vite `@` alias; stub `/regulamin` + `/polityka-prywatnosci` (footer links); `/kontakt` wired to `site.ts`; `scrollbar-gutter: stable`
+- **Verified:** `npm run dev` — nav, footer, and legal pages work responsively
+- **Next:** Step 3.3 — Home (`/`) hero, description, gallery (≥3 photos), CTA
 
 ## Planner Chat Template
 

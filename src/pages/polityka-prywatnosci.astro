@@ -1,0 +1,30 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const updatedAt = "19 czerwca 2026";
+---
+
+<BaseLayout title="Polityka prywatności - Piekarnia Tilulu">
+  <article class="prose prose-neutral max-w-none">
+
+    <p class="text-sm text-muted-foreground">Ostatnia aktualizacja: {updatedAt}</p>
+
+    <h1 class="mt-6">Polityka prywatności</h1>
+
+    <p class="mt-6">
+      Pełna polityka przetwarzania danych i informacja o cookies (GA4, Clarity) zostanie
+      uzupełniona przed uruchomieniem produkcyjnym. Składając zapytanie przez formularz,
+      podajesz dane kontaktowe wyłącznie w celu obsługi zapytania.
+    </p>
+
+    <p id="zgody">
+      Ustawienia zgód na analitykę będą dostępne po wdrożeniu banera cookies (Phase 5).
+    </p>
+
+    <p class="mt-6">
+      <a href="/" class="font-medium text-primary hover:underline">Wróć na stronę główną</a>
+      ·
+      <a href="/kontakt" class="font-medium text-primary hover:underline">Kontakt</a>
+    </p>
+  </article>
+</BaseLayout>

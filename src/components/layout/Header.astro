@@ -1,0 +1,23 @@
+---
+import { site } from "@/lib/site";
+import Nav from "@/components/layout/Nav.astro";
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+---
+
+<header class="border-b border-border">
+  <nav
+    class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 md:py-4"
+    aria-label="Główne menu"
+  >
+    <a href="/" class="shrink-0 text-lg font-semibold">
+      {site.name}
+    </a>
+
+    <Nav currentPath={currentPath} />
+  </nav>
+</header>

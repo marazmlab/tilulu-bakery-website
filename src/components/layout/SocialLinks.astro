@@ -1,0 +1,38 @@
+---
+import { site } from "@/lib/site";
+import { t } from "@/i18n/t";
+
+interface Props {
+  class?: string;
+  variant?: "muted" | "prominent";
+}
+
+const { class: className = "", variant = "muted" } = Astro.props;
+
+const linkClass =
+  variant === "prominent"
+    ? "text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    : "text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+
+const links = [
+  { href: site.social.instagram, label: t("footer.instagram") },
+  { href: site.social.facebook, label: t("footer.facebook") },
+] as const;
+---
+
+<ul class:list={["flex flex-wrap gap-3", className]}>
+  {
+    links.map(({ href, label }) => (
+      <li>
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class={linkClass}
+        >
+          {label}
+        </a>
+      </li>
+    ))
+  }
+</ul>

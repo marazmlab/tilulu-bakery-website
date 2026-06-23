@@ -1,0 +1,115 @@
+---
+import { t } from "@/i18n/t";
+
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+
+const navItems = [
+  { href: "/", labelKey: "nav.home" },
+  { href: "/oferta", labelKey: "nav.offer" },
+  { href: "/o-nas", labelKey: "nav.about" },
+  { href: "/zamowienia", labelKey: "nav.orders" },
+  { href: "/kontakt", labelKey: "nav.contact" }
+] as const;
+
+function isActive(href: string): boolean {
+  return href === "/" ? currentPath === "/" : currentPath.startsWith(href);
+}
+
+function linkClass(href: string): string {
+  return isActive(href)
+    ? "font-medium text-foreground"
+    : "text-muted-foreground transition-colors hover:text-foreground";
+}
+---
+
+<ul class="hidden flex-nowrap items-center gap-2 text-sm md:flex md:gap-3 lg:gap-4">
+  {
+    navItems.map(({ href, labelKey }) => (
+      <li>
+        <a
+          href={href}
+          class={linkClass(href)}
+          aria-current={isActive(href) ? "page" : undefined}
+        >
+          {t(labelKey)}
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<details class="relative md:hidden" data-mobile-nav>
+  <summary
+    class="inline-flex size-9 cursor-pointer list-none items-center justify-center rounded-md bg-background p-0 text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&::-webkit-details-marker]:hidden"
+    aria-label={t("nav.openMenu")}
+  >
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    aria-hidden="true"
+  >
+    <line x1="4" x2="20" y1="6" y2="6"></line>
+    <line x1="4" x2="20" y1="12" y2="12"></line>
+    <line x1="4" x2="20" y1="18" y2="18"></line>
+  </svg>
+  </summary>
+
+  <ul class="absolute right-0 top-full z-50 mt-2 min-w-44 rounded-md border border-border bg-background p-2 shadow-md">
+    {
+      navItems.map(({ href, labelKey }) => (
+        <li>
+          <a
+            href={href}
+            class:list={[
+              "block rounded-md px-3 py-3 text-sm",
+              linkClass(href),
+            ]}
+            aria-current={isActive(href) ? "page" : undefined}
+          >
+            {t(labelKey)}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</details>
+
+<script>
+  function setupMobileNav() {
+  const nav = document.querySelector("[data-mobile-nav]");
+  if (!(nav instanceof HTMLDetailsElement)) return;
+
+  nav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      nav.open = false;
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || !nav.open) return;
+    nav.open = false;
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!nav.open) return;
+    const target = event.target;
+    if (!(target instanceof Node)) return;
+    if (nav.contains(target)) return;
+
+    nav.open = false;
+  });
+}
+
+setupMobileNav();
+</script>

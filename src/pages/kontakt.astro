@@ -1,27 +1,48 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import SocialLinks from "@/components/layout/SocialLinks.astro";
+import { site } from "@/lib/site";
 ---
 
 <BaseLayout title="Kontakt - Piekarnia Tilulu">
   <h1 class="text-3xl font-bold tracking-tight">Kontakt</h1>
 
   <p class="mt-4 max-w-2xl text-muted-foreground">
-    Masz pytanie poza formularzem? Skontaktuj się bezpośrednio — dane
-    kontaktowe uzupełnimy po uzgodnieniu z właścicielką.
+    Masz pytanie poza formularzem? Napisz, zadzwoń lub zajrzyj na social media.
   </p>
 
   <dl class="mt-8 max-w-md space-y-4">
     <div>
       <dt class="text-sm font-medium text-muted-foreground">E-mail</dt>
-      <dd class="mt-1">kontakt@tilulu.pl (placeholder)</dd>
+      <dd class="mt-1">
+        <a
+          href={`mailto:${site.contact.email}`}
+          class="text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          {site.contact.emailDisplay}
+        </a>
+      </dd>
     </div>
     <div>
       <dt class="text-sm font-medium text-muted-foreground">Telefon</dt>
-      <dd class="mt-1">+48 — — — — — — (placeholder)</dd>
+      <dd class="mt-1">
+        <a
+          href={`tel:${site.contact.phone}`}
+          class="text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          {site.contact.phoneDisplay}
+        </a>
+      </dd>
     </div>
     <div>
       <dt class="text-sm font-medium text-muted-foreground">Lokalizacja</dt>
-      <dd class="mt-1">Szczecin</dd>
+      <dd class="mt-1">{site.location}</dd>
+    </div>
+    <div>
+      <dt class="text-sm font-medium text-muted-foreground">Social media</dt>
+      <dd class="mt-2">
+        <SocialLinks variant="prominent" />
+      </dd>
     </div>
   </dl>
 
@@ -30,5 +51,4 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
       Wolisz formularz? Wyślij zapytanie o zamówienie
     </a>
   </p>
-
 </BaseLayout>

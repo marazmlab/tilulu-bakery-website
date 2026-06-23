@@ -9,12 +9,10 @@ export const site = {
   location: "Szczecin",
 
   contact: {
-    email: "kontakt@tilulu.pl",
-    /** Display format shown to users */
-    emailDisplay: "kontakt@tilulu.pl",
-    // E.164-ish for tel: link - update when owner confirm
-    phone: "+48000000000",
-    phoneDisplay: "+48 --- --- ---",
+    email: "tilulu@gmail.pl",
+    emailDisplay: "tilulu@gmail.pl",
+    phone: "+48514736333",
+    phoneDisplay: "+48 514 736 333",
   },
 
   social: {
