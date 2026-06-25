@@ -1,0 +1,12 @@
+---
+/* eslint-disable astro/no-set-html-directive -- JSON-LD only; schema is built server-side, never from user input */
+
+interface Props {
+  schema: Record<string, unknown>;
+}
+
+const { schema } = Astro.props;
+const json = JSON.stringify(schema);
+---
+
+<script type="application/ld+json" set:html={json} />

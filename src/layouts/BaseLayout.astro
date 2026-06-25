@@ -5,10 +5,22 @@ import Footer from "@/components/layout/Footer.astro";
 
 interface Props {
   title?: string;
+  description?: string;
+  ogImage?: string;
 }
 
-const { title = "Tilulu Bakery" } = Astro.props;
+const { 
+  title = "Tilulu Bakery", 
+  description,
+  ogImage = "/images/og/default.jpg",
+
+} = Astro.props;
+
 const currentPath = Astro.url.pathname;
+const canonicalURL = new URL(Astro.url.pathname, Astro.url.origin);
+const ogImageURL = new URL(ogImage, Astro.url.origin);
+
+
 ---
 
 <!doctype html>
@@ -20,6 +32,15 @@ const currentPath = Astro.url.pathname;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <title>{title}</title>
+
+    {description && <meta name="description" content={description} />}
+    
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:image" content={ogImageURL.href} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL.href} />
+    <meta property="twitter:card" content="summary_large_image" />
   </head>
 
   <body class="flex min-h-screen flex-col bg-background font-sans text-foreground antialiased">
