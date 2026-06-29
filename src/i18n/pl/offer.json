@@ -1,0 +1,60 @@
+{
+  "meta.title": "Oferta - Piekarnia Tilulu",
+  "meta.description": "Torty okolicznościowe, ciastka, alfajores i ciasta na zamówienie w Szczecinie. Ceny orientacyjne i stałe — wyślij zapytanie, a potwierdzimy szczegóły indywidualnie.",
+
+  "page.title": "Oferta",
+  "page.lead": "Przeglądaj nasze wypieki podzielone na kategorie. Podane ceny mają charakter orientacyjny lub cennikowy — ostateczne warunki ustalamy po kontakcie.",
+
+  "badges.shipping": "Możliwość wysyłki",
+  "badges.pickup": "Odbiór osobisty",
+
+  "categories.occasion.title": "Torty okolicznościowe / na zamówienie",
+  "categories.occasion.description": "Torty na urodziny, komunie, baby shower i inne okazje — komponowane indywidualnie.",
+
+  "categories.standard.title": "Stałe wypieki",
+  "categories.standard.description": "Ciastka, alfajores i ciasta z regularnej oferty — ze stałymi cenami.",
+
+  "categories.custom.title": "Inne ciasta na zamówienie",
+  "categories.custom.description": "Ciasta dopasowane do diety i preferencji, w tym opcje bezglutenowe i wegańskie.",
+
+  "special.title": "Zamówienia specjalne",
+  "special.text": "Potrzebujesz zwariowanej wersji bezglutenowej, wegańskiej lub nietypowej dekoracji? Opisz swoje oczekiwania w formularzu zapytań — na pewno się jakoś dogadamy!",
+
+  "cta.label": "Wyślij zapytanie o zamówienie",
+
+  "products.tortClassic.name": "Tort klasyczny na zamówienie",
+  "products.tortClassic.description": "Biszkpty, kremy i dekoracja dopasowane do okazji. Minimum 48 h na realizację.",
+  "products.tortClassic.price": "od 200 zł",
+
+  "products.tortTall.name": "Tort wysoki na zamówienie",
+  "products.tortTall.description": "Więcej pięter i dekoracji — idealny na większe uroczystości.",
+  "products.tortTall.price": "od 280 zł",
+
+  "products.tortKids.name": "Tort dla dzieci",
+  "products.tortKids.description": "Kolorowa dekoracja i łagodniejsze smaki — ustalane indywidualnie.",
+  "products.tortKids.price": "od 220 zł",
+
+  "products.cookies.name": "Ciastka domowej piekarni",
+  "products.cookies.description": "Różne smaki i foremki — idealne na słodki stół lub prezent.",
+  "products.cookies.price": "25 zł / 6 szt.",
+
+  "products.alfajores.name": "Alfajores",
+  "products.alfajores.description": "Argentyńskie ciasteczka maślane z nadzieniem dulce de leche.",
+  "products.alfajores.price": "8 zł/szt.",
+
+  "products.cheesecake.name": "Sernik",
+  "products.cheesecake.description": "Klasyczny sernik na kruchym spodzie — porcja lub całość na zapytanie.",
+  "products.cheesecake.price": "25 zł/kawałek",
+
+  "products.brownie.name": "Brownie",
+  "products.brownie.description": "Ciężkie, czekoladowe brownie — porcja lub większy format na event.",
+  "products.brownie.price": "12 zł/kawałek",
+
+  "products.glutenFree.name": "Ciasto bezglutenowe na zamówienie",
+  "products.glutenFree.description": "Receptura dopasowana do potrzeb — skład ustalamy po kontakcie.",
+  "products.glutenFree.price": "od 180 zł",
+
+  "products.vegan.name": "Ciasto wegańskie na zamówienie",
+  "products.vegan.description": "Bez składników odzwierzęcych — smak i dekoracja do ustalenia.",
+  "products.vegan.price": "od 180 zł"
+}

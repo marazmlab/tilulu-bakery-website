@@ -1,38 +1,57 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import ProductCard from "@/components/offer/ProductCard.astro";
+import { t } from "@/i18n/t";
+import { productCategories, getProductsByCategory } from "@/data/products";
 ---
 
-<BaseLayout title="Oferta - Piekarnia Tilulu">
-  <h1 class="text-3xl font-bold tracking-tight">Oferta</h1>
+<BaseLayout 
+  title={t("offer.meta.title")}
+  description={t("offer.meta.description")}
+  ogImage="/images/og/offer.jpg"
+>
+  <h1 class="text-3xl font-bold tracking-tight">{t("offer.page.title")}</h1>
+  <p class="mt-4 max-w-2xl text-muted-foreground">{t("offer.page.lead")}</p>
 
-  <p class="mt-4 max-w-2xl text-muted-foreground">
-    Tutaj pojawi się galeria produktów: torty okolicznościowe, ciasta,
-    ciasteczka i alfajores — z cenami orientacyjnymi i informacją o odbiorze
-    lub wysyłce.
-  </p>
+  {
+    productCategories.map((category) => (
+      <section class="mt-12 rounded-xl border border-border p-6">
+        <h2 class="text-2xl font-semibold">{t(category.titleKey)}</h2>
+        <p class="mt-2 max-w-2xl text-muted-foreground">
+          {t(category.descriptionKey)}
+        </p>
+        <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {
+            getProductsByCategory(category.id).map((product) => (
+              <li class="h-full">
+                <ProductCard product={product} />
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mt-8">
+          <a
+            href="/zamowienia"
+            class="inline-flex h-10 items-center justify-center rounded-4xl bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
+          >
+            {t("offer.cta.label")}
+          </a>
+        </p>
+      </section>
+    ))
+  }
 
-  <ul class="mt-8 grid gap-4 sm:grid-cols-2">
-    <li class="rounded-xl border border-border p-4">
-      <h2 class="font-semibold">Torty okolicznościowe</h2>
-      <p class="mt-1 text-sm text-muted-foreground">od — PLN · odbiór osobisty</p>
-    </li>
-    <li class="rounded-xl border border-border p-4">
-      <h2 class="font-semibold">Ciastka i alfajores</h2>
-      <p class="mt-1 text-sm text-muted-foreground">cena za sztukę · możliwa wysyłka</p>
-    </li>
-    <li class="rounded-xl border border-border p-4">
-      <h2 class="font-semibold">Ciasta na zamówienie</h2>
-      <p class="mt-1 text-sm text-muted-foreground">od — PLN · opcje bezglutenowe na zapytanie</p>
-    </li>
-    <li class="rounded-xl border border-border p-4">
-      <h2 class="font-semibold">Inne na zamówienie</h2>
-      <p class="mt-1 text-sm text-muted-foreground">opisz potrzeby w formularzu zapytania</p>
-    </li>
-  </ul>
+  <section class="mt-12 rounded-xl border border-border bg-muted/30 p-6">
+    <h2 class="text-xl font-semibold">{t("offer.special.title")}</h2>
+    <p class="mt-2 max-w-2xl text-muted-foreground">{t("offer.special.text")}</p>
 
-  <p class="mt-8">
-    <a href="/zamowienia" class="font-medium text-primary hover:underline">
-      Przejdź do formularza zapytań
-    </a>
-  </p>
+    <p class="mt-8">
+      <a
+        href="/zamowienia"
+        class="inline-flex h-10 items-center justify-center rounded-4xl bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
+      >
+        {t("offer.cta.label")}
+      </a>
+    </p>
+  </section>
 </BaseLayout>

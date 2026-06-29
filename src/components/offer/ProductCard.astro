@@ -1,0 +1,43 @@
+---
+import type { Product } from "@/data/products";
+import { t } from "@/i18n/t";
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+
+const badgeLabelKeys = {
+  shipping: "offer.badges.shipping",
+  pickup: "offer.badges.pickup",
+} as const;
+---
+
+<article class="flex h-full flex-col overflow-hidden rounded-xl border border-border bg-background">
+  <img 
+    src={product.image}
+    alt={t(product.nameKey)}
+    width={640}
+    height={480}
+    loading="lazy"
+    class="aspect-4/3 w-full object-cover"
+  />
+
+  <div class="flex flex-1 flex-col gap-2 p-4">
+    <div class="flex flex-wrap gap-2">
+      {
+        product.badges.map((badge) => (
+          <span class="rounded-full border border-border bg-muted/50 px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+            {t(badgeLabelKeys[badge])}
+          </span>
+        ))
+      }
+    </div>
+
+    <h3 class="text-lg font-semibold">{t(product.nameKey)}</h3>
+    <p class="flex-1 text-sm text-muted-foreground">{t(product.descriptionKey)}</p>
+    <p class="pt-2 text-sm font-medium">{t(product.priceKey)}</p>
+  </div>
+
+</article>

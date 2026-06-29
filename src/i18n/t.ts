@@ -1,11 +1,13 @@
 import nav from "@/i18n/pl/nav.json";
 import footer from "@/i18n/pl/footer.json";
 import home from "@/i18n/pl/home.json";
+import offer from "@/i18n/pl/offer.json";
 
 const messages = {
   nav,
   footer,
   home,
+  offer,
 } as const;
 
 type Namespace = keyof typeof messages;
