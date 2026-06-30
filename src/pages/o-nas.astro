@@ -1,22 +1,66 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import SocialLinks from "@/components/layout/SocialLinks.astro";
+import { t } from "@/i18n/t";
+import { aboutOwnerPhoto } from "@/data/about-owner";
+
+const valueItemKeys = [
+  "about.values.item1",
+  "about.values.item2",
+  "about.values.item3",
+] as const
 ---
 
-<BaseLayout title="O nas - Piekarnia Tilulu">
-  <h1 class="text-3xl font-bold tracking-tight">O nas</h1>
+<BaseLayout title={t("about.meta.title")}>
+  <h1 class="text-3xl font-bold tracking-tight">{t("about.page.title")}</h1>
+  <p class="mt-4 max-w-2xl text-muted-foreground">{t("about.page.lead")}</p>
 
-  <p class="mt-4 max-w-2xl text-muted-foreground">
-    Tilulu to domowa piekarnia w Szczecinie. Łączymy argentyńskie inspiracje
-    z rzemieślniczym podejściem do każdego zamówienia.
-  </p>
+  <section class="mt-12">
+    <h2 class="text-3xl font-bold tracking-tight">{t("about.owner.title")}</h2>
+    <figure class="mt-6 max-w-xl"> 
+      <img
+        src={aboutOwnerPhoto.src}
+        alt={t(aboutOwnerPhoto.altKey)}
+        width={800}
+        height={600}
+        loading="lazy"
+        class="aspect-4/3 w-full rounded-xl border border-border object-cover"
+      />
+    </figure>
+  </section>
 
-  <div class="mt-8 flex aspect-video max-w-xl items-center justify-center rounded-xl border border-dashed bg-muted/40 text-sm text-muted-foreground">
-    zdjęcie właścicielki - placeholder
-  </div>
 
-  <p class="mt-6 max-w-2xl text-muted-foreground">
-    Pełna historia piekarni, wartości i linki do social mediów dodamy w
-    kolejnej fazie projektu.
-  </p>
+  <section class="mt-12">
+    <h2 class="text-2xl font-semibold">{t("about.story.title")}</h2>
+    <p class="mt-4 max-w-2xl text-muted-foreground">{t("about.story.p1")}</p>
+    <p class="mt-4 max-w-2xl text-muted-foreground">{t("about.story.p2")}</p>
+  </section>
+  
+  <section class="mt-12">
+    <h2 class="text-2xl font-semibold">{t("about.values.title")}</h2>
+    <p class="mt-4 max-w-2xl text-muted-foreground">{t("about.values.lead")}</p>
+
+    <ul class="mt-6 space-y-3">
+      {
+        valueItemKeys.map((key) => (
+          <li class="flex gap-3 text-foreground">
+            <span
+              class="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary"
+              aria-hidden="true"
+            />
+            <span>{t(key)}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="mt-12">
+    <h2 class="text-2xl font-semibold">{t("about.social.title")}</h2>
+    <p class="mt-2 max-w-2xl text-muted-foreground">{t("about.social.lead")}</p>
+    <SocialLinks variant="prominent" class="mt-4"/>
+  </section>
+
+  
 
 </BaseLayout>
