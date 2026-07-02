@@ -1,19 +1,24 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SocialLinks from "@/components/layout/SocialLinks.astro";
+import { buttonVariants } from "@/components/ui/button";
+import { t } from "@/i18n/t";
 import { site } from "@/lib/site";
 ---
 
-<BaseLayout title="Kontakt - Piekarnia Tilulu">
-  <h1 class="text-3xl font-bold tracking-tight">Kontakt</h1>
+<BaseLayout 
+  title={t("contact.meta.title")}
+  description={t("contact.meta.description")}
+>
+  <h1 class="text-3xl font-bold tracking-tight">{t("contact.page.title")}</h1>
 
   <p class="mt-4 max-w-2xl text-muted-foreground">
-    Masz pytanie poza formularzem? Napisz, zadzwoń lub zajrzyj na social media.
+    {t("contact.page.lead")}
   </p>
 
   <dl class="mt-8 max-w-md space-y-4">
     <div>
-      <dt class="text-sm font-medium text-muted-foreground">E-mail</dt>
+      <dt class="text-sm font-medium text-muted-foreground">{t("contact.fields.email")}</dt>
       <dd class="mt-1">
         <a
           href={`mailto:${site.contact.email}`}
@@ -24,7 +29,7 @@ import { site } from "@/lib/site";
       </dd>
     </div>
     <div>
-      <dt class="text-sm font-medium text-muted-foreground">Telefon</dt>
+      <dt class="text-sm font-medium text-muted-foreground">{t("contact.fields.phone")}</dt>
       <dd class="mt-1">
         <a
           href={`tel:${site.contact.phone}`}
@@ -35,20 +40,23 @@ import { site } from "@/lib/site";
       </dd>
     </div>
     <div>
-      <dt class="text-sm font-medium text-muted-foreground">Lokalizacja</dt>
+      <dt class="text-sm font-medium text-muted-foreground">{t("contact.fields.location")}</dt>
       <dd class="mt-1">{site.location}</dd>
     </div>
     <div>
-      <dt class="text-sm font-medium text-muted-foreground">Social media</dt>
+      <dt class="text-sm font-medium text-muted-foreground">{t("contact.fields.social")}</dt>
       <dd class="mt-2">
         <SocialLinks variant="prominent" />
       </dd>
     </div>
   </dl>
 
-  <p class="mt-8">
-    <a href="/zamowienia" class="font-medium text-primary hover:underline">
-      Wolisz formularz? Wyślij zapytanie o zamówienie
+  <div class="mt-8">
+    <a 
+      href="/zamowienia"
+      class={buttonVariants({ size: "lg" })}
+    >
+      {t("contact.cta.form")}
     </a>
-  </p>
+  </div>
 </BaseLayout>

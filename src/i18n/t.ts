@@ -3,6 +3,7 @@ import footer from "@/i18n/pl/footer.json";
 import home from "@/i18n/pl/home.json";
 import offer from "@/i18n/pl/offer.json";
 import about from "@/i18n/pl/about.json";
+import contact from "@/i18n/pl/contact.json";
 
 const messages = {
   nav,
@@ -10,6 +11,7 @@ const messages = {
   home,
   offer,
   about,
+  contact,
 } as const;
 
 type Namespace = keyof typeof messages;
