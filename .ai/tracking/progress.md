@@ -11,13 +11,13 @@ Full checklist: [`roadmap.md`](./roadmap.md)
 ```
 Project: Tilulu Bakery (tilulu-bakery-website)
 Phase 3 — Public Pages
-Current step: 3.3 - Home (/)
-Last session: 2026-06-23 — 3.2 shared layout complete (Header/Nav/Footer, i18n, legal stubs, kontakt)
+Current step: 3.6 - Contact (/kontakt)
+Last session: 2026-07-02 — 3.5 About complete (i18n, owner photo, SEO); first-person voice polish across nav/about/offer
 Blockers: none
 Workflow: Implement in Tilulu myself; web-dev-assistant = planner/mentor only
 ```
 
-**Last updated:** 2026-06-23
+**Last updated:** 2026-07-02
 
 ---
 
@@ -106,6 +106,45 @@ Append a short entry after each session. Max 5 bullets per entry.
 - **Done:** `Header`, `Nav` (desktop + mobile `<details>`), `Footer`, `SocialLinks`; `BaseLayout` as flex shell; i18n moved to `src/i18n/`; Vite `@` alias; stub `/regulamin` + `/polityka-prywatnosci` (footer links); `/kontakt` wired to `site.ts`; `scrollbar-gutter: stable`
 - **Verified:** `npm run dev` — nav, footer, and legal pages work responsively
 - **Next:** Step 3.3 — Home (`/`) hero, description, gallery (≥3 photos), CTA
+
+---
+
+### 2026-06-24 — Home content foundation
+
+- **Done:** `src/i18n/pl/home.json`; `src/data/home-gallery.ts`; three gallery placeholder images in `public/images/home/`; extended `t()` helper for home namespace
+- **Next:** Build out `index.astro` — hero, values, gallery grid, CTA, SEO
+
+---
+
+### 2026-06-25 — Home page (3.3) complete
+
+- **Done:** Full homepage — hero, description, values list, gallery (≥3 photos), CTAs to `/oferta` and `/zamowienia`; per-page meta + OG image; `StructuredData.astro` (LocalBusiness JSON-LD); `BaseLayout` extended with `description` and `ogImage` props
+- **Verified:** Homepage renders with i18n copy and responsive gallery
+- **Next:** Step 3.4 — Offer (`/oferta`)
+
+---
+
+### 2026-06-29 — Offer page (3.4) complete
+
+- **Done:** `src/data/products.ts` (3 categories, badges, indicative prices); `ProductCard.astro`; full `/oferta` with category sections and CTA to `/zamowienia`; `src/i18n/pl/offer.json`; product + OG placeholder images in `public/images/offer/`
+- **Verified:** All three product categories render with cards and per-category order CTA
+- **Next:** Step 3.5 — About (`/o-nas`)
+
+---
+
+### 2026-06-30 — About page (3.5) complete
+
+- **Done:** `src/i18n/pl/about.json`; story, values, owner section with photo (`about-owner.ts`, `public/images/about/owner.jpg`); social links on `/o-nas`
+- **Verified:** About page content fully driven by i18n keys
+- **Next:** Per-page SEO (meta, OG) and copy polish
+
+---
+
+### 2026-07-02 — About SEO + i18n voice polish
+
+- **Done:** About page meta description + OG image (`/images/og/about.jpg`); first-person voice in `nav.json`, `about.json`, and `offer.json` (bakery speaks as “I/my” not “we/our”)
+- **Verified:** Roadmap steps 3.3–3.5 meet DoD
+- **Next:** Step 3.6 — Contact (`/kontakt`) — i18n, SEO, polish beyond layout stub
 
 ## Planner Chat Template
 

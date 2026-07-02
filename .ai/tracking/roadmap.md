@@ -65,9 +65,9 @@ UI planning + static page implementation. Form stays a stub until Phase 4.
 | --- | --------------------------- | ------ | --------------------------------------------------------------------------------- |
 | 3.1 | UI architecture plan        | [x]    | `.ai/ui-plan.md`: views, nav, component tree, Astro vs React; uses db- + api-plan |
 | 3.2 | Shared layout polish        | [x]    | Header nav (incl. mobile), footer with legal links, responsive, Polish copy       |
-| 3.3 | Home (`/`)                  | [ ]    | Hero, description, gallery (≥3 photos), CTA to offer or orders                    |
-| 3.4 | Offer (`/oferta`)           | [ ]    | 3 categories, product cards, badges, indicative prices, CTA to `/zamowienia`      |
-| 3.5 | About (`/o-nas`)            | [ ]    | Story, values, owner/team photo, social links                                     |
+| 3.3 | Home (`/`)                  | [x]    | Hero, description, gallery (≥3 photos), CTA to offer or orders                    |
+| 3.4 | Offer (`/oferta`)           | [x]    | 3 categories, product cards, badges, indicative prices, CTA to `/zamowienia`      |
+| 3.5 | About (`/o-nas`)            | [x]    | Story, values, owner/team photo, social links                                     |
 | 3.6 | Contact (`/kontakt`)        | [ ]    | Email, phone, location (Szczecin), social links                                   |
 | 3.7 | Legal pages                 | [ ]    | `/regulamin`, `/polityka-prywatnosci`; linked from footer and (later) order form  |
 | 3.8 | Placeholder images          | [ ]    | Unsplash or similar until real assets; lazy loading where applicable              |
