@@ -1,9 +1,9 @@
 {
   "meta.title": "Oferta - Piekarnia Tilulu",
-  "meta.description": "Torty okolicznościowe, ciastka, alfajores i ciasta na zamówienie w Szczecinie. Ceny orientacyjne i stałe — wyślij zapytanie, a potwierdzimy szczegóły indywidualnie.",
+  "meta.description": "Torty okolicznościowe, ciastka, alfajores i ciasta na zamówienie w Szczecinie. Ceny orientacyjne i stałe — wyślij zapytanie, a potwierdzę szczegóły indywidualnie.",
 
   "page.title": "Oferta",
-  "page.lead": "Przeglądaj nasze wypieki podzielone na kategorie. Podane ceny mają charakter orientacyjny lub cennikowy — ostateczne warunki ustalamy po kontakcie.",
+  "page.lead": "Przeglądaj moje wypieki podzielone na kategorie. Podane ceny mają charakter orientacyjny lub cennikowy — ostateczne warunki ustalam po kontakcie.",
 
   "badges.shipping": "Możliwość wysyłki",
   "badges.pickup": "Odbiór osobisty",
@@ -23,7 +23,7 @@
   "cta.label": "Wyślij zapytanie o zamówienie",
 
   "products.tortClassic.name": "Tort klasyczny na zamówienie",
-  "products.tortClassic.description": "Biszkpty, kremy i dekoracja dopasowane do okazji. Minimum 48 h na realizację.",
+  "products.tortClassic.description": "Biszkopty, kremy i dekoracja dopasowane do okazji. Minimum 48 h na realizację.",
   "products.tortClassic.price": "od 200 zł",
 
   "products.tortTall.name": "Tort wysoki na zamówienie",
