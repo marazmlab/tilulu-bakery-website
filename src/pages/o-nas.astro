@@ -11,7 +11,11 @@ const valueItemKeys = [
 ] as const
 ---
 
-<BaseLayout title={t("about.meta.title")}>
+<BaseLayout 
+  title={t("about.meta.title")}
+  description={t("about.meta.description")}
+  ogImage="/images/og/about.jpg"
+>
   <h1 class="text-3xl font-bold tracking-tight">{t("about.page.title")}</h1>
   <p class="mt-4 max-w-2xl text-muted-foreground">{t("about.page.lead")}</p>
 
