@@ -13,7 +13,7 @@ import { site } from "@/lib/site";
 >
   <h1 class="text-3xl font-bold tracking-tight">{t("contact.page.title")}</h1>
 
-  <p class="mt-4 max-w-2xl text-muted-foreground">
+  <p class="mt-4 max-w-2xl text-pretty text-muted-foreground">
     {t("contact.page.lead")}
   </p>
 
@@ -52,12 +52,16 @@ import { site } from "@/lib/site";
     </div>
   </dl>
 
-  <div class="mt-8">
+  <div class="mx-auto mt-8 flex w-full flex-col items-center gap-3 max-w-md text-center">
+    <p class="text-muted-foreground">{t("contact.cta.intro")}</p>
     <a 
       href="/zamowienia"
-      class={buttonVariants({ size: "lg" })}
+      class={buttonVariants({ 
+        size: "lg",
+        className: "w-full sm:w-auto",
+      })}
     >
-      {t("contact.cta.form")}
+      {t("contact.cta.button")}
     </a>
   </div>
 </BaseLayout>

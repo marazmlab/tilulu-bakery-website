@@ -10,5 +10,6 @@
   "fields.location": "Lokalizacja",
   "fields.social": "Social media",
 
-  "cta.form": "Wolisz formularz? Wyślij zapytanie o zamówienie"
+  "cta.intro": "Wolisz formularz?",
+  "cta.button": "Wyślij zapytanie o zamówienie"
 }
