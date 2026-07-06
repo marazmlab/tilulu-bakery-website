@@ -1,25 +1,67 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { t } from "@/i18n/t";
 
 const updatedAt = "19 czerwca 2026";
+
+const sections = [
+  {
+    titleKey: "terms.section.quote.title",
+    bodyKey: "terms.section.quote.body",
+  },
+  {
+    titleKey: "terms.section.confirmation.title",
+    bodyKey: "terms.section.confirmation.body",
+  },
+  {
+    titleKey: "terms.section.response.title",
+    bodyKey: "terms.section.response.body",
+  },
+  {
+    titleKey: "terms.section.modification.title",
+    bodyKey: "terms.section.modification.body",
+  },
+  {
+    titleKey: "terms.section.cancellation.title",
+    bodyKey: "terms.section.cancellation.body",
+  },
+] as const;
 ---
 
-<BaseLayout title="Regulamin - Piekarnia Tilulu">
-  <article class="prose prose-neutral max-w-none">
-    <p class="text-sm text-muted-foreground">Ostatnia aktualizacja: {updatedAt}</p>
 
-    <h1 class="mt-6">Regulamin składania zapytań</h1>
-
-    <p class="mt-6">
-      Treść regulaminu zostanie uzupełniona po przygotowaniu dokumentu prawnego.
-      Formularz na stronie służy do składania <strong>zapytań ofertowych</strong>, a nie
-      do zawarcia umowy sprzedaży online.
+<BaseLayout 
+  title={t("terms.meta.title")}
+  description={t("terms.meta.description")}
+  ogImage="/images/og/terms.jpg"
+>
+  <article>
+    <p class="text-sm text-muted-foreground">
+      {t("terms.meta.updatedLabel")}: {updatedAt}
     </p>
 
-    <p class="mt-6">
-      <a href="/" class="font-medium text-primary hover:underline">Wróć na stronę główną</a>
-      ·
-      <a href="/zamowienia" class="font-medium text-primary hover:underline">Złóż zapytanie</a>
+    <h1 class="mt-6 text-3xl font-bold tracking-tight">
+      {t("terms.page.title")}
+    </h1>
+
+    <p class="mt-4 max-w-3xl text-muted-foreground">{t("terms.intro.p1")}</p>
+
+    {
+      sections.map(({ titleKey, bodyKey}) => (
+        <section class="mt-8">
+          <h2 class="text-2xl font-semibold">{t(titleKey)}</h2>
+          <p class="max-w-3xl text-muted-foreground">{t(bodyKey)}</p>
+        </section>
+      ))
+    }
+
+    <p class="not-prose mt-8">
+      <a href="/" class="font-medium text-primary hover:underline">
+        {t("terms.nav.home")}
+      </a>
+      {" · "}
+      <a href="/zamowienia" class="font-medium text-primary hover:underline">
+        {t("terms.nav.orders")}
+      </a>
     </p>
   </article>
 </BaseLayout>

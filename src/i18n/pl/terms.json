@@ -1,0 +1,27 @@
+{
+  "meta.title": "Regulamin - Piekarnia Tilulu",
+  "meta.description": "Regulamin składania zapytań ofertowych w Piekarni Tilulu — zasady potwierdzania, modyfikacji i anulowania zamówień oraz czas odpowiedzi.",
+
+  "page.title": "Regulamin składania zapytań",
+  "meta.updatedLabel": "Ostatnia aktualizacja",
+
+  "intro.p1": "Niniejszy regulamin określa zasady składania zapytań ofertowych przez formularz na stronie Piekarni Tilulu (Szczecin).",
+
+  "section.quote.title": "Zapytanie ofertowe — nie umowa sprzedaży",
+  "section.quote.body": "Formularz służy wyłącznie do przesłania zapytania ofertowego. Wysłanie formularza nie oznacza zawarcia umowy sprzedaży ani rezerwacji terminu. Każde zapytanie wymaga indywidualnego potwierdzenia przeze mnie — e-mailem lub telefonicznie.",
+
+  "section.confirmation.title": "Potwierdzenie zamówienia",
+  "section.confirmation.body": "Po otrzymaniu zapytania skontaktuję się e-mailowo lub telefonicznie, aby ustalić szczegóły, cenę i termin odbioru. Zamówienie jest wiążące dopiero po moim wyraźnym potwierdzeniu.",
+
+  "section.response.title": "Czas odpowiedzi",
+  "section.response.body": "Na zapytania odpowiadam w ciągu 24 godzin (w dni robocze). W okresach wzmożonego ruchu termin może ulec wydłużeniu — poinformuję o tym przy kontakcie.",
+
+  "section.modification.title": "Modyfikacja zamówienia",
+  "section.modification.body": "Zmiany w zamówieniu (smak, dekoracja, termin odbioru) są możliwe najpóźniej na 48 godzin przed ustalonym terminem odbioru, o ile wypiek nie został jeszcze rozpoczęty. W razie wątpliwości napisz lub zadzwoń.",
+
+  "section.cancellation.title": "Anulowanie zamówienia",
+  "section.cancellation.body": "Anulowanie jest możliwe najpóźniej na 48 godzin przed terminem odbioru bez kosztów, o ile wypiek nie został jeszcze rozpoczęty. Przy późniejszym anulowaniu mogę pobrać opłatę pokrywającą poniesione koszty — każdy przypadek rozpatruję indywidualnie.",
+
+  "nav.home": "Wróć na stronę główną",
+  "nav.orders": "Złóż zapytanie"
+}

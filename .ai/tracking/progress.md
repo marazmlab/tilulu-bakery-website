@@ -11,13 +11,13 @@ Full checklist: [`roadmap.md`](./roadmap.md)
 ```
 Project: Tilulu Bakery (tilulu-bakery-website)
 Phase 3 — Public Pages
-Current step: 3.6 - Contact (/kontakt)
-Last session: 2026-07-02 — 3.5 About complete (i18n, owner photo, SEO); first-person voice polish across nav/about/offer
+Current step: 3.7 - Legal pages (/regulamin, /polityka-prywatnosci)
+Last session: 2026-07-06 — 3.6 Contact complete (i18n, SEO, CTA); section layout unified on home, about, offer
 Blockers: none
 Workflow: Implement in Tilulu myself; web-dev-assistant = planner/mentor only
 ```
 
-**Last updated:** 2026-07-02
+**Last updated:** 2026-07-06
 
 ---
 
@@ -140,11 +140,19 @@ Append a short entry after each session. Max 5 bullets per entry.
 
 ---
 
-### 2026-07-02 — About SEO + i18n voice polish
+### 2026-07-02 — About SEO, i18n voice + contact foundation
 
-- **Done:** About page meta description + OG image (`/images/og/about.jpg`); first-person voice in `nav.json`, `about.json`, and `offer.json` (bakery speaks as “I/my” not “we/our”)
+- **Done:** About page meta description + OG image (`/images/og/about.jpg`); first-person voice in `nav.json`, `about.json`, and `offer.json`; `src/i18n/pl/contact.json` + wired `/kontakt` (email, phone, location, social links)
 - **Verified:** Roadmap steps 3.3–3.5 meet DoD
-- **Next:** Step 3.6 — Contact (`/kontakt`) — i18n, SEO, polish beyond layout stub
+- **Next:** Contact SEO (meta, OG) and CTA polish — finish 3.6
+
+---
+
+### 2026-07-06 — Contact complete (3.6) + page layout unify
+
+- **Done:** Contact meta description + OG image (`/images/og/contact.jpg`); split CTA intro + button copy; layout consistency on `/`, `/o-nas`, `/oferta` (removed bordered section boxes, grid cols 3, `main` full width)
+- **Verified:** Roadmap step 3.6 meets DoD — contact fields, social links, order CTA to `/zamowienia`
+- **Next:** Step 3.7 — Legal pages — replace stubs with real copy; footer links already wired
 
 ## Planner Chat Template
 
