@@ -1,0 +1,36 @@
+{
+  "meta.title": "Polityka prywatności - Piekarnia Tilulu",
+  "meta.description": "Informacja o przetwarzaniu danych osobowych i plikach cookies w Piekarni Tilulu — zgodnie z RODO. Google Analytics 4 i Microsoft Clarity uruchamiane po zgodzie.",
+
+  "page.title": "Polityka prywatności",
+  "meta.updatedLabel": "Ostatnia aktualizacja",
+
+  "intro.p1": "Niniejsza polityka opisuje, jak Piekarnia Tilulu przetwarza dane osobowe i wykorzystuje pliki cookies na stronie internetowej. Dbam o przejrzystość i minimalny zakres danych — tylko to, co potrzebne do obsługi zapytań.",
+
+  "section.administrator.title": "Administrator danych",
+  "section.administrator.body": "Administratorem danych osobowych jest właścicielka Piekarni Tilulu, działającej w Szczecinie. Aktualne dane kontaktowe (e-mail, telefon) znajdziesz na stronie Kontakt.",
+
+  "section.scope.title": "Jakie dane przetwarzam",
+  "section.scope.body": "Przy składaniu zapytania przez formularz mogę przetwarzać: imię i nazwisko, adres e-mail, numer telefonu, opis zamówienia, wybrany termin odbioru oraz opcjonalnie zdjęcie inspiracji. Podstawowe dane techniczne (np. adres IP) mogą być rejestrowane w logach serwera w celach bezpieczeństwa.",
+
+  "section.purpose.title": "Cel przetwarzania",
+  "section.purpose.body": "Dane wykorzystuję wyłącznie do obsługi zapytania ofertowego: kontaktu w sprawie zamówienia, ustalenia szczegółów, ceny i terminu odbioru. Nie sprzedaję danych podmiotom trzecim.",
+
+  "section.legalBasis.title": "Podstawa prawna",
+  "section.legalBasis.body": "Przetwarzanie odbywa się na podstawie art. 6 ust. 1 lit. b RODO (działania przed zawarciem umowy — obsługa zapytania) oraz — w przypadku zgody na cookies analityczne — art. 6 ust. 1 lit. a RODO.",
+
+  "section.retention.title": "Okres przechowywania",
+  "section.retention.body": "Dane z formularza przechowuję przez okres niezbędny do obsługi zapytania i ewentualnej realizacji zamówienia, a następnie przez czas wymagany przepisami lub do momentu wycofania zgody / wniosku o usunięcie — zależnie od podstawy prawnej.",
+
+  "section.rights.title": "Twoje prawa",
+  "section.rights.body": "Przysługuje Ci prawo dostępu do danych, sprostowania, usunięcia, ograniczenia przetwarzania, przenoszenia danych, wniesienia sprzeciwu oraz wycofania zgody w dowolnym momencie (bez wpływu na zgodność z prawem przetwarzania sprzed wycofania). Masz też prawo wniesienia skargi do Prezesa UODO. W sprawach danych napisz lub zadzwoń — dane kontaktowe na stronie Kontakt.",
+
+  "section.cookies.title": "Pliki cookies",
+  "section.cookies.body": "Strona może używać cookies niezbędnych do działania serwisu. Po Twojej zgodzie uruchamiane są cookies analityczne: Google Analytics 4 (statystyki odwiedzin) oraz Microsoft Clarity (mapy ciepła, nagrania sesji — bez wrażliwych pól formularza). Analityka nie startuje bez zgody.",
+
+  "section.consent.title": "Zarządzanie zgodami",
+  "section.consent.body": "Ustawienia zgód na cookies analityczne będą dostępne po wdrożeniu banera cookies. Do tego czasu możesz skorzystać z linku „Zmień zgody” w stopce strony — sekcja zostanie aktywowana wraz z banerem (Phase 5).",
+
+  "nav.home": "Wróć na stronę główną",
+  "nav.contact": "Kontakt"
+}
