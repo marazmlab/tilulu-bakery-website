@@ -11,13 +11,13 @@ Full checklist: [`roadmap.md`](./roadmap.md)
 ```
 Project: Tilulu Bakery (tilulu-bakery-website)
 Phase 3 — Public Pages
-Current step: 3.7 - Legal pages (/regulamin, /polityka-prywatnosci)
-Last session: 2026-07-06 — 3.6 Contact complete (i18n, SEO, CTA); section layout unified on home, about, offer
+Current step: 3.8 - Placeholder images (lazy loading audit)
+Last session: 2026-07-08 — 3.7 Legal pages complete (regulamin + polityka prywatności, i18n, SEO)
 Blockers: none
 Workflow: Implement in Tilulu myself; web-dev-assistant = planner/mentor only
 ```
 
-**Last updated:** 2026-07-06
+**Last updated:** 2026-07-14
 
 ---
 
@@ -153,6 +153,21 @@ Append a short entry after each session. Max 5 bullets per entry.
 - **Done:** Contact meta description + OG image (`/images/og/contact.jpg`); split CTA intro + button copy; layout consistency on `/`, `/o-nas`, `/oferta` (removed bordered section boxes, grid cols 3, `main` full width)
 - **Verified:** Roadmap step 3.6 meets DoD — contact fields, social links, order CTA to `/zamowienia`
 - **Next:** Step 3.7 — Legal pages — replace stubs with real copy; footer links already wired
+
+---
+
+### 2026-07-06 (later) — Regulamin (3.7 partial)
+
+- **Done:** `/regulamin` — `src/i18n/pl/terms.json` (5 sections: zapytanie ofertowe, potwierdzenie, odpowiedź, modyfikacja, anulowanie); meta + OG (`/images/og/terms.jpg`)
+- **Next:** Polityka prywatności — pełna treść RODO + cookies
+
+---
+
+### 2026-07-08 — Polityka prywatności (3.7 complete)
+
+- **Done:** `/polityka-prywatnosci` — `src/i18n/pl/privacy.json` (administrator, zakres, cel, podstawa prawna, retencja, prawa, cookies, zgody `#zgody`); meta + OG (`/images/og/privacy.jpg`)
+- **Verified:** Roadmap step 3.7 meets DoD — obie strony prawne z i18n i SEO; linki w stopce działają
+- **Next:** Step 3.8 — Placeholder images (lazy loading audit); potem 3.9 — dopracować stub `/zamowienia` (linki do regulaminu/RODO)
 
 ## Planner Chat Template
 
