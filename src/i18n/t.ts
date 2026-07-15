@@ -6,6 +6,7 @@ import about from "@/i18n/pl/about.json";
 import contact from "@/i18n/pl/contact.json";
 import terms from "@/i18n/pl/terms.json";
 import privacy from "@/i18n/pl/privacy.json";
+import orders from "@/i18n/pl/orders.json";
 
 const messages = {
   nav,
@@ -16,6 +17,7 @@ const messages = {
   contact,
   terms,
   privacy,
+  orders,
 } as const;
 
 type Namespace = keyof typeof messages;

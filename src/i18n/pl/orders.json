@@ -1,0 +1,26 @@
+{
+  "meta.title": "Zamówienia - Piekarnia Tilulu",
+  "meta.description": "Złóż zapytanie ofertowe w Tilulu — domowej piekarni w Szczecinie. Formularz wkrótce na tej stronie; każde zamówienie potwierdzam indywidualnie, mailowo lub telefonicznie.",
+
+  "page.title": "Zamówienia",
+  "page.lead": "Chcesz zamówić wypiek? Wkrótce uruchomię tutaj formularz zapytania ofertowego. To nie jest sklep online — każde zamówienie omawiam i potwierdzam osobiście.",
+
+  "stub.notice": "Formularz pojawi się w kolejnej fazie projektu. Już teraz możesz zapoznać się z regulaminem i polityką prywatności — linki znajdziesz poniżej.",
+
+  "form.zoneTitle": "Formularz zapytania",
+  "form.placeholder": "Formularz pojawi się tutaj.",
+
+  "form.fieldsTitle": "Co będzie w formularzu",
+  "form.field.category": "Kategoria zamówienia",
+  "form.field.details": "Opis zamówienia",
+  "form.field.contact": "Dane kontaktowe (imię, e-mail, telefon)",
+  "form.field.pickupDate": "Termin odbioru (minimum 48 godzin)",
+  "form.field.photo": "Opcjonalne zdjęcie inspiracji",
+
+  "legal.lead": "Przed wysłaniem zapytania zapoznaj się z:",
+  "legal.terms": "Regulamin",
+  "legal.privacy": "Polityka prywatności",
+
+  "nav.contact": "Masz pytanie poza formularzem?",
+  "nav.contactButton": "Przejdź do kontaktu"
+}

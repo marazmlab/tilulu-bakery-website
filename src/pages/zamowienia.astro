@@ -1,28 +1,90 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { buttonVariants } from "@/components/ui/button";
+import { t } from "@/i18n/t";
+
+const formFields = [
+  "orders.form.field.category",
+  "orders.form.field.details",
+  "orders.form.field.contact",
+  "orders.form.field.pickupDate",
+  "orders.form.field.photo",
+] as const;
 ---
 
-<BaseLayout title="Zamówienia - Piekarnia Tilulu">
-  <h1 class="text-3xl font-bold tracking-tight">Zamówienia</h1>
+<BaseLayout
+  title={t("orders.meta.title")}
+  description={t("orders.meta.description")}
+  ogImage="/images/og/orders.jpg"
+>
+  <h1 class="text-3xl font-bold tracking-tight">{t("orders.page.title")}</h1>
 
-  <p class="mt-4 max-w-2xl text-muted-foreground">
-    Formularz zapytania ofertowego pojawi się tutaj. To nie jest zakup online
-    — każde zamówienie wymaga kontaktu i potwierdzenia przez piekarnię.
+  <p class="mt-4 max-w-2xl text-pretty text-muted-foreground">
+    {t("orders.page.lead")}
   </p>
 
-  <div class="mt-8 rounded-xl border border-border bg-muted/30 p-6">
-    <h2 class="font-semibold">Co będzie w formularzu (MVP)</h2>
+  <p class="mt-4 max-w-2xl text-sm text-muted-foreground">
+    {t("orders.stub.notice")}
+  </p>
+
+  <section
+    class="mt-8 max-w-2xl rounded-xl border border-border bg-muted/30 p-6"
+    aria-labelledby="orders-form-zone-title"
+  >
+    <h2 id="orders-form-zone-title" class="font-semibold">
+      {t("orders.form.zoneTitle")}
+    </h2>
+
+    <div
+      class="mt-4 flex min-h-32 items-center justify-center rounded-lg border border-border bg-background/60 px-4 py-8 text-center text-sm text-muted-foreground"
+      role="status"
+    >
+    {t("orders.form.placeholder")}
+    </div>
+
+    <h3 class="mt-6 font-medium">{t("orders.form.fieldsTitle")}</h3>
     <ul class="mt-3 list-inside list-disc space-y-1 text-sm text-muted-foreground">
-      <li>kategoria zamówienia</li>
-      <li>opis zamówienia</li>
-      <li>dane kontaktowe</li>
-      <li>data odbioru (minimum +48h)</li>
-      <li>opcjonalne zdjęcie inspiracji</li>
+      {
+        formFields.map((fieldKey) => (
+          <li>{t(fieldKey)}</li>
+        ))
+      }
     </ul>
+
+    <div class="mt-6 border-t border-border pt-6">
+      <p class="text-sm text-muted-foreground">{t("orders.legal.lead")}</p>
+      <p class="not-prose mt-2 text-sm">
+        <a
+          href="/regulamin"
+          class="font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+        {t("orders.legal.terms")}
+        </a>
+        {" · "}
+        <a
+          href="/polityka-prywatnosci"
+          class="font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          {t("orders.legal.privacy")}
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <div id="potwierdzenie" tabindex="-1" aria-hidden="true"></div>
+
+  <div class="mx-auto mt-8 flex w-full max-w-md flex-col items-center gap-3 text-center">
+    <p class="text-muted-foreground">{t("orders.nav.contact")}</p>
+    <a
+      href="/kontakt"
+      class={buttonVariants({
+        variant: "outline",
+        size: "lg",
+        className: "w-full sm:w-auto"
+      })}
+    >
+      {t("orders.nav.contactButton")}
+    </a>
   </div>
 
-  <p class="mt-6 text-sm text-muted-foreground">
-    Regulamin zamówień i polityka prywatności — osobne podstrony w późniejszej
-    fazie.
-  </p>
 </BaseLayout>
