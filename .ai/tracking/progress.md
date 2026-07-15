@@ -12,7 +12,7 @@ Full checklist: [`roadmap.md`](./roadmap.md)
 Project: Tilulu Bakery (tilulu-bakery-website)
 Phase 3 — Public Pages
 Current step: 3.8 - Placeholder images (lazy loading audit)
-Last session: 2026-07-08 — 3.7 Legal pages complete (regulamin + polityka prywatności, i18n, SEO)
+Last session: 2026-07-08 — 3.7 Legal pages complete (`/regulamin`, `/polityka-prywatnosci`, i18n, SEO)
 Blockers: none
 Workflow: Implement in Tilulu myself; web-dev-assistant = planner/mentor only
 ```
@@ -55,7 +55,7 @@ Append a short entry after each session. Max 5 bullets per entry.
 
 ### 2026-06-15 — Bootstrap 1.8–1.11
 
-- **Done:** `.nvmrc`; Tailwind CSS 4 + `global.css`; shadcn/ui + `Button`; `BaseLayout` (nav, footer, active link); `index.astro` with hero and CTA; MVP stubs on `/oferta`, `/o-nas`, `/zamowienia`, `/kontakt`; Prettier disabled for `.astro`, walking skeleton builded
+- **Done:** `.nvmrc`; Tailwind CSS 4 + `global.css`; shadcn/ui + `Button`; `BaseLayout` (nav, footer, active link); `index.astro` with hero and CTA; MVP stubs on `/oferta`, `/o-nas`, `/zamowienia`, `/kontakt`; Prettier disabled for `.astro`; walking skeleton built
 - **Verified:** `npm run lint` and `npm run build` pass; build outputs 5 pages
 - **Next:** start Phase 2
 
@@ -156,18 +156,18 @@ Append a short entry after each session. Max 5 bullets per entry.
 
 ---
 
-### 2026-07-06 (later) — Regulamin (3.7 partial)
+### 2026-07-06 (later) — Terms page (3.7 partial)
 
-- **Done:** `/regulamin` — `src/i18n/pl/terms.json` (5 sections: zapytanie ofertowe, potwierdzenie, odpowiedź, modyfikacja, anulowanie); meta + OG (`/images/og/terms.jpg`)
-- **Next:** Polityka prywatności — pełna treść RODO + cookies
+- **Done:** `/regulamin` — `src/i18n/pl/terms.json` (5 sections: quote request, confirmation, response time, modification, cancellation); meta + OG (`/images/og/terms.jpg`)
+- **Next:** Privacy policy — full GDPR + cookies copy
 
 ---
 
-### 2026-07-08 — Polityka prywatności (3.7 complete)
+### 2026-07-08 — Privacy policy (3.7 complete)
 
-- **Done:** `/polityka-prywatnosci` — `src/i18n/pl/privacy.json` (administrator, zakres, cel, podstawa prawna, retencja, prawa, cookies, zgody `#zgody`); meta + OG (`/images/og/privacy.jpg`)
-- **Verified:** Roadmap step 3.7 meets DoD — obie strony prawne z i18n i SEO; linki w stopce działają
-- **Next:** Step 3.8 — Placeholder images (lazy loading audit); potem 3.9 — dopracować stub `/zamowienia` (linki do regulaminu/RODO)
+- **Done:** `/polityka-prywatnosci` — `src/i18n/pl/privacy.json` (administrator, scope, purpose, legal basis, retention, rights, cookies, consent `#zgody`); meta + OG (`/images/og/privacy.jpg`)
+- **Verified:** Roadmap step 3.7 meets DoD — both legal pages with i18n and SEO; footer links work
+- **Next:** Step 3.8 — Placeholder images (lazy loading audit); then 3.9 — polish `/zamowienia` stub (links to terms and privacy policy)
 
 ## Planner Chat Template
 

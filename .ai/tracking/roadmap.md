@@ -70,8 +70,8 @@ UI planning + static page implementation. Form stays a stub until Phase 4.
 | 3.5 | About (`/o-nas`)            | [x]    | Story, values, owner/team photo, social links                                     |
 | 3.6 | Contact (`/kontakt`)        | [x]    | Email, phone, location (Szczecin), social links                                   |
 | 3.7 | Legal pages                 | [x]    | `/regulamin`, `/polityka-prywatnosci`; linked from footer and (later) order form  |
-| 3.8 | Placeholder images          | [ ]    | Unsplash or similar until real assets; lazy loading where applicable              |
-| 3.9 | Orders stub (`/zamowienia`) | [ ]    | Page shell only — “form coming in Phase 4”; no API integration yet                |
+| 3.8 | Placeholder images          | [x]    | Unsplash or similar until real assets; lazy loading where applicable              |
+| 3.9 | Orders stub (`/zamowienia`) | [x]    | Page shell only — “form coming in Phase 4”; no API integration yet                |
 
 ## **Phase 3 complete when:** all public pages match MVP definition; mobile + desktop OK; no console errors; `/zamowienia` remains non-functional stub.
 
